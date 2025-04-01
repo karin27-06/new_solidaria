@@ -9,6 +9,7 @@ const quote = page.props.quote;
 defineProps<{
     title?: string;
     description?: string;
+    image?: string;
 }>();
 </script>
 
@@ -18,8 +19,12 @@ defineProps<{
             <div class="absolute inset-0 bg-zinc-900" />
             <Link :href="route('home')" class="relative z-20 flex items-center text-lg font-medium">
                 <AppLogoIcon class="mr-2 size-8 fill-current text-white" />
-                {{ name }}
+                <span>{{ name }}</span>
             </Link>
+            <!-- image -->
+            <div class="relative z-20 mt-auto flex h-full items-center justify-center">
+                <img :src="image" alt="imagen" class="h-full w-full object-cover object-center" />
+            </div>
             <div v-if="quote" class="relative z-20 mt-auto">
                 <blockquote class="space-y-2">
                     <p class="text-lg">&ldquo;{{ quote.message }}&rdquo;</p>
