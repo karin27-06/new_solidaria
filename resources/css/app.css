@@ -58,42 +58,42 @@ html {
     }
 
     .dark {
-        --background: 20 14.3% 4.1%;
-        --foreground: 0 0% 95%;
-        --card: 24 9.8% 10%;
-        --card-foreground: 0 0% 95%;
-        --popover: 0 0% 9%;
-        --popover-foreground: 0 0% 95%;
-        --primary: 142.1 70.6% 45.3%;
-        --primary-foreground: 144.9 80.4% 10%;
-        --secondary: 240 3.7% 15.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 0 0% 15%;
-        --muted-foreground: 240 5% 64.9%;
-        --accent: 12 6.5% 15.1%;
-        --accent-foreground: 0 0% 98%;
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 217.2 91.2% 59.8%;
+        --primary-foreground: 222.2 47.4% 11.2%;
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
         --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 85.7% 97.3%;
-        --border: 240 3.7% 15.9%;
-        --input: 240 3.7% 15.9%;
-        --ring: 142.4 71.8% 29.2%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 224.3 76.3% 48%;
 
-        /* Variables de gráficos para modo oscuro (verdes) */
-        --chart-1: 142.1 70.6% 45.3%; /* Primary verde claro */
-        --chart-2: 141.7 76.4% 42.7%; /* Similar al primary */
-        --chart-3: 142.4 71.8% 29.2%; /* Verde oscuro */
-        --chart-4: 138.5 76.5% 56.7%; /* Verde agua */
-        --chart-5: 144.9 80.4% 20%; /* Verde oscuro más claro */
+        /* Variables de gráficos para modo oscuro */
+        --chart-1: 217 91% 60%; /* primary */
+        --chart-2: 224 76% 48%; /* ring */
+        --chart-3: 221 83% 53%; /* primary del modo claro */
+        --chart-4: 210 40% 70%; /* para contraste */
+        --chart-5: 215 20% 65%; /* muted-foreground */
 
         /* Variables de sidebar para modo oscuro */
-        --sidebar-background: 144.9 80.4% 5%; /* Fondo oscuro */
-        --sidebar-foreground: 142.1 70.6% 85%; /* Texto verde claro */
-        --sidebar-primary: 142.1 70.6% 45.3%; /* Primary */
-        --sidebar-primary-foreground: 144.9 80.4% 10%; /* Verde oscuro */
-        --sidebar-accent: 144.9 80.4% 15%; /* Acorde al fondo */
-        --sidebar-accent-foreground: 142.1 70.6% 75%; /* Verde claro */
-        --sidebar-border: 142.4 71.8% 25%; /* Borde verde oscuro */
-        --sidebar-ring: 142.4 71.8% 29.2%; /* Igual que ring */
+        --sidebar-background: 217.2 32.6% 10%; /* Más oscuro que secondary */
+        --sidebar-foreground: 210 40% 98%; /* foreground */
+        --sidebar-primary: 217.2 91.2% 59.8%; /* primary */
+        --sidebar-primary-foreground: 222.2 47.4% 11.2%; /* primary-foreground */
+        --sidebar-accent: 217.2 32.6% 20%; /* Más claro que secondary */
+        --sidebar-accent-foreground: 210 40% 90%; /* foreground más claro */
+        --sidebar-border: 217.2 32.6% 25%; /* Más claro que border */
+        --sidebar-ring: 224.3 76.3% 48%; /* ring */
     }
 }
 @layer base {

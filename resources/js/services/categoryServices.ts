@@ -1,17 +1,21 @@
-import { CategoryDeleteResponse, CategoryRequest, CategoryResponse, CategoryUpdateRequest, showCategoryResponse } from "@/pages/panel/category/interface/Category";
+import {
+    CategoryDeleteResponse,
+    CategoryRequest,
+    CategoryResponse,
+    CategoryUpdateRequest,
+    showCategoryResponse,
+} from '@/pages/panel/category/interface/Category';
 import { router } from '@inertiajs/vue3';
-import axios from "axios";
-
+import axios from 'axios';
 
 export const CategoryServices = {
-
     //list categories
     async index(page: number, name: string): Promise<CategoryResponse> {
         const response = await axios.get(`/panel/listar-categories?page=${page}&name=${encodeURIComponent(name)}`);
         return response.data;
     },
     //inertia
-    async store(data: CategoryRequest)  {
+    async store(data: CategoryRequest) {
         router.post(route('panel.categories.store'), data);
     },
     // show categories
