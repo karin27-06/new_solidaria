@@ -1,7 +1,7 @@
 <template>
     <Head title="category"></Head>
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+        <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-2">
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
                 <FilterCategory @search="searchCategory" />
                 <TableCategory
@@ -31,19 +31,19 @@
     </AppLayout>
 </template>
 <script setup lang="ts">
+import DeleteCategory from '@/components/delete.vue';
+import FilterCategory from '@/components/filter.vue';
+import { useCategory } from '@/composables/useCategory';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
-import { CategoryUpdateRequest } from './interface/Category';
-import { useCategory } from '@/composables/useCategory';
-import { BreadcrumbItem } from '@/types';
-import FilterCategory from '@/components/filter.vue';
-import TableCategory from './components/tableCategory.vue';
 import EditCategory from './components/editCategory.vue';
-import DeleteCategory from '@/components/delete.vue';
+import TableCategory from './components/tableCategory.vue';
+import { CategoryUpdateRequest } from './interface/Category';
 
 const breadcrumbs: BreadcrumbItem[] = [
-{
+    {
         title: 'Crear categoría',
         href: '/panel/categories/create',
     },
@@ -67,7 +67,7 @@ onMounted(() => {
     loadingCategories();
 });
 
-const {principal, loadingCategories, getCategoryById, updateCategory, deleteCategory} = useCategory();
+const { principal, loadingCategories, getCategoryById, updateCategory, deleteCategory } = useCategory();
 
 // get pagination
 const handlePageChange = (page: number) => {

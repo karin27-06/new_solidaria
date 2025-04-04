@@ -1,7 +1,7 @@
 <template>
     <Head title="supplier"></Head>
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+        <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl p-2">
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
                 <FilterSupplier @search="searchSupplier" />
                 <TableSupplier
@@ -31,19 +31,19 @@
     </AppLayout>
 </template>
 <script setup lang="ts">
+import FilterSupplier from '@/components/filter.vue';
+import { useSupplier } from '@/composables/useSupplier';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
-import TableSupplier from './components/tableSupplier.vue';
-import { SupplierUpdateRequest } from './interface/Supplier';
 import DeleteSupplier from '../../../components/delete.vue';
 import EditSupplier from './components/editSupplier.vue';
-import { useSupplier } from '@/composables/useSupplier';
-import { BreadcrumbItem } from '@/types';
-import FilterSupplier from '@/components/filter.vue';
+import TableSupplier from './components/tableSupplier.vue';
+import { SupplierUpdateRequest } from './interface/Supplier';
 
 const breadcrumbs: BreadcrumbItem[] = [
-{
+    {
         title: 'Crear proveedor',
         href: '/panel/suppliers/create',
     },
@@ -67,7 +67,7 @@ onMounted(() => {
     loadingSuppliers();
 });
 
-const {principal,loadingSuppliers, getSupplierById, updateSupplier, deleteSupplier} = useSupplier();
+const { principal, loadingSuppliers, getSupplierById, updateSupplier, deleteSupplier } = useSupplier();
 
 // get pagination
 const handlePageChange = (page: number) => {

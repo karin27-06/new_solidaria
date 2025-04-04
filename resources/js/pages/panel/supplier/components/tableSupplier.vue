@@ -1,58 +1,94 @@
 <template>
-    <div class="container mx-auto px-0">
-        <LoadingTable v-if="loading" :headers="6" :row-count="10" />
-           <Table v-else class="my-3 w-full overflow-clip rounded-lg border border-gray-100">
-               <TableCaption>Lista de proveedores</TableCaption>
-               <TableHeader>
-                   <TableRow>
-                       <TableHead class="text-center">ID</TableHead>    
-                       <TableHead class="w-[200px]">Nombre</TableHead>
-                       <TableHead class="text-left px-10">Ruc</TableHead>
-                       <TableHead class="text-left px-10">Teléfono</TableHead>
-                       <TableHead class="text-left px-1">Dirección</TableHead>
-                       <TableHead>Estado</TableHead>
-                       <TableHead class="text-center">Acciones</TableHead>
-                   </TableRow>
-               </TableHeader>
-               <TableBody class="cursor-pointer">
-                   <TableRow v-for="supplier in supplierList" :key="supplier.id">
-                       <td class="text-center font-bold">{{ supplier.id }}</td>
-                       <td class="text-left px-2">{{ supplier.name }}</td>
-                       <td class="text-left px-10">{{ supplier.ruc }}</td>
-                       <td class="text-left px-10">{{ supplier.phone }}</td>
-                       <td>{{ supplier.address }}</td>
-                       <td class="w-[100px] text-center">
-                        <span v-if="supplier.state === true" class="rounded-full bg-green-400 px-2 py-1 text-white">Activo</span>
-                        <span v-else class="rounded-full bg-red-400 px-2 py-1 text-white">Inactivo</span>
-                       </td>
-                       <td class="flex gap-2 justify-center">
-                        <Button variant="outline" class="bg-orange-400 text-white shadow-md hover:bg-orange-600" @click="openModal(supplier.id)">
-                            <UserPen class="h-5 w-5" />
-                        </Button>
-                        <Button variant="outline" class="bg-red-400 text-white shadow-md hover:bg-red-600" @click="openModalDelete(supplier.id)">
-                            <Trash class="h-5 w-5" />
-                        </Button>
-                       </td>
-                   </TableRow>
-               </TableBody>
-           </Table>
-           <PaginationSupplier :meta="supplierPaginate" @page-change="$emit('page-change', $event)"/>
-   </div>
+    <div class="container-table">
+        <LoadingTable v-if="loading" :headers="7" :row-count="12" />
+        <div v-else class="table-content">
+            <div class="table-container">
+                <div class="table-responsive">
+                    <Table>
+                        <TableHeader>
+                            <TableRow class="table-header-row">
+                                <TableHead class="table-head-id">ID</TableHead>
+                                <TableHead class="table-head">Nombre</TableHead>
+                                <TableHead class="table-head">Ruc</TableHead>
+                                <TableHead class="table-head">Teléfono</TableHead>
+                                <TableHead class="table-head">Dirección</TableHead>
+                                <TableHead class="table-head-status">Estado</TableHead>
+                                <TableHead class="table-head-actions">Acciones</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody class="table-body">
+                            <TableRow v-for="supplier in supplierList" :key="supplier.id" class="table-row">
+                                <td class="cell-id">{{ supplier.id }}</td>
+                                <td class="cell-data">{{ supplier.name }}</td>
+                                <td class="cell-data">{{ supplier.ruc }}</td>
+                                <td class="cell-data">{{ supplier.phone }}</td>
+                                <td class="cell-data">{{ supplier.address }}</td>
+                                <td class="cell-status">
+                                    <span v-if="supplier.state === true" class="status-badge status-active">
+                                        <span class="status-indicator status-indicator-active"></span>
+                                        Activo
+                                    </span>
+                                    <span v-else class="status-badge status-inactive">
+                                        <span class="status-indicator status-indicator-inactive"></span>
+                                        Inactivo
+                                    </span>
+                                </td>
+                                <td class="cell-actions">
+                                    <div class="actions-container">
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            class="action-button"
+                                            @click="openModal(supplier.id)"
+                                            title="Editar proveedor"
+                                        >
+                                            <UserPen class="action-icon" />
+                                            <span class="sr-only">Editar proveedor</span>
+                                        </Button>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            class="action-button"
+                                            @click="openModalDelete(supplier.id)"
+                                            title="Eliminar proveedor"
+                                        >
+                                            <Trash class="action-icon" />
+                                            <span class="sr-only">Eliminar proveedor</span>
+                                        </Button>
+                                    </div>
+                                </td>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+            </div>
+
+            <div class="pagination-container">
+                <div class="pagination-summary">
+                    Mostrando <span class="pagination-emphasis">{{ supplierPaginate.from || 0 }}</span> a
+                    <span class="pagination-emphasis">{{ supplierPaginate.to || 0 }}</span> de
+                    <span class="pagination-emphasis">{{ supplierPaginate.total }}</span> proveedores
+                </div>
+                <PaginationSupplier :meta="supplierPaginate" @page-change="$emit('page-change', $event)" />
+            </div>
+        </div>
+    </div>
 </template>
+
 <script setup lang="ts">
 import LoadingTable from '@/components/loadingTable.vue';
-import { Pagination } from '@/interface/paginacion';
-import { SupplierResource } from '../interface/Supplier';
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import PaginationSupplier from '@/components/pagination.vue';
 import Button from '@/components/ui/button/Button.vue';
-import { usePage } from '@inertiajs/vue3';
-import { SharedData } from '@/types';
-import { onMounted, ref } from 'vue';
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/components/ui/toast';
-import PaginationSupplier from '../../../../components/pagination.vue';
+import { Pagination } from '@/interface/paginacion';
+import { SharedData } from '@/types';
+import { usePage } from '@inertiajs/vue3';
 import { Trash, UserPen } from 'lucide-vue-next';
+import { onMounted, ref } from 'vue';
+import { SupplierResource } from '../interface/Supplier';
 
-const { toast }  = useToast();
+const { toast } = useToast();
 
 const emit = defineEmits<{
     (e: 'page-change', page: number): void;
@@ -60,7 +96,6 @@ const emit = defineEmits<{
     (e: 'open-modal-delete', id_supplier: number): void;
 }>();
 const page = usePage<SharedData>();
-
 
 const message = ref(page.props.flash?.message || '');
 
@@ -73,10 +108,10 @@ onMounted(() => {
     }
 });
 
-const {supplierList,supplierPaginate} = defineProps<{
-   supplierList: SupplierResource[];
-   supplierPaginate: Pagination;
-   loading: boolean;
+const { supplierList, supplierPaginate } = defineProps<{
+    supplierList: SupplierResource[];
+    supplierPaginate: Pagination;
+    loading: boolean;
 }>();
 
 const openModal = (id: number) => {
@@ -86,6 +121,4 @@ const openModal = (id: number) => {
 const openModalDelete = (id: number) => {
     emit('open-modal-delete', id);
 };
-
 </script>
-<style scoped lang="css"></style>

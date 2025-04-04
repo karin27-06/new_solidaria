@@ -11,81 +11,89 @@ html {
 @layer base {
     :root {
         --background: 0 0% 100%;
-        --foreground: 222.2 84% 4.9%;
+        --foreground: 240 10% 3.9%;
+
         --card: 0 0% 100%;
-        --card-foreground: 222.2 84% 4.9%;
+        --card-foreground: 240 10% 3.9%;
+
         --popover: 0 0% 100%;
-        --popover-foreground: 222.2 84% 4.9%;
-        --primary: 221.2 83.2% 53.3%;
-        --primary-foreground: 210 40% 98%;
-        --secondary: 210 40% 96.1%;
-        --secondary-foreground: 222.2 47.4% 11.2%;
-        --muted: 210 40% 96.1%;
-        --muted-foreground: 215.4 16.3% 46.9%;
-        --accent: 210 40% 96.1%;
-        --accent-foreground: 222.2 47.4% 11.2%;
+        --popover-foreground: 240 10% 3.9%;
+
+        --primary: 142.1 76.2% 36.3%;
+        --primary-foreground: 355.7 100% 97.3%;
+
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+
         --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 210 40% 98%;
-        --border: 214.3 31.8% 91.4%;
-        --input: 214.3 31.8% 91.4%;
-        --ring: 221.2 83.2% 53.3%;
+        --destructive-foreground: 0 0% 98%;
+
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 142.1 76.2% 36.3%;
         --radius: 0.5rem;
 
-        /* Variables de gráficos basadas en la nueva paleta */
-        --chart-1: 221 83% 53%; /* Variación del primary */
-        --chart-2: 217 91% 60%; /* Variación del ring (modo oscuro) */
-        --chart-3: 224 76% 48%; /* Variación del ring (modo oscuro) */
-        --chart-4: 210 40% 70%; /* Variación del secondary */
-        --chart-5: 215 16% 47%; /* Variación del muted-foreground */
+        /* Variables de gráficos basadas en la paleta verde */
+        --chart-1: 142.1 76.2% 36.3%; /* Primary verde */
+        --chart-2: 141.7 76.4% 42.7%; /* Variación más clara del primary */
+        --chart-3: 142.4 71.8% 29.2%; /* Variación más oscura */
+        --chart-4: 138.5 76.5% 56.7%; /* Verde claro/agua */
+        --chart-5: 144.9 80.4% 10%; /* Verde muy oscuro */
 
-        /* Variables de sidebar armonizadas */
-        --sidebar-background: 210 40% 98%; /* Similar a primary-foreground */
-        --sidebar-foreground: 222.2 47.4% 11.2%; /* secondary-foreground */
-        --sidebar-primary: 221.2 83.2% 53.3%; /* primary */
-        --sidebar-primary-foreground: 210 40% 98%; /* primary-foreground */
-        --sidebar-accent: 210 40% 94%; /* Más claro que secondary */
-        --sidebar-accent-foreground: 222.2 47.4% 30%; /* secondary-foreground más oscuro */
-        --sidebar-border: 214.3 31.8% 85%; /* Más oscuro que border */
-        --sidebar-ring: 221.2 83.2% 53.3%; /* Igual que ring */
+        /* Variables de sidebar armonizadas con verdes */
+        --sidebar-background: 144.9 80.4% 97%; /* Fondo muy claro */
+        --sidebar-foreground: 144.9 80.4% 10%; /* Texto oscuro */
+        --sidebar-primary: 142.1 76.2% 36.3%; /* Primary verde */
+        --sidebar-primary-foreground: 355.7 100% 97.3%; /* Blanco roto */
+        --sidebar-accent: 140 76.5% 94.5%; /* Verde muy claro */
+        --sidebar-accent-foreground: 143.8 61.2% 20.2%; /* Verde oscuro */
+        --sidebar-border: 140 76.5% 90%; /* Borde claro */
+        --sidebar-ring: 142.1 76.2% 36.3%; /* Igual que primary */
     }
 
     .dark {
-        --background: 222.2 84% 4.9%;
-        --foreground: 210 40% 98%;
-        --card: 222.2 84% 4.9%;
-        --card-foreground: 210 40% 98%;
-        --popover: 222.2 84% 4.9%;
-        --popover-foreground: 210 40% 98%;
-        --primary: 217.2 91.2% 59.8%;
-        --primary-foreground: 222.2 47.4% 11.2%;
-        --secondary: 217.2 32.6% 17.5%;
-        --secondary-foreground: 210 40% 98%;
-        --muted: 217.2 32.6% 17.5%;
-        --muted-foreground: 215 20.2% 65.1%;
-        --accent: 217.2 32.6% 17.5%;
-        --accent-foreground: 210 40% 98%;
+        --background: 20 14.3% 4.1%;
+        --foreground: 0 0% 95%;
+        --card: 24 9.8% 10%;
+        --card-foreground: 0 0% 95%;
+        --popover: 0 0% 9%;
+        --popover-foreground: 0 0% 95%;
+        --primary: 142.1 70.6% 45.3%;
+        --primary-foreground: 144.9 80.4% 10%;
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 0 0% 15%;
+        --muted-foreground: 240 5% 64.9%;
+        --accent: 12 6.5% 15.1%;
+        --accent-foreground: 0 0% 98%;
         --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 210 40% 98%;
-        --border: 217.2 32.6% 17.5%;
-        --input: 217.2 32.6% 17.5%;
-        --ring: 224.3 76.3% 48%;
+        --destructive-foreground: 0 85.7% 97.3%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 142.4 71.8% 29.2%;
 
-        /* Variables de gráficos para modo oscuro */
-        --chart-1: 217 91% 60%; /* primary */
-        --chart-2: 224 76% 48%; /* ring */
-        --chart-3: 221 83% 53%; /* primary del modo claro */
-        --chart-4: 210 40% 70%; /* para contraste */
-        --chart-5: 215 20% 65%; /* muted-foreground */
+        /* Variables de gráficos para modo oscuro (verdes) */
+        --chart-1: 142.1 70.6% 45.3%; /* Primary verde claro */
+        --chart-2: 141.7 76.4% 42.7%; /* Similar al primary */
+        --chart-3: 142.4 71.8% 29.2%; /* Verde oscuro */
+        --chart-4: 138.5 76.5% 56.7%; /* Verde agua */
+        --chart-5: 144.9 80.4% 20%; /* Verde oscuro más claro */
 
         /* Variables de sidebar para modo oscuro */
-        --sidebar-background: 217.2 32.6% 10%; /* Más oscuro que secondary */
-        --sidebar-foreground: 210 40% 98%; /* foreground */
-        --sidebar-primary: 217.2 91.2% 59.8%; /* primary */
-        --sidebar-primary-foreground: 222.2 47.4% 11.2%; /* primary-foreground */
-        --sidebar-accent: 217.2 32.6% 20%; /* Más claro que secondary */
-        --sidebar-accent-foreground: 210 40% 90%; /* foreground más claro */
-        --sidebar-border: 217.2 32.6% 25%; /* Más claro que border */
-        --sidebar-ring: 224.3 76.3% 48%; /* ring */
+        --sidebar-background: 144.9 80.4% 5%; /* Fondo oscuro */
+        --sidebar-foreground: 142.1 70.6% 85%; /* Texto verde claro */
+        --sidebar-primary: 142.1 70.6% 45.3%; /* Primary */
+        --sidebar-primary-foreground: 144.9 80.4% 10%; /* Verde oscuro */
+        --sidebar-accent: 144.9 80.4% 15%; /* Acorde al fondo */
+        --sidebar-accent-foreground: 142.1 70.6% 75%; /* Verde claro */
+        --sidebar-border: 142.4 71.8% 25%; /* Borde verde oscuro */
+        --sidebar-ring: 142.4 71.8% 29.2%; /* Igual que ring */
     }
 }
 @layer base {
@@ -96,4 +104,119 @@ html {
     body {
         @apply bg-background text-foreground;
     }
+}
+
+/* Estilos generales para contenedores de tabla */
+.container-table {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.table-content {
+    @apply space-y-6;
+}
+
+.table-container {
+    @apply overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:shadow-none;
+}
+
+.table-responsive {
+    @apply overflow-x-auto;
+}
+
+/* Estilos de cabecera de tabla */
+.table-header-row {
+    @apply bg-gray-50 dark:bg-gray-800/60;
+}
+
+.table-head {
+    @apply py-3 font-medium text-gray-700 dark:text-gray-300;
+}
+
+.table-head-id {
+    @apply w-16 py-3 text-center font-medium text-gray-700 dark:text-gray-300;
+}
+
+.table-head-status {
+    @apply w-24 py-3 text-center font-medium text-gray-700 dark:text-gray-300;
+}
+
+.table-head-actions {
+    @apply w-24 py-3 text-center font-medium text-gray-700 dark:text-gray-300;
+}
+
+/* Estilos del cuerpo de la tabla */
+.table-body {
+    @apply cursor-pointer divide-y divide-gray-200 dark:divide-gray-700;
+}
+
+.table-row {
+    @apply transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/30;
+}
+
+/* Estilos de celdas */
+.cell-id {
+    @apply py-3 text-center font-medium text-gray-600 dark:text-gray-400;
+}
+
+.cell-data {
+    @apply py-3 text-gray-600 dark:text-gray-400;
+}
+
+.cell-status {
+    @apply py-3 text-center;
+}
+
+.cell-actions {
+    @apply py-2;
+}
+
+/* Estilos de indicadores de estado */
+.status-badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium;
+}
+
+.status-active {
+    @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200;
+}
+
+.status-inactive {
+    @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200;
+}
+
+.status-indicator {
+    @apply mr-1 h-1.5 w-1.5 rounded-full;
+}
+
+.status-indicator-active {
+    @apply bg-green-500 dark:bg-green-400;
+}
+
+.status-indicator-inactive {
+    @apply bg-red-500 dark:bg-red-400;
+}
+
+/* Estilos de acciones */
+.actions-container {
+    @apply flex items-center justify-center gap-1;
+}
+
+.action-button {
+    @apply h-8 w-8 p-0 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100;
+}
+
+.action-icon {
+    @apply h-4 w-4;
+}
+
+/* Estilos de paginación */
+.pagination-container {
+    @apply flex items-center justify-between pt-3;
+}
+
+.pagination-summary {
+    @apply text-sm text-gray-500 dark:text-gray-400;
+}
+
+.pagination-emphasis {
+    @apply font-medium;
 }
