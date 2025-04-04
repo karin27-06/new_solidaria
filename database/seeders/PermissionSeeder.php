@@ -21,23 +21,29 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'eliminar usuarios']);
         Permission::create(['name' => 'ver usuarios']);
     
-        // model clientes
+        // model clients
         Permission::create(['name' => 'crear clientes']);
         Permission::create(['name' => 'editar clientes']);
         Permission::create(['name' => 'eliminar clientes']);
         Permission::create(['name' => 'ver clientes']);
 
-        // model proveedores
+        // model suppliers
         Permission::create(['name' => 'crear proveedores']);
         Permission::create(['name' => 'editar proveedores']);
         Permission::create(['name' => 'eliminar proveedores']);
         Permission::create(['name' => 'ver proveedores']);
 
-        // model categorias
+        // model categories
         Permission::create(['name' => 'crear categorias']);
         Permission::create(['name' => 'editar categorias']);
         Permission::create(['name' => 'eliminar categorias']);
         Permission::create(['name' => 'ver categorias']);
+
+        // model doctors
+        Permission::create(['name' => 'crear doctores']);
+        Permission::create(['name' => 'editar doctores']);
+        Permission::create(['name' => 'eliminar doctores']);
+        Permission::create(['name' => 'ver doctores']);
 
         // model laboratorios
         Permission::create(['name' => 'crear laboratorios']);
