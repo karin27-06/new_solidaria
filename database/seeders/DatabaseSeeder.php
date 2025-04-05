@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             LaboratorySeeder::class,
             DoctorSeeder::class,
+            ZoneSeeder::class,
             ClientTypeSeeder::class,
         ]);
     }
