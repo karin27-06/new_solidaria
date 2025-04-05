@@ -7,9 +7,12 @@ use App\Http\Requests\StoreDoctorRequest;
 use App\Http\Requests\UpdateDoctorRequest;
 use App\Http\Resources\DoctorResource;
 use App\Models\Doctor;
+use App\Pipelines\FilterByCode;
+use App\Pipelines\FilterByName;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Pipeline\Pipeline;
 use Inertia\Inertia;
 
 class DoctorController extends Controller
@@ -27,9 +30,12 @@ class DoctorController extends Controller
         Gate::authorize('viewAny', Doctor::class);
         try {
             $name = $request->get('name');
-            $doctors = Doctor::when($name, function ($query, $name) {
-                return $query->whereLike('name', "%$name%");
-            })->orderBy('id','asc')->paginate(12);
+            $doctors = app(Pipeline::class)
+                ->send(Doctor::query())
+                ->through([
+                    new FilterByName($name),
+                ])
+                ->thenReturn()->orderBy('id','asc')->paginate(12);
             return response()->json([
                 'doctors'=> DoctorResource::collection($doctors),
                 'pagination' => [
