@@ -88,9 +88,14 @@ class DoctorController extends Controller
     public function update(UpdateDoctorRequest $request, Doctor $doctor)
     {
         Gate::authorize('update', $doctor);
+    
         $validated = $request->validated();
-        $validated['start_date'] = Carbon::createFromFormat('d/m/Y H:i:s', $validated['start_date']);
+    
+        // Parseo simple con Carbon (automáticamente entiende '2024-04-27T15:18')
+        $validated['start_date'] = Carbon::parse($validated['start_date']);
+    
         $doctor->update($validated);
+    
         return response()->json([
             'status' => true,
             'message' => 'Doctor actualizado correctamente',
