@@ -63,5 +63,11 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'eliminar tipos_clientes']);
         Permission::create(['name' => 'ver tipos_clientes']);
 
+        // model productos
+        Permission::create(['name' => 'crear productos']);
+        Permission::create(['name' => 'editar productos']);
+        Permission::create(['name' => 'eliminar productos']);
+        Permission::create(['name' => 'ver productos']);
+        
     }
 }
