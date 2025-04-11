@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             DoctorSeeder::class,
             ZoneSeeder::class,
             ClientTypeSeeder::class,
+            LocalSeeder::class,
             ProductSeeder::class,
         ]);
     }
