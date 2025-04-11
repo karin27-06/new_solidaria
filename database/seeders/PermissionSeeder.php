@@ -56,7 +56,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'editar zonas']);
         Permission::create(['name' => 'eliminar zonas']);
         Permission::create(['name' => 'ver zonas']);
-      
+
         // model tipos_clientes
         Permission::create(['name' => 'crear tipos_clientes']);
         Permission::create(['name' => 'editar tipos_clientes']);
