@@ -72,5 +72,6 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'editar productos']);
         Permission::create(['name' => 'eliminar productos']);
         Permission::create(['name' => 'ver productos']);
+        
     }
 }

@@ -58,6 +58,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('products', ProductController::class); 
         # list Products
         Route::get('listar-products',[ProductController::class,'listarProducts'])->name('products.listar');
+
+
+
       
                 # Route group for inputs, selects and autocomplete
                 Route::prefix('inputs')->name('inputs.')->group(function(){
