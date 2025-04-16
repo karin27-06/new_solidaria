@@ -10,6 +10,7 @@ use App\Http\Controllers\LaboratoryController;
 use App\Http\Controllers\Panel\LocalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Inputs\SelectController;
+use App\Http\Controllers\MovementController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -58,15 +59,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('products', ProductController::class); 
         # list Products
         Route::get('listar-products',[ProductController::class,'listarProducts'])->name('products.listar');
-
-
-
+        # module Movements
+        Route::resource('movements', MovementController::class); 
+        # list Movements
+        Route::get('listar-movements',[MovementController::class,'listMovements'])->name('movements.listar');
+      
       
                 # Route group for inputs, selects and autocomplete
                 Route::prefix('inputs')->name('inputs.')->group(function(){
                     # get laboratory list
                     Route::get('laboratory_list',[SelectController::class,'getLaboratoryList'])->name('laboratory_list');
                     Route::get('category_list',[SelectController::class,'getCategoryList'])->name('category_list');
+
+                    Route::get('suppliers', [SelectController::class, 'getSuppliers'])->name('suppliers_list');
+                    Route::get('users', [SelectController::class, 'getUsers'])->name('users_list');
+                    Route::get('movement-types', [SelectController::class, 'getMovementTypes'])->name('movement-types_list');
+                    
                 });
     });
 });
