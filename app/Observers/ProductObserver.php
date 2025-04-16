@@ -2,8 +2,12 @@
 
 namespace App\Observers;
 
+use App\Models\Local;
 use App\Models\Product;
+use App\Models\Product_Local;
 use App\Models\Product_Record;
+use App\Models\Product_Zone;
+use App\Models\Zone;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -14,12 +18,28 @@ class ProductObserver
      */
     public function created(Product $product): void
     {
-        $userLogin = Auth::user();
-        Product_Record::create([
-            'description' => "Producto {$product->name} fue creado por {$userLogin->name}",
-        ]);
-
-        Log::info("Producto {$product->name} created");
+        $numberZone = Zone::count();
+        for ($i = 1; $i <= $numberZone; $i++) {
+           Product_Zone::create([
+            'product_id' => $product->id,
+            'zone_id' => $i,
+            'purchase_price' => 0,
+            'percentage' => 0,
+            'unit_price' => 0,
+            'fraction_price' => 0,
+           ]);
+        }
+        $numberLocals = Local::count();
+        for ($i = 1; $i <= $numberLocals; $i++) {
+            Product_Local::create([
+                'product_id' => $product->id,
+                'local_id' => $i,
+                'StockFraction' => 0,
+                'StockBox' => 0,
+                'stock_min' => 3,
+                'stock_max' => 5,
+            ]);
+        }
     }
 
     /**
