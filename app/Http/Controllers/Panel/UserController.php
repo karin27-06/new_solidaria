@@ -12,7 +12,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return 'hola desde user controller';
+    }
+
+    public function listarUsers()
+    {
+        return response()->json([
+            'hola' => 'mundo',
+        ]);
     }
 
     /**
