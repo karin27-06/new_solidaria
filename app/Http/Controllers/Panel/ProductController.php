@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Panel;
 
+use App\Exports\ProductExport;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -124,6 +126,25 @@ class ProductController extends Controller
         return response()->json([
             'state' => true,
             'message' => 'Producto eliminado de manera correcta',
+        ]);
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new ProductExport, 'products.xlsx');
+    }
+
+    // IMPORTAR EXCEL
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'archivo' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        Excel::import(new ProductImport, $request->file('archivo'));
+        
+        return response()->json([
+            'message' => 'Importación de productos realizado correctamente',
         ]);
     }
 }
