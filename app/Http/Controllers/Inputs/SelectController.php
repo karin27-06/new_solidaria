@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Inputs;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Laboratory;
+use App\Models\Product;
 use App\Models\Local;
 use App\Models\Supplier;
 use App\Models\TypeMovement;
@@ -30,6 +31,14 @@ class SelectController extends Controller
             ->get();
         return response()->json($category);
     }
+          // Obtener lista de productos
+          public function getProductList()
+          {
+              $users = Product::select('id', 'name')
+                  ->orderBy('name')
+                  ->get();
+              return response()->json($users);
+          }
 
     // Obtener lista de proveedores
     public function getSuppliers()

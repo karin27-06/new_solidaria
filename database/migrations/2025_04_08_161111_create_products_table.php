@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('barcode', 8)->nullable();
             $table->foreignId('laboratory_id')->constrained('laboratories','id');
             $table->foreignId('category_id')->constrained('categories','id');
+            $table->smallInteger('fraction')->default(1);
             $table->boolean('state_fraction')->default(true)->comment('true: fraccionable, false: no fraccionable');
             $table->boolean('state_igv')->default(true)->comment('true: afectado, false: inafectado');
             $table->boolean('state')->default(true)->comment('true: activo, false: inactivo');

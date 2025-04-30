@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Product_Local;
 use App\Models\Product_Record;
 use App\Models\Product_Zone;
+use App\Models\Productprice;
 use App\Models\Zone;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -70,8 +71,13 @@ class ProductObserver
                 'stock_max' => 5,
             ]);
         }
+        //observersito para precio de producto
+        Productprice::create([
+            'product_id' => $product->id,
+            'box_price' => 0,
+            'fraction_price' => 0,
+        ]);
     }
-
     /**
      * Handle the Product "updated" event.
      */

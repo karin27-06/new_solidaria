@@ -39,18 +39,22 @@ const mainNavItems3: NavItem[] = [
         href: '#',
         icon: Box,
         items: [
-            {
-                title: 'Productos Disponibles',
-                href: '/panel/products',
-            },
-            {
-                title: 'Categorías',
-                href: '/panel/categories',
-            },
-            {
-                title: 'Laboratorios',
-                href: '/panel/laboratories',
-            },
+    {
+        title: 'Productos Disponibles',
+        href: '/panel/products',
+    },
+    {
+        title: 'Precios de Productos',
+        href: '/panel/product_prices',
+    },
+    {
+        title: 'Categorías',
+        href: '/panel/categories',
+    },
+    {
+        title: 'Laboratorios',
+        href: '/panel/laboratories',
+    },
         ],
     },
     {

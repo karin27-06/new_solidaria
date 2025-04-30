@@ -21,6 +21,7 @@ class Product extends Model
         'barcode',
         'laboratory_id',
         'category_id',
+        'fraction',
         'state_fraction',
         'state_igv',
         'state',

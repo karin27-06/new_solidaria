@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_zone', function (Blueprint $table) {
+        Schema::create('product_prices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('zone_id')->constrained()->onDelete('cascade');
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products','id');
+            $table->double('box_price', 8, 2);
+            $table->double('fraction_price', 8, 2)->default(0.00);;
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_zone');
+        Schema::dropIfExists('product_prices');
     }
 };
