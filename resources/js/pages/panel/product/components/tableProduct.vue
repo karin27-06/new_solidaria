@@ -84,7 +84,6 @@
                     </TableBody>
                 </Table>
             </div>
-
             <PaginationProduct :meta="productPaginate" @page-change="$emit('page-change', $event)" class="mt-6" />
         </div>
     </div>

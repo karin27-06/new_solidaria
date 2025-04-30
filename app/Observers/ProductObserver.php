@@ -7,7 +7,7 @@ use App\Models\Product;
 use App\Models\Product_Local;
 use App\Models\Product_Record;
 use App\Models\Product_Zone;
-use App\Models\Productprice;
+use App\Models\ProductPrice;
 use App\Models\Zone;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -43,7 +43,7 @@ class ProductObserver
     //     }
     // }
 
-        /**
+    /**
      * Handle the Product "created" event.
      */
     public function created(Product $product): void
@@ -72,7 +72,7 @@ class ProductObserver
             ]);
         }
         //observersito para precio de producto
-        Productprice::create([
+        ProductPrice::create([
             'product_id' => $product->id,
             'box_price' => 0,
             'fraction_price' => 0,

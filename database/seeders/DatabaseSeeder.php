@@ -18,16 +18,15 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             LocalSeeder::class,
             UserSeeder::class,
-            SupplierSeeder::class,
-            CategorySeeder::class,
-            LaboratorySeeder::class,
-            DoctorSeeder::class,
-            ClientTypeSeeder::class,
+            //SupplierSeeder::class,
+            //CategorySeeder::class,
+            //LaboratorySeeder::class,
+            //DoctorSeeder::class,
             ZoneSeeder::class,
             ClientTypeSeeder::class,
-            ProductSeeder::class,
+            //ProductSeeder::class,
             TypeMovementSeeder::class,
-            GuideSeeder::class,
+            //GuideSeeder::class,
         ]);
     }
 }

@@ -75,7 +75,7 @@
                         <FormItem>
                             <div class="flex items-center justify-between">
                                 <div class="flex-grow space-y-2">
-                                    <FormLabel>Local</FormLabel>
+                                    <FormLabel>Rol</FormLabel>
                                     <FormControl>
                                         <RoleSelect @role_name="(name) => setFieldValue('role_name', name)" />
                                     </FormControl>
