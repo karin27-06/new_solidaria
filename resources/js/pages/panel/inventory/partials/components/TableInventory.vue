@@ -26,16 +26,18 @@
                                 <td class="cell-data text-center">{{ product.laboratorio }}</td>
                                 <td class="cell-data text-center">{{ product.categoria }}</td>
                                 <td class="cell-data text-center">
-                                    <span 
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
-                                        <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-blue-500 dark:bg-blue-400"></span>
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                                    >
+                                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-blue-500 dark:bg-blue-400"></span>
                                         {{ product.cajas }}
                                     </span>
                                 </td>
                                 <td class="cell-data text-center">
-                                    <span 
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">
-                                        <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-purple-500 dark:bg-purple-400"></span>
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-300"
+                                    >
+                                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-purple-500 dark:bg-purple-400"></span>
                                         {{ product.fracciones }}
                                     </span>
                                 </td>
@@ -69,9 +71,9 @@ import { InventoryResource } from '../interface/Inventory';
 
 const { toast } = useToast();
 
-const emit = defineEmits<{
-    (e: 'page-change', page: number): void;
-}>();
+// const emit = defineEmits<{
+//     (e: 'page-change', page: number): void;
+// }>();
 
 const page = usePage<SharedData>();
 

@@ -111,7 +111,7 @@ import { useForm } from 'vee-validate';
 import { z } from 'zod';
 import { UserRequest } from '../interface/User';
 
-const { storeUser, message } = useUser();
+const { storeUser } = useUser();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

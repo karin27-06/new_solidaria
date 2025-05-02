@@ -60,14 +60,7 @@ export const useLocal = () => {
 
     const locals = ref<GetLocalResponse[]>([]);
     // loading Locals
-    const loadingLocals = async (
-        page: number = 1,
-        name: string = '',
-        address: string = '',
-        series: string = '',
-        series_note: string = '',
-        status: boolean = true,
-    ) => {
+    const loadingLocals = async (page: number = 1, name: string = '', status: boolean = true) => {
         if (status) {
             principal.loading = true;
             try {
