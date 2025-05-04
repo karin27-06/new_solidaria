@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Panel;
 
+use App\Exports\CategoryExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
+use App\Imports\CategoryImport;
 use App\Models\Category;
+use App\Pipelines\FilterByName;
 use Illuminate\Http\Request;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryController extends Controller
 {
@@ -31,9 +36,12 @@ class CategoryController extends Controller
 
         try {
             $name = $request->get('name');
-            $categories = Category::when($name, function ($query, $name) {
-                return $query->whereLike('name', "%$name%");
-            })->orderBy('id','asc')->paginate(12);
+            $categories = app(Pipeline::class)
+                ->send(Category::query())
+                ->through([
+                    new FilterByName($name),
+                ])
+                ->thenReturn()->orderBy('id','asc')->paginate(12);
             return response()->json([
                 'categories'=> CategoryResource::collection($categories),
                 'pagination' => [
@@ -116,5 +124,23 @@ class CategoryController extends Controller
         ]);
     }
 
-    
+    // EXPORTAR A EXCEL
+    public function exportExcel()
+    {
+        return Excel::download(new CategoryExport, 'categorías.xlsx');
+    }
+
+    // IMPORTAR EXCEL
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'archivo' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        Excel::import(new CategoryImport, $request->file('archivo'));
+        
+        return response()->json([
+            'message' => 'Importación de categorias realizado correctamente',
+        ]);
+    }
 }
