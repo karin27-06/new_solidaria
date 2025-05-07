@@ -27,7 +27,7 @@ class GuideFactory extends Factory
             'destination_local_id' => $destination,
             'type_movement_id' => $this->faker->numberBetween(1, 4),
             'code' => $this->faker->unique()->regexify('[A-Z0-9]{10}'),
-            'status' => $this->faker->randomElement(['pending', 'completed', 'in_progress']),
+            'status' => $this->faker->randomElement(['pending', 'completed', 'in_progress', 'canceled']),
             'sent_at' => $this->faker->dateTime(),
         ];
     }

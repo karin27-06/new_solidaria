@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GuidePipelineRequest;
 use App\Http\Requests\StoreGuideRequest;
 use App\Http\Requests\UpdateGuideRequest;
 use App\Http\Resources\GuideResource;
 use App\Models\Guide;
+use App\Pipelines\Guides\CreateGuide;
+use App\Pipelines\Guides\CreateGuideDetails;
+use App\Pipelines\Guides\validateProducts;
 use Illuminate\Http\Request;
+use Illuminate\Pipeline\Pipeline;
 
 class GuideController extends Controller
 {
@@ -89,5 +94,24 @@ class GuideController extends Controller
         return response()->json([
             'message' => 'hola desde la api',
         ]);
+    }
+
+    public function sendGuide(GuidePipelineRequest $request)
+    {
+
+        $guideData = $request->validated();
+        $guide = app(Pipeline::class)
+            ->send($guideData)
+            ->through([
+                validateProducts::class,
+                CreateGuide::class,
+                CreateGuideDetails::class,
+            ])
+            ->thenReturn();
+        return response()->json([
+            'status' => true,
+            'message' => 'Guia enviada correctamente',
+            'guide' => $guide,
+        ])->setStatusCode(200);
     }
 }

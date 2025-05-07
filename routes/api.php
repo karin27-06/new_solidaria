@@ -15,3 +15,6 @@ Route::post('/guides', [GuideController::class, 'store'])->name('api.guides.stor
 Route::get('/guides/{guide}', [GuideController::class, 'show'])->name('api.guides.show');
 Route::put('/guides/{guide}', [GuideController::class, 'update'])->name('api.guides.update');
 Route::delete('/guides/{guide}', [GuideController::class, 'destroy'])->name('api.guides.destroy');
+
+// pipeline routes
+Route::post('/guides/pipeline', [GuideController::class, 'sendGuide'])->name('api.guides.pipeline');
