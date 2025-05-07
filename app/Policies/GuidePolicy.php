@@ -13,7 +13,7 @@ class GuidePolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class GuidePolicy
      */
     public function view(User $user, Guide $guide): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class GuidePolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +37,7 @@ class GuidePolicy
      */
     public function update(User $user, Guide $guide): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -45,7 +45,7 @@ class GuidePolicy
      */
     public function delete(User $user, Guide $guide): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -53,7 +53,7 @@ class GuidePolicy
      */
     public function restore(User $user, Guide $guide): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -61,6 +61,6 @@ class GuidePolicy
      */
     public function forceDelete(User $user, Guide $guide): bool
     {
-        return false;
+        return true;
     }
 }

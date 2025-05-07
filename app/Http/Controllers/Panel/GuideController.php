@@ -7,6 +7,7 @@ use App\Http\Requests\StoreGuideRequest;
 use App\Http\Requests\UpdateGuideRequest;
 use App\Http\Resources\GuideResource;
 use App\Models\Guide;
+use Illuminate\Http\Request;
 
 class GuideController extends Controller
 {
@@ -15,12 +16,21 @@ class GuideController extends Controller
      */
     public function index()
     {
+        //Gate::authorize('viewAny', Guide::class);
         $guides = Guide::with('originLocals', 'destinationLocals', 'typeMovements')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'asc')
             ->paginate(10);
         return response()->json([
             'guides' => GuideResource::collection($guides),
-        ]);
+            'pagination' => [
+                'total' => $guides->total(),
+                'current_page' => $guides->currentPage(),
+                'per_page' => $guides->perPage(),
+                'last_page' => $guides->lastPage(),
+                'from' => $guides->firstItem(),
+                'to' => $guides->lastItem(),
+            ],
+        ])->setStatusCode(200);
     }
 
 
@@ -33,6 +43,7 @@ class GuideController extends Controller
         $validated = $request->validated();
         $guide = Guide::create($validated);
         return response()->json([
+            'status' => true,
             'message' => 'Guide created successfully',
             'guide' => new GuideResource($guide),
         ], 201);
@@ -44,6 +55,7 @@ class GuideController extends Controller
     public function show(Guide $guide)
     {
         return response()->json([
+            'status' => true,
             'guide' => new GuideResource($guide),
         ]);
     }
@@ -68,7 +80,14 @@ class GuideController extends Controller
     {
         $guide->delete();
         return response()->json([
-            'message' => 'Guide deleted successfully',
+            'message' => 'Guia eliminada correctamente',
+        ]);
+    }
+
+    public function pruebaApi()
+    {
+        return response()->json([
+            'message' => 'hola desde la api',
         ]);
     }
 }
