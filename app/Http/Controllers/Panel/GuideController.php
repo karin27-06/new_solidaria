@@ -11,8 +11,7 @@ use App\Models\Guide;
 use App\Pipelines\Guides\CreateGuide;
 use App\Pipelines\Guides\CreateGuideDetails;
 use App\Pipelines\Guides\validateProducts;
-use Illuminate\Http\Request;
-use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\Pipeline as FacadesPipeline;
 
 class GuideController extends Controller
 {
@@ -98,10 +97,8 @@ class GuideController extends Controller
 
     public function sendGuide(GuidePipelineRequest $request)
     {
-
         $guideData = $request->validated();
-        $guide = app(Pipeline::class)
-            ->send($guideData)
+        $guide = FacadesPipeline::send($guideData)
             ->through([
                 validateProducts::class,
                 CreateGuide::class,

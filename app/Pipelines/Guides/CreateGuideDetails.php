@@ -3,17 +3,27 @@
 namespace App\Pipelines\Guides;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 
 class CreateGuideDetails
 {
   public function __invoke($request, Closure $next)
   {
-    $guide_id = $request['guide_model']['origin_local_id'];
-    Log::info('CreateGuideDetails pipeline started', [
-      'guide_id' => $guide_id,
+    $guide = $request['guide_model'];
+    $products = $request['products'];
+
+    $pivotData = [];
+
+    foreach ($products as $product) {
+      $pivotData[$product['product_id']] = [
+        'quantity_box' => $product['quantity_box'] ?? 0,
+        'quantity_fraction' => $product['quantity_fraction'] ?? 0,
+      ];
+    }
+    $guide->products()->attach($pivotData);
+    Log::info('crear detalle para la tabla guide_products', [
+      'guide_id' => $guide->id,
+      'cantidad de productos' => count($pivotData),
     ]);
     return $next($request);
   }
