@@ -10,7 +10,7 @@ class guide_products extends Pivot
 
     protected $fillable = [
         'guide_id',
-        'product_id',
+        'product_local_id',
         'quantity_box',
         'quantity_fraction',
     ];

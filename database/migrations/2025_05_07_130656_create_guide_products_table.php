@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('guide_products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('guide_id')->constrained()->onDelete('cascade');
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_local_id')->constrained('product_locals', 'id')->onDelete('cascade');
             $table->integer('quantity_box');
             $table->integer('quantity_fraction');
             $table->timestamps();

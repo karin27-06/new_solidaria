@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('product_sale', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sale_id')->constrained('sales', 'id');
-            $table->foreignId('product_id')->constrained('products', 'id');
+            $table->foreignId('product_local_id')->constrained('product_locals', 'id');
             $table->tinyInteger('quantity_box')->default(0);
             $table->tinyInteger('quantity_fraction')->default(0);
             $table->double('price_box', 10, 2)->default(0);

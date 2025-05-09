@@ -32,8 +32,17 @@ class Product_Local extends Model
 
     public function sales(): BelongsToMany
     {
-        return $this->belongsToMany(Sale::class, 'product_sale')
+        return $this->belongsToMany(Sale::class, 'product_sale', 'product_local_id', 'sale_id')
+            ->using(ProductSale::class)
             ->withPivot('quantity_box', 'quantity_fraccion', 'price_box', 'price_fraccion', 'total')
+            ->withTimestamps();
+    }
+
+    public function guides(): BelongsToMany
+    {
+        return $this->belongsToMany(Guide::class, 'guide_products', 'product_local_id', 'guide_id')
+            ->using(guide_products::class)
+            ->withPivot('quantity_box', 'quantity_fraction')
             ->withTimestamps();
     }
 }

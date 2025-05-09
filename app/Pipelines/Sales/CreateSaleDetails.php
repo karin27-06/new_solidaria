@@ -15,7 +15,7 @@ class CreateSaleDetails
     $pivotData = [];
 
     foreach ($products as $product) {
-      $pivotData[$product['product_id']] = [
+      $pivotData[$product['product_local_id']] = [
         'quantity_box' => $product['quantity_box'] ?? 0,
         'quantity_fraction' => $product['quantity_fraction'] ?? 0,
         'price_box' => $product['price_box'] ?? 0,

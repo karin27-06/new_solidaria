@@ -39,7 +39,7 @@ class SalePipelineRequest extends FormRequest
             'state_sunat' => 'nullable|boolean',
             // products
             'products' => 'required|array|min:1',
-            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.product_local_id' => 'required|exists:products,id',
             'products.*.quantity_box' => 'required|integer|min:0',
             'products.*.quantity_fraction' => 'required|integer|min:0',
             'products.*.price_box' => 'required|numeric|min:0',

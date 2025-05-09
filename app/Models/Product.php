@@ -52,13 +52,6 @@ class Product extends Model
     {
         return $this->hasMany(Product_Local::class, 'product_id', 'id');
     }
-
-    public function guides(): BelongsToMany
-    {
-        return $this->belongsToMany(Guide::class, 'guide_products')
-            ->withPivot('quantity_box', 'quantity_fraction')
-            ->withTimestamps();
-    }
     public function sales(): BelongsToMany
     {
         return $this->belongsToMany(Sale::class, 'product_sale')

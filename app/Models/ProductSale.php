@@ -10,7 +10,7 @@ class ProductSale extends Pivot
 
     protected $fillable = [
         'sale_id',
-        'product_id',
+        'product_local_id',
         'quantity_box',
         'quantity_fraccion',
         'price_box',

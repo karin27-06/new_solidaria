@@ -8,6 +8,7 @@ use App\Http\Requests\StoreGuideRequest;
 use App\Http\Requests\UpdateGuideRequest;
 use App\Http\Resources\GuideResource;
 use App\Models\Guide;
+use App\Pipelines\General\UpdateStock;
 use App\Pipelines\General\validateProducts;
 use App\Pipelines\Guides\CreateGuide;
 use App\Pipelines\Guides\CreateGuideDetails;
@@ -103,6 +104,7 @@ class GuideController extends Controller
                 validateProducts::class,
                 CreateGuide::class,
                 CreateGuideDetails::class,
+                UpdateStock::class,
             ])
             ->thenReturn();
         return response()->json([

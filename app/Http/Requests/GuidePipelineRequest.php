@@ -25,11 +25,11 @@ class GuidePipelineRequest extends FormRequest
             'origin_local_id' => 'required|exists:locals,id',
             'destination_local_id' => 'required|exists:locals,id',
             'type_movement_id' => 'required|exists:type_movements,id',
-            'code' => 'required|string|max:150',
+            'code' => 'required|string|max:150|unique:guides,code',
             'status' => 'required|in:pending,completed,in_progress',
             'sent_at' => 'required|date',
             'products' => 'required|array|min:1',
-            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.product_local_id' => 'required|exists:products,id',
             'products.*.quantity_box' => 'required|integer|min:0',
             'products.*.quantity_fraction' => 'required|integer|min:0',
         ];

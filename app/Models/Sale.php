@@ -65,7 +65,8 @@ class Sale extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'product_sale')
+        return $this->belongsToMany(Product_Local::class, 'product_sale', 'sale_id', 'product_local_id')
+            ->using(ProductSale::class)
             ->withPivot('quantity_box', 'quantity_fraction', 'price_box', 'price_fraction')
             ->withTimestamps();
     }

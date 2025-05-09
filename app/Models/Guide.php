@@ -37,7 +37,8 @@ class Guide extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'guide_products')
+        return $this->belongsToMany(Product_Local::class, 'guide_products', 'guide_id', 'product_local_id')
+            ->using(guide_products::class)
             ->withPivot('quantity_box', 'quantity_fraction')
             ->withTimestamps();
     }
