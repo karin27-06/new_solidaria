@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product_Local extends Model
 {
@@ -20,10 +21,19 @@ class Product_Local extends Model
         'stock_max',
     ];
 
-    public function product(): BelongsTo{
-        return $this->belongsTo(Product::class,'product_id','id');
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
-    public function local(): BelongsTo{
-        return $this->belongsTo(Local::class,'local_id','id');
+    public function local(): BelongsTo
+    {
+        return $this->belongsTo(Local::class, 'local_id', 'id');
+    }
+
+    public function sales(): BelongsToMany
+    {
+        return $this->belongsToMany(Sale::class, 'product_sale')
+            ->withPivot('quantity_box', 'quantity_fraccion', 'price_box', 'price_fraccion', 'total')
+            ->withTimestamps();
     }
 }

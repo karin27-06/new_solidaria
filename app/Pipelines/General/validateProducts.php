@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Pipelines\Guides;
+namespace App\Pipelines\General;
 
 use App\Models\Product_Local;
 use Closure;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
@@ -11,7 +12,7 @@ class validateProducts
 {
   public function __invoke($guideData, Closure $next)
   {
-    $originLocalId = $guideData['origin_local_id'];
+    $originLocalId = Auth::user()->local_id ?? 1;
     $products = $guideData['products'];
     $productIds = collect($products)->pluck('product_id')->all();
     $stockData = Product_Local::where('local_id', $originLocalId)

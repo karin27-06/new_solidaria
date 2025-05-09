@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\Panel\GuideController;
+use App\Http\Controllers\Panel\SaleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,3 +19,9 @@ Route::delete('/guides/{guide}', [GuideController::class, 'destroy'])->name('api
 
 // pipeline routes
 Route::post('/guides/pipeline', [GuideController::class, 'sendGuide'])->name('api.guides.pipeline');
+
+
+
+Route::resource('sales', SaleController::class);
+// pipeline sale
+Route::post('/sales/pipeline', [SaleController::class, 'sendSale'])->name('api.sales.pipeline');

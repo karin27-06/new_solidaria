@@ -59,4 +59,10 @@ class Product extends Model
             ->withPivot('quantity_box', 'quantity_fraction')
             ->withTimestamps();
     }
+    public function sales(): BelongsToMany
+    {
+        return $this->belongsToMany(Sale::class, 'product_sale')
+            ->withPivot('quantity_box', 'quantity_fraccion', 'price_box', 'price_fraccion', 'total')
+            ->withTimestamps();
+    }
 }

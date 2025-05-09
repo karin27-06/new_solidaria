@@ -8,9 +8,9 @@ use App\Http\Requests\StoreGuideRequest;
 use App\Http\Requests\UpdateGuideRequest;
 use App\Http\Resources\GuideResource;
 use App\Models\Guide;
+use App\Pipelines\General\validateProducts;
 use App\Pipelines\Guides\CreateGuide;
 use App\Pipelines\Guides\CreateGuideDetails;
-use App\Pipelines\Guides\validateProducts;
 use Illuminate\Support\Facades\Pipeline as FacadesPipeline;
 
 class GuideController extends Controller

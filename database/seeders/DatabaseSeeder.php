@@ -27,6 +27,10 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             TypeMovementSeeder::class,
             GuideSeeder::class,
+            CustomerSeeder::class,
+            TypeVoucherSeeder::class,
+            TypePaymentSeeder::class,
+            SaleSeeder::class,
         ]);
     }
 }
