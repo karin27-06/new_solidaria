@@ -14,7 +14,7 @@ const props = defineProps<{
     columnsX: string[];
     title: string;
     subtitle: string;
-    chartType: 'bar' | 'line' | 'area' | 'radar' | 'scatter' | 'heatmap' | 'donut';
+    chartType: 'bar' | 'line' | 'area' | 'radar' | 'scatter' | 'heatmap' | 'polarArea';
     height?: number;
     width?: number;
 }>();

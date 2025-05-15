@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientTypeController;
+use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\Panel\CategoryController;
 use App\Http\Controllers\Panel\ZoneController;
@@ -23,9 +24,7 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('dashboard', [Dashboard::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 
 
