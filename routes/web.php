@@ -1,20 +1,20 @@
 <?php
 
-use App\Http\Controllers\ClientTypeController;
 use App\Http\Controllers\Dashboard;
-use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\Panel\CategoryController;
 use App\Http\Controllers\Panel\ZoneController;
 use App\Http\Controllers\Panel\DoctorController;
 use App\Http\Controllers\Panel\SupplierController;
 use App\Http\Controllers\Panel\ProductController;
-use App\Http\Controllers\LaboratoryController;
-use App\Http\Controllers\ProductPriceController;
 use App\Http\Controllers\Panel\LocalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Inputs\SelectController;
-use App\Http\Controllers\MovementController;
+use App\Http\Controllers\Panel\ClientTypeController;
 use App\Http\Controllers\Panel\GuideController;
+use App\Http\Controllers\Panel\InventoryController;
+use App\Http\Controllers\Panel\LaboratoryController;
+use App\Http\Controllers\Panel\MovementController;
+use App\Http\Controllers\Panel\ProductPriceController;
 use App\Http\Controllers\Panel\RoleController;
 use App\Http\Controllers\Panel\SaleController;
 use App\Http\Controllers\Panel\UserController;
