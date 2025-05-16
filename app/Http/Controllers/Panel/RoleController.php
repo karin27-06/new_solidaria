@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\RoleResource;
+use App\Models\Permission;
 use App\Models\Role;
 use App\Pipelines\FilterByName;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role as ModelsRole;
 
 class RoleController extends Controller
 {
@@ -39,9 +39,9 @@ class RoleController extends Controller
                 ->through([
                     new FilterByName($name),
                 ])
-                ->thenReturn()->orderBy('id','asc')->paginate(12);
+                ->thenReturn()->orderBy('id', 'asc')->paginate(12);
             return response()->json([
-                'roles'=> RoleResource::collection($roles),
+                'roles' => RoleResource::collection($roles),
                 'pagination' => [
                     'total' => $roles->total(),
                     'current_page' => $roles->currentPage(),
@@ -80,7 +80,7 @@ class RoleController extends Controller
         }
         // Crear el rol
         $role = Role::create($validated);
-        return redirect()->route('panel.roles.index')->with('message', 'Rol creado correctamente');   
+        return redirect()->route('panel.roles.index')->with('message', 'Rol creado correctamente');
     }
 
     /**
@@ -116,27 +116,18 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(UpdateRoleRequest $request, ModelsRole $role)
     {
-        Gate::authorize('update', $role);
-
-        //Log::info('Datos recibidos para actualizar rol:', $request->all());
-
-        // Validar y actualizar el rol
-        $validated = $request->validated();
-        $role->update($validated);
-
-        // Sincronizar los permisos seleccionados
-        $role->permisos()->sync($request->permisos);
-     
-        // Recargar la relación permisos para que se incluyan en la respuesta JSON
-        $role->load('permisos');
+        // Gate::authorize('update', $role);
+        $validatedData = $request->validated();
+        $role->update($validatedData);
+        if ($request->has('permisos')) {
+            $role->syncPermissions($request->permisos);
+        }
         return response()->json([
             'status' => true,
             'message' => 'Rol actualizado correctamente',
-            'role' => new RoleResource($role),
         ]);
-        
     }
 
     /**
@@ -151,5 +142,4 @@ class RoleController extends Controller
             'message' => 'Rol eliminado correctamente',
         ]);
     }
-
 }
