@@ -4,25 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Permission as SpatiePermission;
 
-class Permission extends Model
+class Permission extends SpatiePermission
 {
     use HasFactory;
-     // nombre de la tabla que se le asigna al modelo
+
+    // Nombre de la tabla asociada
     protected $table = 'permissions';
-     // atributos al que va a tener acceso
+
+    // Atributos que se pueden asignar masivamente
     protected $fillable = [
         'name',
-        'guard_name ',
-        'created_at',
-        'updated_at',
+        'guard_name',
     ];
-     // atributos que no tendra acceso
+
+    // Atributos que se ocultarán al serializar
     protected $hidden = [
-        
+        // No hay campos ocultos por ahora
     ];
-     // relaciones
-    public function roles(){
-        return $this->belongsToMany(Role::class,'role_has_permissions','permission_id','role_id');
-    }
+
+    // Relaciones: aún no se definen, se agregarán más adelante si se requiere
 }

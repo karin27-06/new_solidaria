@@ -1,40 +1,37 @@
 import { Pagination } from '@/interface/paginacion';
 
-export type RoleResource = {
+export type PermissionResource = {
     id: number;
     name: string;
     created_at: string;
     updated_at: string;
 };
 
-export type RoleRequest = {
-    id?: number;
+export type PermissionRequest = {
     name: string;
 };
 
-export type showRoleResponse = {
+export type showPermissionResponse = {
     status: boolean;
     message: string;
-    role: RoleResource;
+    permission: PermissionResource;
 };
 
-export type RoleDeleteResponse = {
+export type PermissionDeleteResponse = {
     status: boolean;
     message: string;
 };
 
-export type RoleUpdateRequest = {
-    id?: number;
+export type PermissionUpdateRequest = {
     name: string;
-    permisos: number[];
 };
 
-export type RoleResponse = {
-    roles: RoleResource[];
+export type PermissionResponse = {
+    permissions: PermissionResource[];
     pagination: Pagination;
 };
 
-export type getRoleList = {
+export type getPermissionList = {
     id: number;
     name: string;
 };

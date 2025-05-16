@@ -93,6 +93,11 @@ const mainNavItems4: NavItem[] = [
         icon: UserCog,
     },
     {
+        title: 'Permisos',
+        href: '/panel/permissions',
+        icon: ShieldCheck,
+    },
+    {
         title: 'Zonas',
         href: '/panel/zones',
         icon: Map,

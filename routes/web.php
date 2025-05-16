@@ -16,6 +16,7 @@ use App\Http\Controllers\Panel\LaboratoryController;
 use App\Http\Controllers\Panel\MovementController;
 use App\Http\Controllers\Panel\ProductPriceController;
 use App\Http\Controllers\Panel\RoleController;
+use App\Http\Controllers\Panel\PermissionController;
 use App\Http\Controllers\Panel\SaleController;
 use App\Http\Controllers\Panel\UserController;
 use Inertia\Inertia;
@@ -83,6 +84,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('roles', RoleController::class);
         # list roles
         Route::get('listar-roles', [RoleController::class, 'listarRoles'])->name('roles.listar');
+         # module permission
+        Route::resource('permissions', PermissionController::class);
+        # list permissions
+        Route::get('listar-permissions', [PermissionController::class, 'listarPermissions'])->name('permissions.listar');
         # Module Users
         Route::resource('users', UserController::class);
         # list users

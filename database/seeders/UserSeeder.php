@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
         $admin_1->assignRole($adminRole);
 
 
-        $vendedor_1 = User::create([
+        $admin_2 = User::create([
             'name' => 'Karin Hair',
             'email' => 'kayisanta5@gmail.com',
             'username' => 'kchozo27',
@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'status' => 1,
         ]);
-        $vendedor_1->assignRole($adminRole);
+        $admin_2->assignRole($adminRole);
 
         $almacen_1 = User::create([
             'name' => 'Renato Moran',
@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
         ]);
         $auditor_1->assignRole($adminRole);
 
-        $admin_2 = User::create([
+        $admin_3 = User::create([
             'name' => 'Pablo Lupu',
             'email' => 'pablolupu2020@gmail.com',
             'username' => 'PabloLupu',
@@ -72,9 +72,9 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'status' => 1,
         ]);
-        $admin_2->assignRole($adminRole);
+        $admin_3->assignRole($adminRole);
 
-        $admin_3 = User::create([
+        $admin_4 = User::create([
             'name' => 'Anthony Marck',
             'email' => 'thonymarck385213xd@gmail.com',
             'username' => 'thonymarck',
@@ -82,9 +82,9 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'status' => 1,
         ]);
-        $admin_3->assignRole($adminRole);
+        $admin_4->assignRole($adminRole);
 
-        $admin_4 = User::create([
+        $admin_5 = User::create([
             'name' => 'Gustavo Siancas',
             'email' => 'gustavo@gmail.com',
             'username' => 'gustavo25',
@@ -92,17 +92,8 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'status' => 1,
         ]);
-        $admin_4->assignRole($adminRole);
-
-        $admin_5 = User::create([
-            'name' => 'Jorge Arce',
-            'email' => 'prueba@gmail.com',
-            'username' => 'jorgearce',
-            'local_id' => 6,
-            'password' => Hash::make('12345678'),
-            'status' => 1,
-        ]);
         $admin_5->assignRole($adminRole);
+
 
         $admin_6 = User::create([
             'name' => 'Prueba 1',
@@ -114,6 +105,7 @@ class UserSeeder extends Seeder
         ]);
 
         $admin_6->assignRole($adminRole);
+      
         $admin_7 = User::create([
             'name' => 'Prueba 2',
             'email' => 'prueba2@gmail.com',
@@ -123,6 +115,7 @@ class UserSeeder extends Seeder
             'status' => 1,
         ]);
         $admin_7->assignRole($adminRole);
+      
         $admin_8 = User::create([
             'name' => 'Prueba 3',
             'email' => 'prueba3@gmail.com',
@@ -131,6 +124,17 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'status' => 1,
         ]);
+      
         $admin_8->assignRole($adminRole);
+      
+         $admin_9 = User::create([
+            'name' => 'Jorge Arce',
+            'email' => 'prueba@gmail.com',
+            'username' => 'jorgearce',
+            'local_id' => 6,
+            'password' => Hash::make('12345678'),
+            'status' => 1,
+        ]);
+        $admin_9->assignRole($adminRole);
     }
 }

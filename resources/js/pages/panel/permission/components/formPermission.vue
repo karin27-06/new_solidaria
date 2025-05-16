@@ -1,11 +1,11 @@
 <template>
-    <Head title="Nueva "></Head>
+    <Head title="Nuevo permiso" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <Card class="mt-4 flex flex-col gap-4">
                 <CardHeader>
-                    <CardTitle>NUEVO ROL</CardTitle>
-                    <CardDescription>Complete los campos para crear un nuevo rol</CardDescription>
+                    <CardTitle>NUEVO PERMISO</CardTitle>
+                    <CardDescription>Complete los campos para crear un nuevo permiso</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form @submit="onSubmit" class="flex flex-col gap-6">
@@ -28,6 +28,7 @@
         </div>
     </AppLayout>
 </template>
+
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -40,63 +41,39 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import * as z from 'zod';
 
-// composable
-import { useRole } from '@/composables/useRole';
-const { createRole } = useRole();
+// Composable de permisos
+import { usePermission } from '@/composables/usePermission';
+const { createPermission } = usePermission();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Roles',
-        href: '/panel/roles',
+        title: 'Permisos',
+        href: '/panel/permissions',
     },
     {
-        title: 'Crear Rol',
-        href: '/panel/roles/create',
+        title: 'Crear permiso',
+        href: '/panel/permisos/create',
     },
 ];
 
-// Form validation
+// Validación del formulario
 const formSchema = toTypedSchema(
     z.object({
         name: z
             .string({ message: 'Campo obligatorio' })
-            .min(1, { message: 'Nombre mayor a 5 letras' })
+            .min(1, { message: 'Nombre mayor a 1 letra' })
             .max(50, { message: 'Nombre menor a 50 letras' }),
     }),
 );
+
 const { handleSubmit } = useForm({
     validationSchema: formSchema,
 });
 
-const selectedPermissions = ref<number[]>([]);  // Aquí está la definición de ref
-
-// Manejo de formulario
-const onSubmit = handleSubmit(async (values) => {
-    // Llamada al composable para crear el rol
-    await createRole({
-        name: values.name,
-        permisos: selectedPermissions.value, // Aquí pasamos los permisos seleccionados (IDs)
-    });
-    console.log('Rol creado con permisos:', selectedPermissions.value);
+const onSubmit = handleSubmit((values) => {
+    console.log('Formulario enviado');
+    createPermission(values);
 });
-
-const props = defineProps<{
-    permisos: {
-        id: number;
-        name: string;
-    }[]; // Definir los permisos como un array de objetos con id y name
-}>();
-// Al cargar el componente, seleccionamos todos los permisos por defecto
-onMounted(() => {
-    //selectedPermissions.value = props.permisos.map(permiso => permiso.id);
-});
-
-// Reset selectedPermissions when clicking "Borrar"
-const resetPermissions = () => {
-    selectedPermissions.value = [];
-};
-
-console.log(props.permisos);
 </script>
 
 <style scoped></style>
