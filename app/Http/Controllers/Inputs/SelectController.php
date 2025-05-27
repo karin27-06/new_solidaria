@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Local;
 use App\Models\Supplier;
 use App\Models\TypeMovement;
+use App\Models\TypePayment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -31,14 +32,14 @@ class SelectController extends Controller
             ->get();
         return response()->json($category);
     }
-          // Obtener lista de productos
-          public function getProductList()
-          {
-              $users = Product::select('id', 'name')
-                  ->orderBy('name')
-                  ->get();
-              return response()->json($users);
-          }
+    // Obtener lista de productos
+    public function getProductList()
+    {
+        $users = Product::select('id', 'name')
+            ->orderBy('name')
+            ->get();
+        return response()->json($users);
+    }
 
     // Obtener lista de proveedores
     public function getSuppliers()
@@ -83,5 +84,14 @@ class SelectController extends Controller
             ->orderBy('id')
             ->get();
         return response()->json($roles);
+    }
+
+    public function getTypePaymentList()
+    {
+        $typePayment = TypePayment::select('id', 'name')
+            ->where('status', 1)
+            ->orderBy('id')
+            ->get();
+        return response()->json($typePayment);
     }
 }

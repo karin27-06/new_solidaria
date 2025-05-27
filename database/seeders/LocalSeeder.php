@@ -14,6 +14,7 @@ class LocalSeeder extends Seeder
     public function run(): void
     {
         Local::create([
+            'zone_id' => 2,
             'name' => 'ALMACEN',
             'address' => 'PIURA',
             'series' => 'S0001',
@@ -21,6 +22,7 @@ class LocalSeeder extends Seeder
             'status' => 1,
         ]);
         Local::create([
+            'zone_id' => 1,
             'name' => 'DISTRIBUCION',
             'address' => 'PIURA',
             'series' => 'S0002',
@@ -28,6 +30,7 @@ class LocalSeeder extends Seeder
             'status' => 1,
         ]);
         Local::create([
+            'zone_id' => 1,
             'name' => 'VENCIDOS',
             'address' => 'PIURA',
             'series' => 'S0003',
@@ -35,6 +38,7 @@ class LocalSeeder extends Seeder
             'status' => 1,
         ]);
         Local::create([
+            'zone_id' => 1,
             'name' => 'PIURA_CASTILLA',
             'address' => 'PIURA',
             'series' => 'S0004',
@@ -42,6 +46,7 @@ class LocalSeeder extends Seeder
             'status' => 1,
         ]);
         Local::create([
+            'zone_id' => 1,
             'name' => 'SULLANA_NUEVO',
             'address' => 'PIURA',
             'series' => 'S0005',
@@ -49,6 +54,7 @@ class LocalSeeder extends Seeder
             'status' => 1,
         ]);
         Local::create([
+            'zone_id' => 1,
             'name' => 'SULLANA_VIEJO',
             'address' => 'PIURA',
             'series' => 'S0006',
@@ -56,6 +62,7 @@ class LocalSeeder extends Seeder
             'status' => 1,
         ]);
         Local::create([
+            'zone_id' => 1,
             'name' => 'TALARA',
             'address' => 'PIURA',
             'series' => 'S0007',
@@ -63,6 +70,7 @@ class LocalSeeder extends Seeder
             'status' => 1,
         ]);
         Local::create([
+            'zone_id' => 1,
             'name' => 'TUMBES',
             'address' => 'TUMBES',
             'series' => 'S0008',
@@ -70,6 +78,7 @@ class LocalSeeder extends Seeder
             'status' => 1,
         ]);
         Local::create([
+            'zone_id' => 1,
             'name' => 'TRUJILLO',
             'address' => 'LA LIBERTAD',
             'series' => 'S0009',
@@ -77,6 +86,7 @@ class LocalSeeder extends Seeder
             'status' => 1,
         ]);
         Local::create([
+            'zone_id' => 2,
             'name' => 'LIMA',
             'address' => 'LIMA',
             'series' => 'S0010',

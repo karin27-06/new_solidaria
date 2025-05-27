@@ -22,13 +22,10 @@ class SalePipelineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
             'customer_id' => 'nullable|exists:customers,id',
-            'local_id' => 'required|exists:locals,id',
             'doctor_id' => 'nullable|exists:doctors,id',
             'type_voucher_id' => 'required|exists:type_vouchers,id',
             'type_payment_id' => 'required|exists:type_payments,id',
-            'code' => 'required|string|max:255|unique:sales,code',
             'code_card' => 'nullable|string|max:255|unique:sales,code_card',
             'op_gravada' => 'required|numeric|min:0',
             'op_exonerada' => 'nullable|numeric|min:0',

@@ -42,9 +42,9 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
-    public function zones()
+    public function producto_zones(): HasMany
     {
-        return $this->belongsToMany(Zone::class, 'product_zone');
+        return $this->hasMany(Product_Zone::class, 'product_id', 'id');
     }
 
     // Añadir la relación faltante product_locals

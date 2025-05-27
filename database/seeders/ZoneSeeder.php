@@ -17,5 +17,17 @@ class ZoneSeeder extends Seeder
             'name' => 'ALMACEN',
             'status' => true,
         ]);
+        Zone::create([
+            'name' => 'Tumbes',
+            'status' => true,
+        ]);
+        Zone::create([
+            'name' => 'Piura',
+            'status' => true,
+        ]);
+        Zone::create([
+            'name' => 'Lima',
+            'status' => true,
+        ]);
     }
 }

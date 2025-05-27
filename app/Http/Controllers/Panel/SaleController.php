@@ -11,11 +11,13 @@ use App\Models\Sale;
 use App\Pipelines\General\UpdateStock;
 use App\Pipelines\General\validateProducts;
 use App\Pipelines\Sales\CalculateTotals;
+use App\Pipelines\Sales\CodeSale;
 use App\Pipelines\Sales\CreateSale;
 use App\Pipelines\Sales\CreateSaleDetails;
 use App\Pipelines\Sales\SendSunat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Pipeline;
+use Inertia\Inertia;
 
 class SaleController extends Controller
 {
@@ -24,22 +26,28 @@ class SaleController extends Controller
      */
     public function index()
     {
-        $sales = Sale::with('user', 'customer', 'local', 'doctor', 'typeVoucher', 'typePayment')
-            ->orderBy('id', 'asc')
-            ->paginate(10);
-        return response()->json([
-            'sales' => SaleResource::collection($sales),
-            'pagination' => [
-                'total' => $sales->total(),
-                'current_page' => $sales->currentPage(),
-                'per_page' => $sales->perPage(),
-                'last_page' => $sales->lastPage(),
-                'from' => $sales->firstItem(),
-                'to' => $sales->lastItem(),
-            ],
-        ])->setStatusCode(200, 'Sales retrieved successfully', [
-            'Content-Type' => 'application/json',
-        ]);
+        // $sales = Sale::with('user', 'customer', 'local', 'doctor', 'typeVoucher', 'typePayment')
+        //     ->orderBy('id', 'asc')
+        //     ->paginate(10);
+        // return response()->json([
+        //     'sales' => SaleResource::collection($sales),
+        //     'pagination' => [
+        //         'total' => $sales->total(),
+        //         'current_page' => $sales->currentPage(),
+        //         'per_page' => $sales->perPage(),
+        //         'last_page' => $sales->lastPage(),
+        //         'from' => $sales->firstItem(),
+        //         'to' => $sales->lastItem(),
+        //     ],
+        // ])->setStatusCode(200, 'Sales retrieved successfully', [
+        //     'Content-Type' => 'application/json',
+        // ]);
+        return Inertia::render('panel/sale/SaleIndex');
+    }
+
+    public function viewSale()
+    {
+        return Inertia::render('panel/sale/SaleIndex');
     }
 
     /**
@@ -99,6 +107,7 @@ class SaleController extends Controller
             ->through([
                 validateProducts::class,
                 CalculateTotals::class,
+                CodeSale::class,
                 CreateSale::class,
                 CreateSaleDetails::class,
                 UpdateStock::class,

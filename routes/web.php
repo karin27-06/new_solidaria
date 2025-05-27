@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\Inputs\ComboboxController;
 use App\Http\Controllers\Panel\CategoryController;
 use App\Http\Controllers\Panel\ZoneController;
 use App\Http\Controllers\Panel\DoctorController;
@@ -84,7 +85,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('roles', RoleController::class);
         # list roles
         Route::get('listar-roles', [RoleController::class, 'listarRoles'])->name('roles.listar');
-         # module permission
+        # module permission
         Route::resource('permissions', PermissionController::class);
         # list permissions
         Route::get('listar-permissions', [PermissionController::class, 'listarPermissions'])->name('permissions.listar');
@@ -97,7 +98,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         # list Inventory
         Route::get('listar-inventory', [InventoryController::class, 'listInventory'])->name('inventory.listar');
         # module sale
-        // Route::resource('sales', SaleController::class);
+        Route::resource('sales', SaleController::class);
         # Route group for inputs, selects and autocomplete
         Route::prefix('inputs')->name('inputs.')->group(function () {
 
@@ -116,6 +117,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('users', [SelectController::class, 'getUsers'])->name('users_list');
             #get movements list
             Route::get('movement-types', [SelectController::class, 'getMovementTypes'])->name('movement-types_list');
+            # get type PAYMENTS LIST
+            Route::get('type-payments', [SelectController::class, 'getTypePaymentList'])->name('type-payments_list');
         });
 
         # Route group for reports
@@ -131,6 +134,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/import-excel-categories', [CategoryController::class, 'importExcel'])->name('reports.categories.import');
             Route::post('/import-excel-products', [ProductController::class, 'importExcel'])->name('reports.products.import');
             # Exports to PDF
+        });
+
+
+        Route::prefix('combobox')->name('combobox.')->group(function () {
+            Route::get('customer', [ComboboxController::class, 'comboBoxCustomer'])->name('customer');
+            Route::get('doctor', [ComboboxController::class, 'comboBoxDoctor'])->name('doctor');
         });
     });
 });

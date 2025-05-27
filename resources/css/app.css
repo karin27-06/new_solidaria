@@ -184,6 +184,40 @@ html {
     @apply whitespace-nowrap px-4 py-3 text-center text-sm;
 }
 
+.table-footer {
+    @apply bg-gray-50 dark:bg-gray-800/80;
+    border-top: 1px solid var(--border);
+}
+
+/* Estilos para la celda del total */
+.cell-total {
+    @apply whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-800 dark:text-gray-300;
+}
+
+/* Estilo para el contenedor del texto del total */
+.total-text {
+    @apply flex items-center justify-end space-x-2;
+}
+
+/* Estilo para la etiqueta "Total:" */
+.total-label {
+    @apply text-base font-bold text-gray-700 dark:text-gray-300;
+}
+
+/* Estilo para el monto total */
+.total-amount {
+    @apply text-base font-bold text-primary dark:text-primary;
+}
+
+/* Estilo para ajustar los inputs de cantidad */
+.input-qty {
+    @apply h-8 w-20 text-center;
+}
+
+/* Estilo para el icono de eliminar */
+.icon-trash {
+    @apply h-4 w-4;
+}
 /* The rest of your existing styles can remain the same */
 
 /* Estilos de indicadores de estado */

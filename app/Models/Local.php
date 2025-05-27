@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Local extends Model
@@ -13,6 +15,7 @@ class Local extends Model
 
     protected $fillable = [
         'name',
+        'zone_id',
         'address',
         'series',
         'series_note',
@@ -45,5 +48,15 @@ class Local extends Model
     public function sales(): HasMany
     {
         return $this->hasMany(Sale::class, 'local_id', 'id');
+    }
+    public function zone(): BelongsTo
+    {
+        return $this->belongsTo(Zone::class, 'zone_id', 'id');
+    }
+    public function localVouchers(): BelongsToMany
+    {
+        return $this->belongsToMany(TypeVoucher::class, 'local_voucher', 'local_id', 'voucher_id')
+            ->withPivot('serie', 'correlative')
+            ->withTimestamps();
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Product_Local extends Model
 {
@@ -19,6 +20,14 @@ class Product_Local extends Model
         'StockBox',
         'stock_min',
         'stock_max',
+    ];
+
+
+    protected $casts = [
+        'StockFraction' => 'integer',
+        'StockBox' => 'integer',
+        'stock_min' => 'integer',
+        'stock_max' => 'integer',
     ];
 
     public function product(): BelongsTo
@@ -44,5 +53,17 @@ class Product_Local extends Model
             ->using(guide_products::class)
             ->withPivot('quantity_box', 'quantity_fraction')
             ->withTimestamps();
+    }
+
+    public function product_zones(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Product_Zone::class,
+            Product::class,
+            'id',
+            'product_id',
+            'product_id',
+            'id'
+        );
     }
 }

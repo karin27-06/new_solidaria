@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Providers;
+
+use App\Models\Local;
 use App\Models\Zone;
 use App\Observers\ZoneObserver;
 
 use App\Models\Movement;
 use App\Observers\MovementObserver;
 use App\Models\Product;
+use App\Observers\LocalObserver;
 use App\Observers\ProductObserver;
 
 use Illuminate\Support\ServiceProvider;
@@ -29,5 +32,6 @@ class AppServiceProvider extends ServiceProvider
         Zone::observe(ZoneObserver::class);
         Movement::observe(MovementObserver::class);
         Product::observe(ProductObserver::class);
+        Local::observe(LocalObserver::class);
     }
 }

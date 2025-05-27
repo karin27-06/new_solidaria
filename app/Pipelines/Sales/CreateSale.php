@@ -11,14 +11,14 @@ class CreateSale
   public function __invoke($saleData, Closure $next)
   {
     $sale = Sale::create([
-      'user_id' => $saleData['user_id'],
+      'user_id' => 1,
       'customer_id' => $saleData['customer_id'],
-      'local_id' => $saleData['local_id'],
+      'local_id' => 1,
       'doctor_id' => $saleData['doctor_id'],
       'type_voucher_id' => $saleData['type_voucher_id'],
       'type_payment_id' => $saleData['type_payment_id'],
-      'code' => $saleData['code'],
-      'code_card' => $saleData['code_card'],
+      'code' => $saleData['voucher_code'],
+      'code_card' => $saleData['code_card'] ?? '--',
       'op_gravada' => $saleData['op_gravada'],
       'op_exonerada' => $saleData['op_exonerada'],
       'op_inafecta' => $saleData['op_inafecta'],

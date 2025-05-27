@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('type_vouchers', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('code')->unique();
+            $table->string('prefix', 2)->unique();
             $table->string('name')->unique();
             $table->timestamps();
         });

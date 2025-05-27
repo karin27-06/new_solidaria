@@ -18,11 +18,7 @@ class TypePaymentSeeder extends Seeder
             'status' => true,
         ]);
         TypePayment::create([
-            'name' => 'Tarjeta de credito',
-            'status' => true,
-        ]);
-        TypePayment::create([
-            'name' => 'Tarjeta de debito',
+            'name' => 'Tarjeta',
             'status' => true,
         ]);
         TypePayment::create([

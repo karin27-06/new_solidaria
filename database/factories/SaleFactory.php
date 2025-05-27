@@ -22,7 +22,7 @@ class SaleFactory extends Factory
             'local_id' => $this->faker->numberBetween(1, 10),
             'doctor_id' => $this->faker->randomElement([1, 20]),
             'type_voucher_id' => $this->faker->randomElement([1, 3]),
-            'type_payment_id' => $this->faker->randomElement([1, 5]),
+            'type_payment_id' => $this->faker->randomElement([1, 4]),
             'code' => $this->faker->unique()->regexify('[A-Z0-9]{10}'),
             'code_card' => $this->faker->unique()->regexify('[A-Z0-9]{10}'),
             'op_gravada' => $this->faker->randomFloat(2, 0, 1000),
