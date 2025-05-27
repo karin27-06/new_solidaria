@@ -12,10 +12,14 @@ import Label from '@/components/ui/label/Label.vue';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { TypePaymens } from '@/interface/ComboBox';
 import { comboBoxServices } from '@/services/comboBoxServices';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const selectedValue = ref<string>('');
 const typePayments = ref<TypePaymens[]>([]);
+
+const props = defineProps<{
+    reset: boolean;
+}>();
 
 onMounted(async () => {
     try {
@@ -28,6 +32,15 @@ onMounted(async () => {
 const emit = defineEmits<{
     (e: 'emit_type_payment', type: TypePaymens | null): void;
 }>();
+
+watch(
+    () => props.reset,
+    (newVal) => {
+        if (newVal) {
+            selectedValue.value = '';
+        }
+    },
+);
 
 const handleSelection = (value: string) => {
     const selectedPayment = typePayments.value.find((payment) => payment.id.toString() === value);

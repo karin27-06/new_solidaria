@@ -71,7 +71,7 @@
                             <table v-if="props.cardProducts && props.cardProducts.length" class="venta-detalle-table">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
+                                        <th>Id.producto</th>
                                         <th>Producto</th>
                                         <th>Composición</th>
                                         <th>Cant. Caja</th>
@@ -82,7 +82,7 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="item in props.cardProducts" :key="item.id">
-                                        <td>{{ item.id }}</td>
+                                        <td>{{ item.product_id }}</td>
                                         <td>{{ item.product_name }}</td>
                                         <td>{{ item.product_composition }}</td>
                                         <td>{{ item.quantify_box }}</td>
@@ -94,6 +94,15 @@
                             </table>
                             <div v-else class="venta-detalle-empty">Carrito vacío</div>
                         </div>
+                        <div class="venta-detalle-section mt-6">
+                            <Button
+                                @click="processSale"
+                                :disabled="!canProcessSale"
+                                class="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                            >
+                                {{ isProcessing ? 'Procesando...' : 'Procesar Venta' }}
+                            </Button>
+                        </div>
                     </div>
                 </SheetDescription>
             </SheetHeader>
@@ -101,11 +110,13 @@
     </Sheet>
 </template>
 <script setup lang="ts">
+import Button from '@/components/ui/button/Button.vue';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { ComboBoxCustomer, comboBoxDoctor, TypePaymens, TypeVoucher } from '@/interface/ComboBox';
 import { ProductLocalPrice } from '@/interface/ProductLocalPrice';
 import { Eye } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { StoreSaleRequest } from '../interface/Sale';
 
 const props = defineProps<{
     cardProducts: ProductLocalPrice[];
@@ -114,6 +125,12 @@ const props = defineProps<{
     typePaymentData: TypePaymens;
     typeVoucherData: TypeVoucher;
 }>();
+
+const emit = defineEmits<{
+    (event: 'saleProcessed', saleData: StoreSaleRequest): void;
+    (event: 'saleError', errorMessage: string): void;
+}>();
+
 // Operaciones gravadas (con IGV)
 const operacionesGrabadas = computed(() => {
     const total = props.cardProducts.reduce((total, item) => {
@@ -167,6 +184,56 @@ const formatCurrency = (value: number) => {
     })
         .format(value)
         .replace('PEN', 'S/.');
+};
+
+const isProcessing = ref<boolean>(false);
+
+const canProcessSale = computed(() => {
+    return !isProcessing.value && props.customerData?.id && props.typePaymentData?.id && props.typeVoucherData?.id && props.cardProducts?.length > 0;
+});
+
+// Función para procesar la venta
+const processSale = async () => {
+    if (!canProcessSale.value) {
+        emit('saleError', 'Faltan datos requeridos para procesar la venta');
+        return;
+    }
+
+    isProcessing.value = true;
+
+    try {
+        // Preparar los datos en el formato requerido
+        const saleData = {
+            customer_id: props.customerData.id,
+            doctor_id: props.doctorData.id,
+            type_voucher_id: props.typeVoucherData.id,
+            type_payment_id: props.typePaymentData.id,
+            op_gravada: operacionesGrabadas.value,
+            op_inafecta: operacionesInafectas.value,
+            op_exonerada: 0, // Asumiendo que siempre es 0 basado en tu ejemplo
+            igv: igv.value,
+            total: totalVenta.value,
+            status_sale: true,
+            state_sunat: false,
+            products: props.cardProducts.map((item) => ({
+                product_local_id: item.product_id,
+                quantity_box: item.quantify_box,
+                quantity_fraction: item.quantify_fraction,
+                price_box: item.unit_price,
+                price_fraction: item.fraction_price,
+            })),
+        };
+
+        // Emitir el evento con los datos preparados
+        emit('saleProcessed', saleData);
+
+        console.log('Datos de venta preparados:', saleData);
+    } catch (error) {
+        emit('saleError', 'Error al procesar la venta');
+        console.error('Error al procesar la venta:', error);
+    } finally {
+        isProcessing.value = false;
+    }
 };
 </script>
 <style scoped>

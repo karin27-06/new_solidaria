@@ -19,12 +19,16 @@
 import Label from '@/components/ui/label/Label.vue';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { TypeVoucher } from '@/interface/ComboBox';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const selectedValue = ref<string>(''); // Para manejar el valor seleccionado del RadioGroup
 
 const emit = defineEmits<{
     (e: 'emit_type_voucher', type: TypeVoucher | null): void;
+}>();
+
+const props = defineProps<{
+    reset: boolean;
 }>();
 
 const handleSelection = (value: string) => {
@@ -40,6 +44,15 @@ const handleSelection = (value: string) => {
         emit('emit_type_voucher', null);
     }
 };
+
+watch(
+    () => props.reset,
+    (newVal) => {
+        if (newVal) {
+            selectedValue.value = ''; // Resetea el valor seleccionado
+        }
+    },
+);
 </script>
 
 <style scoped></style>

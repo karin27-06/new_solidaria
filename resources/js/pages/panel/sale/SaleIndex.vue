@@ -52,22 +52,22 @@
                         <div class="grid h-full grid-cols-1 gap-3 rounded-lg p-4 shadow md:grid-cols-5">
                             <div class="h-full overflow-auto rounded-lg p-4 shadow">
                                 <div class="text-center text-sm font-semibold">
-                                    <TypeVoucher @emit_type_voucher="getTypeVoucher" />
+                                    <TypeVoucher @emit_type_voucher="getTypeVoucher" :reset="reset" />
                                 </div>
                             </div>
                             <div class="h-full overflow-auto rounded-lg shadow">
                                 <div class="text-center text-sm font-semibold">
-                                    <CustomerCombobox @emit_customer="getCustomer" />
+                                    <CustomerCombobox @emit_customer="getCustomer" :reset="reset" />
                                 </div>
                             </div>
                             <div class="h-full overflow-auto rounded-lg shadow">
                                 <div class="text-center text-sm font-semibold">
-                                    <DoctorCombobox @emit_doctor="getDoctor" />
+                                    <DoctorCombobox @emit_doctor="getDoctor" :reset="reset" />
                                 </div>
                             </div>
                             <div class="h-full overflow-auto rounded-lg p-4 shadow">
                                 <div class="text-center text-sm font-semibold">
-                                    <TypePaymentSale @emit_type_payment="getTypePayment" />
+                                    <TypePaymentSale @emit_type_payment="getTypePayment" :reset="reset" />
                                 </div>
                             </div>
                             <div class="h-full overflow-auto rounded-lg p-4 shadow">
@@ -78,6 +78,7 @@
                                         :doctor-data="doctorData"
                                         :type-payment-data="typePaymentData"
                                         :type-voucher-data="typeVoucherData"
+                                        @sale-processed="storeVenta"
                                     />
                                 </div>
                             </div>
@@ -106,6 +107,7 @@ import TableCartSale from './components/TableCartSale.vue';
 import TableResultSale from './components/TableResultSale.vue';
 import TypePaymentSale from './components/TypePaymentSale.vue';
 import TypeVoucher from './components/TypeVoucher.vue';
+import { StoreSaleRequest } from './interface/Sale';
 
 const {
     loadingResultProducts,
@@ -124,6 +126,8 @@ const {
     typePaymentData,
     typeVoucherData,
     setTypeVoucherData,
+    storeSale,
+    reset,
 } = useSale();
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -179,6 +183,11 @@ const getTypeVoucher = (typeVoucher: import('@/interface/ComboBox').TypeVoucher 
     if (typeVoucher) {
         setTypeVoucherData(typeVoucher);
     }
+};
+
+const storeVenta = (data: StoreSaleRequest) => {
+    console.log('storeVenta', data);
+    storeSale(data);
 };
 </script>
 

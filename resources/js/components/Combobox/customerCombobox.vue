@@ -34,13 +34,17 @@ import { useComboBox } from '@/composables/useComboBox';
 import { ComboBoxCustomer } from '@/interface/ComboBox';
 import debounce from 'debounce';
 import { ChevronsUpDown, Search } from 'lucide-vue-next';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import Button from '../ui/button/Button.vue';
 import { Combobox, ComboboxAnchor, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxList, ComboboxTrigger } from '../ui/combobox';
 
 const { loadingComboBoxCustomer, comboBoxCustomerData } = useComboBox();
 const value = ref<ComboBoxCustomer | null>(null);
 const searchText = ref('');
+
+const props = defineProps<{
+    reset: boolean;
+}>();
 
 const emit = defineEmits<{
     (e: 'emit_customer', customer: ComboBoxCustomer | null): void;
@@ -58,6 +62,15 @@ const debouncedSearch = debounce((texto: string) => {
     searchText.value = texto;
     loadingComboBoxCustomer(texto);
 }, 400);
+
+watch(
+    () => props.reset,
+    (newVal) => {
+        if (newVal) {
+            value.value = null;
+        }
+    },
+);
 
 onMounted(() => {
     loadingComboBoxCustomer('');

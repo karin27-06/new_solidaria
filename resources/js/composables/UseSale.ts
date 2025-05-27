@@ -1,8 +1,9 @@
 import { ComboBoxCustomer, comboBoxDoctor, TypePaymens, TypeVoucher } from '@/interface/ComboBox';
 import { Pagination } from '@/interface/paginacion';
 import { ProductLocalPrice } from '@/interface/ProductLocalPrice';
+import { StoreSaleRequest } from '@/pages/panel/sale/interface/Sale';
 import { saleServices } from '@/services/saleServices';
-import { showSuccessMessage } from '@/utils/message';
+import { showErrorMessage, showSuccessMessage } from '@/utils/message';
 import { ref } from 'vue';
 
 export const useSale = () => {
@@ -36,6 +37,16 @@ export const useSale = () => {
         id: 0,
         name: 'no seleccionado',
     });
+
+    const reset = ref<boolean>(false);
+    const message = ref<string>('');
+
+    const handleApiError = (error: unknown, defaultMessage = 'Error desconocido') => {
+        console.error('API Error:', error);
+        const errorMessage = error instanceof Error ? error.message : defaultMessage;
+        showErrorMessage('Error', errorMessage);
+    };
+
     const deleteResultProduct = () => {
         try {
             loading.value = true;
@@ -57,6 +68,7 @@ export const useSale = () => {
 
     const loadingResultProducts = async (page: number = 1, value: string = '') => {
         loading.value = true;
+        reset.value = false;
         try {
             const response = await saleServices.searchProductsLocalPrice(page, value);
             resultProducts.value = response.products;
@@ -100,6 +112,44 @@ export const useSale = () => {
     const setTypeVoucherData = (typeVoucher: TypeVoucher) => {
         typeVoucherData.value = typeVoucher;
     };
+
+    const storeSale = async (data: StoreSaleRequest) => {
+        loading.value = true;
+        try {
+            const response = await saleServices.storeSale(data);
+            if (response.status) {
+                showSuccessMessage('Éxito', response.message);
+                deleteResultProduct();
+                cardProducts.value = [];
+                customerData.value = {
+                    id: 0,
+                    firstname: 'no seleccionado',
+                    lastname: 'no seleccionado',
+                };
+                doctorData.value = {
+                    id: 0,
+                    name: 'no seleccionado',
+                };
+                typePaymentData.value = {
+                    id: 0,
+                    name: 'no seleccionado',
+                };
+                typeVoucherData.value = {
+                    id: 0,
+                    name: 'no seleccionado',
+                };
+            } else {
+                console.error('Error al guardar la venta:', response.message);
+            }
+            reset.value = true;
+        } catch (error) {
+            handleApiError(error, 'Error al guardar la venta');
+            console.error('Error al guardar la venta:', error);
+        } finally {
+            loading.value = false;
+        }
+    };
+
     return {
         loadingResultProducts,
         deleteResultProduct,
@@ -117,5 +167,7 @@ export const useSale = () => {
         setDoctorData,
         setTypePaymentData,
         setTypeVoucherData,
+        storeSale,
+        reset,
     };
 };
