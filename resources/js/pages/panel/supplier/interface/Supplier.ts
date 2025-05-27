@@ -1,12 +1,12 @@
-import { Pagination } from "@/interface/paginacion";
+import { Pagination } from '@/interface/paginacion';
 
 export type SupplierResource = {
-  id: number;
-  name: string;
-  ruc: string;
-  phone: string;
-  address: string;
-  state: boolean;
+    id: number;
+    name: string;
+    ruc: string;
+    phone: string;
+    address: string;
+    state: boolean;
 };
 
 export type SupplierRequest = {
@@ -36,6 +36,6 @@ export type SupplierUpdateRequest = {
     state: 'activo' | 'inactivo';
 };
 export type SupplierResponse = {
-  suppliers: SupplierResource[];
-  pagination: Pagination;
+    suppliers: SupplierResource[];
+    pagination: Pagination;
 };

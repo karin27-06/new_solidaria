@@ -1,12 +1,12 @@
 <template>
     <!-- Estado de carga inicial -->
-    <div v-if="isLoading" class="flex items-center space-x-2 py-2">
+    <!-- <div v-if="isLoading" class="flex items-center space-x-2 py-2">
         <div class="h-4 w-4 animate-spin rounded-full border-b-2 border-t-2 border-primary"></div>
         <span class="text-sm text-muted-foreground">Cargando proveedores...</span>
-    </div>
+    </div> -->
 
     <!-- Mensaje de error -->
-    <div v-else-if="error" class="py-2 text-sm text-red-500">Error al cargar proveedores. Intente nuevamente.</div>
+    <div v-if="error" class="py-2 text-sm text-red-500">Error al cargar proveedores. Intente nuevamente.</div>
 
     <!-- Combobox con altura controlada -->
     <Combobox v-else by="id" v-model="selectedSupplier">
@@ -88,13 +88,14 @@ const filteredSuppliers = computed(() => {
 
 const initialLoadSuppliers = async () => {
     if (initialLoadDone.value) return;
-
+    console.log('Cargando proveedores...');
     try {
         isLoading.value = true;
         const response = await SupplierServices.getSuppliers('');
         suppliers.value = response.suppliers || [];
         error.value = false;
         initialLoadDone.value = true;
+        console.log('Proveedores cargados:', response.suppliers);
     } catch (e) {
         console.error('Error al cargar proveedores:', e);
         error.value = true;
@@ -138,7 +139,7 @@ const onSelect = (supplier: SupplierResource) => {
 };
 
 onMounted(() => {
-    initialLoadSuppliers();
+    // initialLoadSuppliers();
 });
 </script>
 

@@ -1,17 +1,21 @@
-import { showSupplierResponse, SupplierDeleteResponse, SupplierRequest, SupplierResponse, SupplierUpdateRequest } from "@/pages/panel/supplier/interface/Supplier";
+import {
+    showSupplierResponse,
+    SupplierDeleteResponse,
+    SupplierRequest,
+    SupplierResponse,
+    SupplierUpdateRequest,
+} from '@/pages/panel/supplier/interface/Supplier';
 import { router } from '@inertiajs/vue3';
-import axios from "axios";
-
+import axios from 'axios';
 
 export const SupplierServices = {
-
     //list suppliers
     async index(page: number, name: string): Promise<SupplierResponse> {
         const response = await axios.get(`/panel/listar-suppliers?page=${page}&name=${encodeURIComponent(name)}`);
         return response.data;
     },
     //inertia
-    async store(data: SupplierRequest)  {
+    async store(data: SupplierRequest) {
         router.post(route('panel.suppliers.store'), data);
     },
     // show supplier
@@ -31,6 +35,7 @@ export const SupplierServices = {
     },
     async getSuppliers(search: string = ''): Promise<SupplierResponse> {
         const response = await axios.get(`/panel/inputs/suppliers${search ? `?search=${encodeURIComponent(search)}` : ''}`);
+        console.log('services: ', response.data);
         return response.data;
     },
 };
