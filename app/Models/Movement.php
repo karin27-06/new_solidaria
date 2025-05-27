@@ -35,7 +35,6 @@ class Movement extends Model
         return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
-
     /**
      * Relación con el usuario
      */
@@ -48,5 +47,10 @@ class Movement extends Model
     public function typemovement()
     {
         return $this->belongsTo(TypeMovement::class, 'type_movement_id');
+    }
+
+    public function product_movements()
+    {
+        return $this->hasMany(ProductMovement::class, 'movement_id');
     }
 }

@@ -24,7 +24,6 @@ class TypeVoucher extends Model
     {
         return $this->hasMany(Sale::class, 'type_voucher_id', 'id');
     }
-
     public function localVouchers(): BelongsToMany
     {
         return $this->belongsToMany(Local::class, 'local_voucher', 'voucher_id', 'local_id')

@@ -22,7 +22,6 @@ class Product_Local extends Model
         'stock_max',
     ];
 
-
     protected $casts = [
         'StockFraction' => 'integer',
         'StockBox' => 'integer',

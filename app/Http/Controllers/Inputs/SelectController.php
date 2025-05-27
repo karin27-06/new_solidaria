@@ -40,7 +40,30 @@ class SelectController extends Controller
             ->get();
         return response()->json($users);
     }
+   // Obtener lista de productos con detalles
+    public function getProducts()
+    {
+       $products = Product::select([
+            'id',
+            'name',
+            'composition',
+            'presentation',
+            'form_farm',
+            'barcode',
+            'laboratory_id',
+            'laboratory_id', 
+            'category_id',
+            'category_id',
+            'fraction',
+            'state_fraction',
+            'state_igv',
+            'state'
+        ])
+            ->orderBy('name')
+            ->get();
 
+        return response()->json($products);
+    }
     // Obtener lista de proveedores
     public function getSuppliers()
     {

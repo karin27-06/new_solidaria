@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Http\Controllers\Inputs\SearchProductoLocal;
 use App\Http\Controllers\Panel\GuideController;
 use App\Http\Controllers\Panel\InventoryController;

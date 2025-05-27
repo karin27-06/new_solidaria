@@ -3,6 +3,7 @@
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Inputs\ComboboxController;
 use App\Http\Controllers\Panel\CategoryController;
+use App\Http\Controllers\Panel\ProductMovementController;
 use App\Http\Controllers\Panel\ZoneController;
 use App\Http\Controllers\Panel\DoctorController;
 use App\Http\Controllers\Panel\SupplierController;
@@ -27,7 +28,6 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('dashboard', [Dashboard::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-
 
 
 
@@ -81,6 +81,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('movements', MovementController::class);
         # list Movements
         Route::get('listar-movements', [MovementController::class, 'listMovements'])->name('movements.listar');
+        #Finalize Movement
+        Route::post('movements/{id}/finalize', [MovementController::class, 'finalize'])->name('panel.movements.finalize');
         # module role
         Route::resource('roles', RoleController::class);
         # list roles
@@ -97,14 +99,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('inventory', InventoryController::class);
         # list Inventory
         Route::get('listar-inventory', [InventoryController::class, 'listInventory'])->name('inventory.listar');
+        # module DetailsProductMovements 
+        Route::resource('product-movements', ProductMovementController::class);
+        Route::delete('product-movements/delete', [ProductMovementController::class, 'destroy']);
+        # list ProductMovements
+        Route::get('listar-product-movements', [ProductMovementController::class, 'listProductMovements']);
+        # module sale
+        // Route::resource('sales', SaleController::class);
+        #Print ProductoMovement
+        Route::get('/movements/{movement}/print', [MovementController::class, 'print'])->name('movements.print');
+        # Route group for inputs, selects and autocomplete
+      
         # module sale
         Route::resource('sales', SaleController::class);
-        # Route group for inputs, selects and autocomplete
+      
+      
         Route::prefix('inputs')->name('inputs.')->group(function () {
-
             # get product list
-            Route::get('product_list', [SelectController::class, 'getProductList'])->name('product_list');
-
+            Route::get('product_list', [SelectController::class, 'getProducts'])->name('product_list');
             # get laboratory list
             Route::get('laboratory_list', [SelectController::class, 'getLaboratoryList'])->name('laboratory_list');
             # get category list
