@@ -20,7 +20,7 @@ class Customer extends Model
         'client_type_id',
     ];
     protected $casts = [
-        'birthdate' => 'datetime',
+        'birthdate' => 'date',
     ];
 
     public function clientType(): BelongsTo

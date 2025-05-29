@@ -21,6 +21,7 @@ use App\Http\Controllers\Panel\RoleController;
 use App\Http\Controllers\Panel\PermissionController;
 use App\Http\Controllers\Panel\SaleController;
 use App\Http\Controllers\Panel\UserController;
+use App\Http\Controllers\Panel\CustomerController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -72,6 +73,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('products', ProductController::class);
         # list Products
         Route::get('listar-products', [ProductController::class, 'listarProducts'])->name('products.listar');
+        # module Customer
+        Route::resource('customers', CustomerController::class);
+        # list Customers
+        Route::get('listar-customers', [CustomerController::class, 'listarCustomers'])->name('customers.listar');  
         # module Products
         Route::resource('product_prices', ProductPriceController::class);
         # list Products
@@ -131,6 +136,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('movement-types', [SelectController::class, 'getMovementTypes'])->name('movement-types_list');
             # get type PAYMENTS LIST
             Route::get('type-payments', [SelectController::class, 'getTypePaymentList'])->name('type-payments_list');
+            # get client_type list
+            Route::get('client_type_list', [SelectController::class, 'getClient_typeList'])->name('client_type_list');
         });
 
         # Route group for reports

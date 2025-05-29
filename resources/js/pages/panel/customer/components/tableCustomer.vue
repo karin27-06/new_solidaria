@@ -7,33 +7,41 @@
                     <TableHeader class="table-header-row">
                         <TableRow class="table-header-row">
                             <TableHead class="table-head-id">ID</TableHead>
-                            <TableHead class="table-head">NOMBRE</TableHead>
-                            <TableHead class="table-head">PRECIO CAJA</TableHead>
-                            <TableHead class="table-head">PRECIO FRACCION</TableHead>
+                            <TableHead class="table-head">CÓDIGO</TableHead>
+                            <TableHead class="table-head">NOMBRES</TableHead>
+                            <TableHead class="table-head">APELLIDOS</TableHead>
+                            <TableHead class="table-head">DIRECCIÓN</TableHead>
+                            <TableHead class="table-head">TELEFÓNO</TableHead>
+                            <TableHead class="table-head">CUMPLEAÑOS</TableHead>
+                            <TableHead class="table-head">TIPO DE CLIENTE</TableHead>
                             <TableHead class="table-head-actions">ACCIONES</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody class="table-body">
-                        <TableRow v-for="productprice in productList" :key="productprice.id" class="table-row">
-                            <td class="cell-id">{{ productprice.id }}</td>
-                            <td class="cell-data">{{ productprice.product }}</td>
-                            <td class="cell-data">{{ productprice.box_price }}</td>
-                            <td class="cell-data">{{ productprice.fraction_price }}</td>
+                        <TableRow v-for="customer in customerList" :key="customer.id" class="table-row">
+                            <td class="cell-id">{{ customer.id }}</td>
+                            <td class="cell-data">{{ customer.code }}</td>
+                            <td class="cell-data">{{ customer.firstname }}</td>
+                            <td class="cell-data">{{ customer.lastname }}</td>
+                            <td class="cell-data">{{ customer.address }}</td>
+                            <td class="cell-data">{{ customer.phone }}</td>
+                            <td class="cell-data">{{ customer.birthdate }}</td>
+                            <td class="cell-data">{{ customer.client_type}}</td>
                             <td class="cell-actions">
                                 <div class="actions-container">
-                                    <Button variant="ghost" size="sm" class="action-button" @click="openModal(productprice.id)" title="Editar producto">
+                                    <Button variant="ghost" size="sm" class="action-button" @click="openModal(customer.id)" title="Editar Cliente">
                                         <UserPen class="action-icon" />
-                                        <span class="sr-only">Editar producto</span>
+                                        <span class="sr-only">Editar cliente</span>
                                     </Button>
                                     <Button
                                         variant="ghost"
                                         size="sm"
                                         class="action-button"
-                                        @click="openModalDelete(productprice.id)"
-                                        title="Eliminar producto"
+                                        @click="openModalDelete(customer.id)"
+                                        title="Eliminar Cliente"
                                     >
                                         <Trash class="action-icon" />
-                                        <span class="sr-only">Eliminar producto</span>
+                                        <span class="sr-only">Eliminar cliente</span>
                                     </Button>
                                 </div>
                             </td>
@@ -41,8 +49,7 @@
                     </TableBody>
                 </Table>
             </div>
-
-            <PaginationProduct :meta="productPaginate" @page-change="$emit('page-change', $event)" class="mt-6" />
+            <PaginationCustomer :meta="customerPaginate" @page-change="$emit('page-change', $event)" class="mt-6" />
         </div>
     </div>
 </template>
@@ -57,14 +64,14 @@ import { SharedData } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { Trash, UserPen } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
-import PaginationProduct from '../../../../components/pagination.vue';
-import { ProductpriceResource } from '../interface/Product_price';
+import PaginationCustomer from '../../../../components/pagination.vue';
+import { CustomerResource } from '../interface/Customer';
 
 const { toast } = useToast();
 const emit = defineEmits<{
     (e: 'page-change', page: number): void;
-    (e: 'open-modal', id: number): void;
-    (e: 'open-modal-delete', id: number): void;
+    (e: 'open-modal', id_customer: number): void;
+    (e: 'open-modal-delete', id_customer: number): void;
 }>();
 
 const page = usePage<SharedData>();
@@ -79,9 +86,9 @@ onMounted(() => {
     }
 });
 
-const { productList, productPaginate } = defineProps<{
-    productList: ProductpriceResource[];
-    productPaginate: Pagination;
+const { customerList, customerPaginate } = defineProps<{
+    customerList: CustomerResource[];
+    customerPaginate: Pagination;
     loading: boolean;
 }>();
 

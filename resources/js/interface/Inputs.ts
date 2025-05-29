@@ -31,6 +31,15 @@ export interface InputCategoryResponse {
     data: InputCategory[];
 }
 
+export interface InputClient_type {
+    id: number;
+    name: string;
+}
+
+export interface InputClient_typeResponse {
+    data: InputClient_type[];
+}
+
 export interface InputProduct {
     id: number;
     name: string;
