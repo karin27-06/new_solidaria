@@ -139,7 +139,7 @@ const onSelect = (supplier: SupplierResource) => {
 };
 
 onMounted(() => {
-    // initialLoadSuppliers();
+    initialLoadSuppliers();
 });
 </script>
 
