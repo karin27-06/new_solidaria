@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Inputs;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\ClientType;
 use App\Models\Laboratory;
 use App\Models\Product;
 use App\Models\Local;
@@ -16,6 +17,14 @@ use Spatie\Permission\Models\Role;
 
 class SelectController extends Controller
 {
+    // get client_type list
+    public function getClient_typeList()
+    {
+        $client_type = ClientType::select('id', 'name')
+            ->orderBy('id')
+            ->get();
+        return response()->json($client_type);
+    }
     // get laboratory list
     public function getLaboratoryList()
     {

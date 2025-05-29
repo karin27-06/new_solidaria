@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('lastname', 80);
             $table->string('address', 100)->nullable();
             $table->string('phone', 9)->nullable();
-            $table->timestamp('birthdate')->nullable();
+            $table->date('birthdate')->nullable();
             $table->foreignId('client_type_id')->constrained('client_types', 'id');
             $table->timestamps();
         });

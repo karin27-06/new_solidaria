@@ -34,7 +34,7 @@ class RoleController extends Controller
 
         try {
             $name = $request->get('name');
-            $roles = app(Pipeline::class)
+            $roles = Pipeline::send($name)
                 ->send(Role::query())
                 ->through([
                     new FilterByName($name),

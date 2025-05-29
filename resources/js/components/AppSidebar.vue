@@ -28,6 +28,11 @@ const mainNavItems2: NavItem[] = [
         icon: Syringe,
     },
     {
+        title: 'Clientes',
+        href: '/panel/customers',
+        icon: Users,
+    },
+    {
         title: 'Tipos de cliente',
         href: '/panel/clientTypes',
         icon: Users,
