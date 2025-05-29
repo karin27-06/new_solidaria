@@ -12,14 +12,16 @@ class ClientType extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'tipo_doc',
         'state',
-    ]; 
+    ];
 
     protected $casts = [
         'state' => 'boolean',
     ];
-    
-     public function Customers():HasMany{
-        return $this->hasMany(Customer::class); 
+
+    public function Customers(): HasMany
+    {
+        return $this->hasMany(Customer::class);
     }
 }

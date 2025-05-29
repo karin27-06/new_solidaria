@@ -59,7 +59,7 @@ class FacturaBuilder
     foreach ($items as $item) {
       $details[] = (new SaleDetail())
         ->setCodProducto($item['cod_producto'])
-        ->setUnidad($item['NIU'])
+        ->setUnidad($item['unidad'])
         ->setCantidad($item['cantidad'])
         ->setMtoValorUnitario($item['mto_valor_unitario'])
         ->setDescripcion($item['descripcion'])
@@ -99,7 +99,7 @@ class FacturaBuilder
       ->setTipoDoc($data['tipo_doc'])
       ->setSerie($data['serie'])
       ->setCorrelativo($data['correlativo'])
-      ->setFechaEmision(new DateTime($data['fecha_emision']))
+      ->setFechaEmision($data['fecha_emision'])
       ->setFormaPago($this->buildFormaPago())
       ->setTipoMoneda($data['tipo_moneda'])
       ->setCompany($this->buildCompany($data['company']))
@@ -115,7 +115,7 @@ class FacturaBuilder
   public function createInvoice(array $data): array
   {
     $invoice = $this->buildInvoice($data);
-
+    Log::info('data', $data);
     Log::info('enviado', [
       'serie' => $invoice->getSerie(),
       'correlativo' => $invoice->getCorrelativo(),
@@ -133,7 +133,7 @@ class FacturaBuilder
     }
 
     FacadesStorage::disk('local')->put(
-      'facturas2/' . $invoice->getName() . '.xml',
+      'facturas/' . $invoice->getName() . '.xml',
       $this->see->getFactory()->getLastXml()
     );
 
