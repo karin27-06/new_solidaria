@@ -39,7 +39,6 @@ export const useSale = () => {
     });
 
     const reset = ref<boolean>(false);
-    const message = ref<string>('');
 
     const handleApiError = (error: unknown, defaultMessage = 'Error desconocido') => {
         console.error('API Error:', error);

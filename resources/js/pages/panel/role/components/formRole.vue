@@ -92,11 +92,6 @@ onMounted(() => {
     //selectedPermissions.value = props.permisos.map(permiso => permiso.id);
 });
 
-// Reset selectedPermissions when clicking "Borrar"
-const resetPermissions = () => {
-    selectedPermissions.value = [];
-};
-
 console.log(props.permisos);
 </script>
 
