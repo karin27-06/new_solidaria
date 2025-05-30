@@ -14,15 +14,13 @@ class ClientTypeSeeder extends Seeder
     public function run(): void
     {
         ClientType::create([
-            'name' => 'PERSONA NATURAL',
+            'name' => 'DNI',
+            'tipo_doc' => '01', // DNI
             'state' => true,
         ]);
         ClientType::create([
-            'name' => 'PERSONA JURIDICA',
-            'state' => true,
-        ]);
-        ClientType::create([
-            'name' => 'EMPRESA',
+            'name' => 'FACTURA',
+            'tipo_doc' => '06', // RUC
             'state' => true,
         ]);
     }
