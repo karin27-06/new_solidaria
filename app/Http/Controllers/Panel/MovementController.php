@@ -178,14 +178,13 @@ class MovementController extends Controller
                         'local_id' => $localId,
                     ],
                     [
-                        'StockBox' => DB::raw('"StockBox" + ' . (int)$productMovement->quantity),
-                        'StockFraction' => DB::raw('"StockFraction" + ' . (int)$productMovement->fraction_quantity),
+                        'stockbox' => DB::raw('StockBox + ' . (int)$productMovement->quantity),
+                        'stockfraction' => DB::raw('StockFraction + ' . (int)$productMovement->fraction_quantity),
                         'stock_min' => 0,
                         'stock_max' => 0,
                     ]
                 );
             }
-
             
             $movement->status = 3; // Finalizado
             $movement->save();
