@@ -80,7 +80,7 @@ import { useToast } from '@/components/ui/toast';
 import { Pagination } from '@/interface/paginacion';
 import { SharedData } from '@/types';
 import { usePage } from '@inertiajs/vue3';
-import { Trash, UserPen, KeyRound } from 'lucide-vue-next';
+import { Trash, UserPen } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 import { RoleResource } from '../interface/Role';
 
@@ -111,10 +111,6 @@ const { roleList, rolePaginate } = defineProps<{
     loading: boolean;
 }>();
 
-const openModal = (id: number) => {
-    emit('open-modal', id);
-};
-
 const openModalDelete = (id: number) => {
     emit('open-modal-delete', id);
 };
@@ -123,7 +119,6 @@ const openModalDelete = (id: number) => {
 const openFormEditPermission = (id: number) => {
     window.location.href = `/panel/roles/${id}/edit`;
 };
-
 </script>
 
 <style scoped lang="css"></style>
