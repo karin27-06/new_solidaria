@@ -23,7 +23,7 @@ class CustomerFactory extends Factory
             'address' => $this->faker->address(),
             'phone' => $this->faker->numerify('#########'),
             'birthdate' => $this->faker->date(),
-            'client_type_id' => $this->faker->numberBetween(1, 3),
+            'client_type_id' => $this->faker->numberBetween(1, 2),
         ];
     }
 }
