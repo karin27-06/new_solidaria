@@ -20,10 +20,17 @@ class Product_Zone extends Model
         'fraction_price',
     ];
 
-    public function product(): BelongsTo{
-        return $this->belongsTo(Product::class,'product_id','id');
+    protected $casts = [
+        'unit_price' => 'float',
+        'fraction_price' => 'float',
+    ];
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
-    public function zone(): BelongsTo{
-        return $this->belongsTo(Zone::class,'zone_id','id');
+    public function zone(): BelongsTo
+    {
+        return $this->belongsTo(Zone::class, 'zone_id', 'id');
     }
 }

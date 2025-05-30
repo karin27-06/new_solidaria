@@ -16,14 +16,14 @@
 </template>
 
 <script setup lang="ts">
-import FilterInventory from './components/FilterInventory.vue';
 import { useInventory } from '@/composables/useInventory';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { FilterParams } from '@/services/inventoryService';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
+import FilterInventory from './components/FilterInventory.vue';
 import TableInventory from './components/TableInventory.vue';
-import { FilterParams } from '@/services/inventoryService';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -32,7 +32,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const { principal, loadingProducts, getProductById } = useInventory();
+const { principal, loadingProducts } = useInventory();
 
 onMounted(() => {
     loadingProducts();

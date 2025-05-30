@@ -52,7 +52,7 @@
                     <Button
                       variant="ghost"
                       size="sm"
-                      class="action-button"
+                      class="action-button-2"
                       @click="openModalDelete(local.id)"
                       title="Eliminar local"
                     >

@@ -21,15 +21,15 @@
                             <td class="cell-data">{{ productprice.fraction_price }}</td>
                             <td class="cell-actions">
                                 <div class="actions-container">
-                                    <Button variant="ghost" size="sm" class="action-button" @click="openModal(productprice.product_id)" title="Editar producto">
+                                    <Button variant="ghost" size="sm" class="action-button" @click="openModal(productprice.id)" title="Editar producto">
                                         <UserPen class="action-icon" />
                                         <span class="sr-only">Editar producto</span>
                                     </Button>
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        class="action-button"
-                                        @click="openModalDelete(productprice.product_id)"
+                                        class="action-button-2"
+                                        @click="openModalDelete(productprice.id)"
                                         title="Eliminar producto"
                                     >
                                         <Trash class="action-icon" />
@@ -63,8 +63,8 @@ import { ProductpriceResource } from '../interface/Product_price';
 const { toast } = useToast();
 const emit = defineEmits<{
     (e: 'page-change', page: number): void;
-    (e: 'open-modal', id_product: number): void;
-    (e: 'open-modal-delete', id_product: number): void;
+    (e: 'open-modal', id: number): void;
+    (e: 'open-modal-delete', id: number): void;
 }>();
 
 const page = usePage<SharedData>();

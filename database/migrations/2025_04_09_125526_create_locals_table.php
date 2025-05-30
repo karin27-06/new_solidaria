@@ -15,6 +15,7 @@ class CreateLocalsTable extends Migration
     {
         Schema::create('locals', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('zone_id')->constrained('zones', 'id');
             $table->string('name');
             $table->string('address');
             $table->string('series');

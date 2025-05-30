@@ -13,8 +13,20 @@ class ZoneSeeder extends Seeder
      */
     public function run(): void
     {
-        ZOne::create([
+        Zone::create([
             'name' => 'ALMACEN',
+            'status' => true,
+        ]);
+        Zone::create([
+            'name' => 'Tumbes',
+            'status' => true,
+        ]);
+        Zone::create([
+            'name' => 'Piura',
+            'status' => true,
+        ]);
+        Zone::create([
+            'name' => 'Lima',
             'status' => true,
         ]);
     }

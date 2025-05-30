@@ -14,6 +14,7 @@ class LocalSeeder extends Seeder
     public function run(): void
     {
         Local::create([
+            'zone_id' => 2,
             'name' => 'ALMACEN',
             'address' => 'PIURA',
             'series' => 'S0001',
@@ -21,6 +22,7 @@ class LocalSeeder extends Seeder
             'status' => 1,
         ]);
         Local::create([
+            'zone_id' => 1,
             'name' => 'DISTRIBUCION',
             'address' => 'PIURA',
             'series' => 'S0002',
@@ -28,10 +30,67 @@ class LocalSeeder extends Seeder
             'status' => 1,
         ]);
         Local::create([
+            'zone_id' => 1,
             'name' => 'VENCIDOS',
             'address' => 'PIURA',
             'series' => 'S0003',
             'series_note' => 'SN0003',
+            'status' => 1,
+        ]);
+        Local::create([
+            'zone_id' => 1,
+            'name' => 'PIURA_CASTILLA',
+            'address' => 'PIURA',
+            'series' => 'S0004',
+            'series_note' => 'SN0004',
+            'status' => 1,
+        ]);
+        Local::create([
+            'zone_id' => 1,
+            'name' => 'SULLANA_NUEVO',
+            'address' => 'PIURA',
+            'series' => 'S0005',
+            'series_note' => 'SN0005',
+            'status' => 1,
+        ]);
+        Local::create([
+            'zone_id' => 1,
+            'name' => 'SULLANA_VIEJO',
+            'address' => 'PIURA',
+            'series' => 'S0006',
+            'series_note' => 'SN0006',
+            'status' => 1,
+        ]);
+        Local::create([
+            'zone_id' => 1,
+            'name' => 'TALARA',
+            'address' => 'PIURA',
+            'series' => 'S0007',
+            'series_note' => 'SN0007',
+            'status' => 1,
+        ]);
+        Local::create([
+            'zone_id' => 1,
+            'name' => 'TUMBES',
+            'address' => 'TUMBES',
+            'series' => 'S0008',
+            'series_note' => 'SN0008',
+            'status' => 1,
+        ]);
+        Local::create([
+            'zone_id' => 1,
+            'name' => 'TRUJILLO',
+            'address' => 'LA LIBERTAD',
+            'series' => 'S0009',
+            'series_note' => 'SN0009',
+            'status' => 1,
+        ]);
+        Local::create([
+            'zone_id' => 2,
+            'name' => 'LIMA',
+            'address' => 'LIMA',
+            'series' => 'S0010',
+            'series_note' => 'SN0010',
             'status' => 1,
         ]);
     }

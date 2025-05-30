@@ -46,15 +46,6 @@
                                 <FormMessage />
                             </FormItem>
                         </FormField>
-                        <FormField v-slot="{ componentField }" name="user_id">
-                            <FormItem>
-                                <FormLabel>Usuario</FormLabel>
-                                <FormControl>
-                                    <UserCombobox @select="onSelectUser" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        </FormField>
                         <FormField v-slot="{ componentField }" name="type_movement_id">
                             <FormItem>
                                 <FormLabel>Tipo de Movimiento</FormLabel>
@@ -82,16 +73,14 @@
                             <FormItem>
                                 <FormLabel>Estado</FormLabel>
                                 <FormControl>
-                                    <Select v-bind="componentField">
+                                    <Select v-bind="componentField" disabled>
                                         <SelectTrigger class="w-full">
-                                            <SelectValue placeholder="Seleccione el estado" />
+                                            <SelectValue placeholder="Activo" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Estado</SelectLabel>
-                                                <SelectItem value="2">Anulado</SelectItem>
                                                 <SelectItem value="1">Activo</SelectItem>
-                                                <SelectItem value="0">Eliminado</SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -167,12 +156,16 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import * as z from 'zod';
 import SupplierCombobox from '@/components/Inputs/SupplierCombobox.vue';
-import UserCombobox from '@/components/Inputs/UserCombobox.vue';
 import { ref } from 'vue';
 
 // Composable
 import { useMovement } from '@/composables/useMovement';
 const { createMovement } = useMovement();
+
+// Get authenticated user
+import { usePage } from '@inertiajs/vue3';
+const { props } = usePage();
+const authUserId = props.auth?.user?.id;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -185,9 +178,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-// ID del proveedor y usuario seleccionados
+// ID del proveedor seleccionado
 const selectedSupplier = ref<number | null>(null);
-const selectedUser = ref<number | null>(null);
 
 // Form validation
 const formSchema = toTypedSchema(
@@ -198,9 +190,9 @@ const formSchema = toTypedSchema(
         issue_date: z.string({ message: 'Campo obligatorio' }),
         credit_date: z.string().optional(),
         supplier_id: z.number({ message: 'Seleccione un proveedor' }),
-        user_id: z.number({ message: 'Seleccione un usuario' }),
+        user_id: z.number({ message: 'Usuario no autenticado' }),
         type_movement_id: z.string().or(z.number()).transform(val => Number(val)),
-        status: z.string().or(z.number()).transform(val => Number(val)),
+        status: z.number().default(1),
         igv_status: z.string().or(z.number()).transform(val => Number(val)),
         payment_type: z.string({ message: 'Campo obligatorio' }),
     }),
@@ -211,7 +203,7 @@ const { handleSubmit, setFieldValue } = useForm({
     validationSchema: formSchema,
     initialValues: {
         supplier_id: null,
-        user_id: null,
+        user_id: authUserId,
         payment_type: 'contado',
         status: 1,
         igv_status: 1,
@@ -223,12 +215,6 @@ const { handleSubmit, setFieldValue } = useForm({
 const onSelectSupplier = (id: number) => {
     selectedSupplier.value = id;
     setFieldValue('supplier_id', id);
-};
-
-// Función para manejar la selección de usuario desde el combobox
-const onSelectUser = (id: number) => {
-    selectedUser.value = id;
-    setFieldValue('user_id', id);
 };
 
 // Form submit

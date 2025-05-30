@@ -1,4 +1,4 @@
-// useMovement.ts
+// composables/useMovement.ts
 import { MovementResource, MovementRequest, MovementUpdateRequest } from '@/pages/panel/movement/interface/Movement';
 import { MovementServices } from '@/services/movementService';
 import { reactive } from 'vue';
@@ -22,6 +22,7 @@ export function useMovement() {
         statusModal: {
             update: false,
             delete: false,
+            addProducts: false, // Add addProducts to statusModal
         },
     });
 
@@ -63,7 +64,7 @@ export function useMovement() {
     const updateMovement = async (id: number, data: MovementUpdateRequest) => {
         try {
             await MovementServices.update(id, data);
-            loadingMovements();
+            loadingMovements(principal.paginacion.current_page);
         } catch (error) {
             console.error('Error updating movement:', error);
         }
@@ -73,7 +74,7 @@ export function useMovement() {
     const deleteMovement = async (id: number) => {
         try {
             await MovementServices.destroy(id);
-            loadingMovements();
+            loadingMovements(principal.paginacion.current_page);
             principal.statusModal.delete = false;
         } catch (error) {
             console.error('Error deleting movement:', error);
