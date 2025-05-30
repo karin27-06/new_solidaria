@@ -5,7 +5,7 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Box, Building, Folder, LayoutGrid, Map, PackageCheck, ShieldCheck, Syringe, Truck, UserCog, Users } from 'lucide-vue-next';
+import { Box, Building, Folder, LayoutGrid, Map, PackageCheck, ShieldCheck, Syringe, Truck, UserCog, Users } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -20,10 +20,10 @@ const mainNavItems2: NavItem[] = [
         title: 'Proveedores',
         href: '#',
         icon: PackageCheck,
-                items: [
+        items: [
             {
-        title: 'Proveedores',
-        href: '/panel/suppliers',
+                title: 'Proveedores',
+                href: '/panel/suppliers',
             },
         ],
     },
@@ -32,10 +32,10 @@ const mainNavItems2: NavItem[] = [
         title: 'Doctores',
         href: '/panel/doctors',
         icon: Syringe,
-                items: [
+        items: [
             {
-           title: 'Doctores',
-           href: '/panel/doctors',
+                title: 'Doctores',
+                href: '/panel/doctors',
             },
         ],
     },
@@ -45,12 +45,12 @@ const mainNavItems2: NavItem[] = [
         icon: Users,
         items: [
             {
-            title: 'Clientes',
-            href: '/panel/customers',
+                title: 'Clientes',
+                href: '/panel/customers',
             },
             {
-            title: 'Tipos de cliente',
-            href: '/panel/clientTypes',
+                title: 'Tipos de cliente',
+                href: '/panel/clientTypes',
             },
         ],
     },
@@ -144,13 +144,8 @@ const mainNavItems7: NavItem[] = [
 const footerNavItems: NavItem[] = [
     {
         title: 'Github',
-        href: 'https://github.com/laravel/vue-starter-kit',
+        href: 'https://github.com/JuniorChistemas/new_solidaria',
         icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
     },
 ];
 </script>
@@ -170,7 +165,15 @@ const footerNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain :items="mainNavItems" :items2="mainNavItems2" :items3="mainNavItems3" :items4="mainNavItems4" :items5="mainNavItems5" :items6="mainNavItems6" :items7="mainNavItems7"/>
+            <NavMain
+                :items="mainNavItems"
+                :items2="mainNavItems2"
+                :items3="mainNavItems3"
+                :items4="mainNavItems4"
+                :items5="mainNavItems5"
+                :items6="mainNavItems6"
+                :items7="mainNavItems7"
+            />
         </SidebarContent>
 
         <SidebarFooter>
