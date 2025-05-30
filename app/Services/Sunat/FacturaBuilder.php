@@ -125,6 +125,12 @@ class FacturaBuilder
     $resulta = $this->see->send($invoice);
 
     if (!$resulta->isSuccess()) {
+      Log::error('Error al enviar la factura', [
+        'serie' => $invoice->getSerie(),
+        'correlativo' => $invoice->getCorrelativo(),
+        'fechaEmision' => Carbon::parse($invoice->getFechaEmision())->format('Y-m-d H:i:s'),
+        'error' => $resulta->getError(),
+      ]);
       return [
         'success' => false,
         'errors' => $resulta->getError(),

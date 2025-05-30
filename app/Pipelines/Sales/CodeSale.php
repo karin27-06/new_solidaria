@@ -32,6 +32,8 @@ class CodeSale
     ]);
     // Agregar el código del voucher al array de datos de la venta
     $saleDate['voucher_code'] = $pivot->serie . '-' . str_pad($pivot->correlative + 1, 4, '0', STR_PAD_LEFT);
+    $saleDate['serie']  = $pivot->serie;
+    $saleDate['correlative'] =  str_pad($pivot->correlative + 1, 4, '0', STR_PAD_LEFT);
     return $next($saleDate);
   }
 }

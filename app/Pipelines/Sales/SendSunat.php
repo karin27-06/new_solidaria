@@ -3,7 +3,7 @@
 namespace App\Pipelines\Sales;
 
 use App\Models\Customer;
-use App\Services\Sunat\borradoFacturaBuilder;
+use App\Models\Product;
 use App\Services\Sunat\FacturaBuilder;
 use Closure;
 use DateTime;
@@ -22,7 +22,12 @@ class SendSunat
   {
     Log::info('Enviando a sunat');
     $respuesta = $this->facturaBuilder->createInvoice(
-      $this->getInvoiceData($saleData['customer_id'])
+      $this->getInvoiceData(
+        $saleData['customer_id'],
+        $saleData['products'],
+        $saleData['serie'],
+        $saleData['correlative']
+      )
     );
     Log::info('Respuesta de sunat: ' . json_encode($respuesta));
     return $next($saleData);
@@ -45,9 +50,9 @@ class SendSunat
   {
     return [
       'ubigueo' => '150101',
-      'departamento' => 'LIMA',
-      'provincia' => 'LIMA',
-      'distrito' => 'LIMA',
+      'departamento' => 'PIURA',
+      'provincia' => 'PIURA',
+      'distrito' => 'PIURA',
       'urbanizacion' => '-',
       'direccion' => 'Av. Ejemplo 123',
       'cod_local' => '0000',
@@ -62,25 +67,37 @@ class SendSunat
       'address' => $this->getAddress(),
     ];
   }
-  private function getItems(): array
+  private function getItems(array $productos): array
   {
-    return [
-      [
-        'cod_producto' => 'P001',
-        'unidad' => 'NIU',
-        'cantidad' => 2,
-        'mto_valor_unitario' => 50.00,
-        'descripcion' => 'Producto A',
-        'mto_base_igv' => 100.00,
-        'porcentaje_igv' => 18.00,
-        'igv' => 18.00,
-        'tip_afe_igv' => '10',
-        'total_impuestos' => 18.00,
-        'mto_valor_venta' => 100.00,
-        'mto_precio_unitario' => 59.00,
-      ],
-      // Agregar más productos según sea necesario
-    ];
+    $products = [];
+    foreach ($productos as $producto) {
+      $product = Product::find($producto['product_local_id']);
+      if (!$product) {
+        Log::error("Product with ID {$producto['id']} not found.");
+        throw new \Exception("Product not found");
+      }
+      $cantidad =  $producto['quantity_fraction'] > 0 ? ($producto['quantity_box'] * $product->fraction) + $producto['quantity_fraction'] : $producto['quantity_box'];
+      $precio_unitario = $producto['quantity_fraction'] > 0 ? $producto['price_fraction'] : $producto['price_box'];
+      $totalBase = round($cantidad * $precio_unitario, 2);
+      $igv = round($totalBase * 0.18, 2);
+      $precio_unitario_final = round(($totalBase + $igv) / $cantidad, 2);
+
+      $products[] = [
+        'cod_producto' => 'P' . $product->id, // Código del producto
+        'unidad' => 'NIU', // Unidad de medida - Catalog. 03
+        'cantidad' => $cantidad,
+        'mto_valor_unitario' => round($precio_unitario, 2),
+        'descripcion' => $product->name,
+        'mto_base_igv' => $totalBase,
+        'porcentaje_igv' => 18.00, // Porcentaje IGV - Catalog. 07
+        'igv' => $igv,
+        'tip_afe_igv' => '10', // Afectación IGV - Catalog. 08
+        'total_impuestos' => $igv,
+        'mto_valor_venta' => $totalBase,
+        'mto_precio_unitario' => $precio_unitario_final,
+      ];
+    }
+    return $products;
   }
   private function getLegends(): array
   {
@@ -89,39 +106,47 @@ class SendSunat
       'value' => 'SON DOSCIENTOS TREINTA Y SEIS CON 00/100 SOLES',
     ];
   }
+  public function getInvoiceData(int $customer_id, array $productos, string $serie, string $correlativo): array
+  {
+    $items = $this->getItems($productos);
 
-  private function getInvoiceAmounts(): array
-  {
-    return [
-      'mtoOperGravadas' => 100.00,
-      'mtoIGV' => 18.00,
-      'totalImpuestos' => 18.00,
-      'valorVenta' => 100.00,
-      'subTotal' => 118.00,
-      'mtoImpVenta' => 118.00,
-    ];
-  }
-  public function getInvoiceData(int $customer_id): array
-  {
+    // Calculate totals from items
+    $mto_oper_gravadas = 0;
+    $mto_igv = 0;
+    $total_impuestos = 0;
+    $valor_venta = 0;
+
+    foreach ($items as $item) {
+      $mto_oper_gravadas += $item['mto_valor_venta'];
+      $mto_igv += $item['igv'];
+      $total_impuestos += $item['total_impuestos'];
+      $valor_venta += $item['mto_valor_venta'];
+    }
+
+    // Round all totals to 2 decimal places
+    $mto_oper_gravadas = round($mto_oper_gravadas, 2);
+    $mto_igv = round($mto_igv, 2);
+    $total_impuestos = round($total_impuestos, 2);
+    $valor_venta = round($valor_venta, 2);
+    $sub_total = round($mto_oper_gravadas + $mto_igv, 2);
     return [
       'ubl_version' => '2.1',
       'tipo_operacion' => '0101', // Venta - Catalog. 51
       'tipo_doc' => '01', // Factura - Catalog. 01
-      'serie' => 'F001',
-      'correlativo' => '1',
-      'fecha_emision' => (new DateTime('2025-05-27 13:05:00-05:00')),
-      // 'formaPago' => 'Contado', // FormaPago: Contado
+      'serie' => $serie,
+      'correlativo' => $correlativo,
+      'fecha_emision' => (new DateTime('2025-05-29 13:05:00-05:00')),
       'tipo_moneda' => 'PEN', // Sol - Catalog. 02
       'company' => $this->getCompany(),
       'client' => $this->getCustomer($customer_id),
-      'items' => $this->getItems(),
+      'items' => $items,
       'legends' => $this->getLegends(),
-      'mto_oper_gravadas' => 100.00,
-      'mto_igv' => 18.00,
-      'total_impuestos' => 18.00,
-      'valor_venta' => 100.00,
-      'sub_total' => 118.00,
-      'mto_imp_venta' => 118.00,
+      'mto_oper_gravadas' => $mto_oper_gravadas,
+      'mto_igv' => $mto_igv,
+      'total_impuestos' => $total_impuestos,
+      'valor_venta' => $valor_venta,
+      'sub_total' => $sub_total,
+      'mto_imp_venta' => $sub_total,
     ];
   }
 }
