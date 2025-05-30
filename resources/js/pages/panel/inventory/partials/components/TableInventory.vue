@@ -7,14 +7,14 @@
                     <Table>
                         <TableHeader class="table-header-row">
                             <TableRow>
-                                <TableHead class="table-head-id text-center">ID</TableHead>
-                                <TableHead class="table-head text-center">Nombre</TableHead>
-                                <TableHead class="table-head text-center">Composición</TableHead>
-                                <TableHead class="table-head text-center">Presentación</TableHead>
-                                <TableHead class="table-head text-center">Laboratorio</TableHead>
-                                <TableHead class="table-head text-center">Categoría</TableHead>
-                                <TableHead class="table-head text-center">Cajas</TableHead>
-                                <TableHead class="table-head text-center">Fracciones</TableHead>
+                                <TableHead class="table-head-id">ID</TableHead>
+                                <TableHead class="table-head">Nombre</TableHead>
+                                <TableHead class="table-head">Composición</TableHead>
+                                <TableHead class="table-head">Presentación</TableHead>
+                                <TableHead class="table-head">Laboratorio</TableHead>
+                                <TableHead class="table-head">Categoría</TableHead>
+                                <TableHead class="table-head">Cajas</TableHead>
+                                <TableHead class="table-head">Fracciones</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody class="table-body">

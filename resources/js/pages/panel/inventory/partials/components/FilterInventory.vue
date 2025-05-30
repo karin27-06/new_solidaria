@@ -1,6 +1,6 @@
 <template>
   <div class="p-4 rounded-lg">
-    <div class="flex flex-wrap gap-4 mb-4 container-table mx-auto">
+    <div class="flex flex-wrap gap-4 mb-0 container-table mx-auto">
       <!-- Filtro por nombre -->
       <div class="w-full sm:w-64">
         <label class="text-sm font-medium mb-1 block">Nombre de Producto</label>
@@ -13,22 +13,22 @@
       </div>
 
       <!-- Filtros con comboboxes -->
-      <div class="w-full sm:w-64">
+      <div class="w-full sm:w-52">
         <label class="text-sm font-medium mb-1 block">Laboratorio</label>
         <LaboratoryCombobox ref="laboratoryCombobox" @select="handleLaboratorySelect" />
       </div>
-      <div class="w-full sm:w-64">
+      <div class="w-full sm:w-52">
         <label class="text-sm font-medium mb-1 block">Categoría</label>
         <CategoryCombobox ref="categoryCombobox" @select="handleCategorySelect" />
       </div>
-      <div class="w-full sm:w-64">
+      <div class="w-full sm:w-52">
         <label class="text-sm font-medium mb-1 block">Local</label>
         <LocalCombobox ref="localCombobox" @select="handleLocalSelect" />
       </div>
     </div>
 
     <!-- Radio buttons para estado de stock -->
-    <div class="mb-4 container-table mx-auto">
+    <div class="mb-1 container-table mx-auto">
       <label class="text-sm font-medium mb-2 block">Estado de Stock</label>
       <div class="flex flex-wrap gap-4">
         <div class="flex items-center">

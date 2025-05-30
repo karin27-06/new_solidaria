@@ -26,7 +26,18 @@
                             <td class="cell-data">{{ customer.address }}</td>
                             <td class="cell-data">{{ customer.phone }}</td>
                             <td class="cell-data">{{ customer.birthdate }}</td>
-                            <td class="cell-data">{{ customer.client_type}}</td>
+                            <td class="cell-data">
+                            <span
+                            :class="{
+                            'text-green-600 bg-green-50': customer.client_type_id === 1,
+                            'text-blue-600 bg-blue-50': customer.client_type_id === 2,
+                            'text-yellow-600 bg-yellow-50': customer.client_type_id === 3
+                            }"
+                            class="px-2 py-1 rounded-full text-xs font-medium"
+                            >
+                            {{ customer.client_type }}
+                            </span>
+                            </td>
                             <td class="cell-actions">
                                 <div class="actions-container">
                                     <Button variant="ghost" size="sm" class="action-button" @click="openModal(customer.id)" title="Editar Cliente">
@@ -36,7 +47,7 @@
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        class="action-button"
+                                        class="action-button-2"
                                         @click="openModalDelete(customer.id)"
                                         title="Eliminar Cliente"
                                     >

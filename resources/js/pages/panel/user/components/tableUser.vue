@@ -45,7 +45,7 @@
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        class="action-button"
+                                        class="action-button-2"
                                         @click="openModalDelete(user.id)"
                                         title="Eliminar proveedor"
                                     >
