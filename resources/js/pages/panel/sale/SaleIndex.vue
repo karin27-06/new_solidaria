@@ -86,7 +86,6 @@
                     </ResizablePanel>
                 </ResizablePanelGroup>
             </div>
-            {{ typeVoucherData }}
         </div>
     </AppLayout>
 </template>
