@@ -46,7 +46,7 @@
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            class="action-button"
+                                            class="action-button-2"
                                             @click="openModalDelete(laboratory.id)"
                                             title="Eliminar laboratorio"
                                         >

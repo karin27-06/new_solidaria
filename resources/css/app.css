@@ -251,7 +251,23 @@ html {
 }
 
 .action-button {
-    @apply h-8 w-8 p-0 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100;
+  @apply h-8 w-8 p-0 text-gray-600 hover:bg-gray-100 hover:text-gray-900
+         dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100
+         outline outline-1 outline-green-500;
+}
+
+.action-button:hover {
+  @apply outline-green-500 text-green-600 bg-green-100;
+}
+
+.action-button-2 {
+  @apply h-8 w-8 p-0 text-gray-600 hover:bg-gray-100 hover:text-gray-900
+         dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100
+         outline outline-1 outline-red-500;
+}
+
+.action-button-2:hover {
+  @apply outline-red-500 text-red-600 bg-red-100;
 }
 
 .action-icon {

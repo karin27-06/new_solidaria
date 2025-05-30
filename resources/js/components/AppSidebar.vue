@@ -18,29 +18,41 @@ const mainNavItems: NavItem[] = [
 const mainNavItems2: NavItem[] = [
     {
         title: 'Proveedores',
-        href: '/panel/suppliers',
+        href: '#',
         icon: PackageCheck,
+                items: [
+            {
+        title: 'Proveedores',
+        href: '/panel/suppliers',
+            },
+        ],
     },
 
     {
         title: 'Doctores',
         href: '/panel/doctors',
         icon: Syringe,
+                items: [
+            {
+           title: 'Doctores',
+           href: '/panel/doctors',
+            },
+        ],
     },
     {
         title: 'Clientes',
-        href: '/panel/customers',
+        href: '#',
         icon: Users,
-    },
-    {
-        title: 'Tipos de cliente',
-        href: '/panel/clientTypes',
-        icon: Users,
-    },
-    {
-        title: 'Ventas',
-        href: '/panel/sales',
-        icon: Box,
+        items: [
+            {
+            title: 'Clientes',
+            href: '/panel/customers',
+            },
+            {
+            title: 'Tipos de cliente',
+            href: '/panel/clientTypes',
+            },
+        ],
     },
 ];
 const mainNavItems3: NavItem[] = [
@@ -68,7 +80,7 @@ const mainNavItems3: NavItem[] = [
         ],
     },
     {
-        title: 'Movimientos E inventario',
+        title: 'Movimientos',
         href: '#',
         icon: Truck,
         items: [
@@ -79,7 +91,7 @@ const mainNavItems3: NavItem[] = [
         ],
     },
     {
-        title: 'inventario',
+        title: 'Inventario',
         href: '#',
         icon: Box,
         items: [
@@ -90,7 +102,13 @@ const mainNavItems3: NavItem[] = [
         ],
     },
 ];
-
+const mainNavItems5: NavItem[] = [
+    {
+        title: 'Ventas',
+        href: '/panel/sales',
+        icon: Box,
+    },
+];
 const mainNavItems4: NavItem[] = [
     {
         title: 'Usuarios',
@@ -102,11 +120,8 @@ const mainNavItems4: NavItem[] = [
         href: '/panel/roles',
         icon: UserCog,
     },
-    {
-        title: 'Permisos',
-        href: '/panel/permissions',
-        icon: ShieldCheck,
-    },
+];
+const mainNavItems6: NavItem[] = [
     {
         title: 'Zonas',
         href: '/panel/zones',
@@ -119,6 +134,13 @@ const mainNavItems4: NavItem[] = [
     },
 ];
 
+const mainNavItems7: NavItem[] = [
+    {
+        title: 'Permisos',
+        href: '/panel/permissions',
+        icon: ShieldCheck,
+    },
+];
 const footerNavItems: NavItem[] = [
     {
         title: 'Github',
@@ -148,7 +170,7 @@ const footerNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain :items="mainNavItems" :items2="mainNavItems2" :items3="mainNavItems3" :items4="mainNavItems4" />
+            <NavMain :items="mainNavItems" :items2="mainNavItems2" :items3="mainNavItems3" :items4="mainNavItems4" :items5="mainNavItems5" :items6="mainNavItems6" :items7="mainNavItems7"/>
         </SidebarContent>
 
         <SidebarFooter>

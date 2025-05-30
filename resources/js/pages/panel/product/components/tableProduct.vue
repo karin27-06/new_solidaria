@@ -71,7 +71,7 @@
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        class="action-button"
+                                        class="action-button-2"
                                         @click="openModalDelete(product.id)"
                                         title="Eliminar producto"
                                     >

@@ -7,25 +7,25 @@
                     <Table>
                         <TableHeader class="table-header-row">
                             <TableRow>
-                                <TableHead class="table-head-id text-center">ID</TableHead>
-                                <TableHead class="table-head text-center">Nombre</TableHead>
-                                <TableHead class="table-head text-center">Composición</TableHead>
-                                <TableHead class="table-head text-center">Presentación</TableHead>
-                                <TableHead class="table-head text-center">Laboratorio</TableHead>
-                                <TableHead class="table-head text-center">Categoría</TableHead>
-                                <TableHead class="table-head text-center">Cajas</TableHead>
-                                <TableHead class="table-head text-center">Fracciones</TableHead>
+                                <TableHead class="table-head-id">ID</TableHead>
+                                <TableHead class="table-head">Nombre</TableHead>
+                                <TableHead class="table-head">Composición</TableHead>
+                                <TableHead class="table-head">Presentación</TableHead>
+                                <TableHead class="table-head">Laboratorio</TableHead>
+                                <TableHead class="table-head">Categoría</TableHead>
+                                <TableHead class="table-head">Cajas</TableHead>
+                                <TableHead class="table-head">Fracciones</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody class="table-body">
                             <TableRow v-for="product in productList" :key="product.id" class="table-row">
-                                <td class="cell-id text-center">{{ product.id }}</td>
-                                <td class="cell-data text-center">{{ product.nombre }}</td>
-                                <td class="cell-data text-center">{{ product.composicion }}</td>
-                                <td class="cell-data text-center">{{ product.presentacion }}</td>
-                                <td class="cell-data text-center">{{ product.laboratorio }}</td>
-                                <td class="cell-data text-center">{{ product.categoria }}</td>
-                                <td class="cell-data text-center">
+                                <td class="cell-id">{{ product.id }}</td>
+                                <td class="cell-data">{{ product.nombre }}</td>
+                                <td class="cell-data">{{ product.composicion }}</td>
+                                <td class="cell-data">{{ product.presentacion }}</td>
+                                <td class="cell-data">{{ product.laboratorio }}</td>
+                                <td class="cell-data">{{ product.categoria }}</td>
+                                <td class="cell-data">
                                     <span 
                                         class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
                                         <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-blue-500 dark:bg-blue-400"></span>
@@ -93,30 +93,4 @@ const { productList, productPaginate, loading } = defineProps<{
 }>();
 </script>
 
-<style scoped>
-.container-table {
-    padding: 1rem;
-}
-
-.table-content {
-    width: 100%;
-}
-
-.pagination-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-    padding: 0.5rem;
-}
-
-.pagination-summary {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-}
-
-.pagination-emphasis {
-    font-weight: 600;
-    color: var(--text-primary);
-}
-</style>
+<style scoped land="css"></style>

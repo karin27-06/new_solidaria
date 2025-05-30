@@ -15,7 +15,7 @@
             <circle cx="20" cy="21" r="1" />
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61l1.38-7.39H6" />
         </svg>
-        <p class="empty-cart-text">Tu carrito está vacío</p>
+        <p class="empty-cart-text pl-5">Tu carrito está vacío</p>
     </div>
 </template>
 

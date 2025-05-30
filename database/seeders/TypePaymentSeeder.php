@@ -22,11 +22,11 @@ class TypePaymentSeeder extends Seeder
             'status' => true,
         ]);
         TypePayment::create([
-            'name' => 'yape',
+            'name' => 'Yape',
             'status' => true,
         ]);
         TypePayment::create([
-            'name' => 'plin',
+            'name' => 'Plin',
             'status' => true,
         ]);
     }

@@ -111,7 +111,7 @@
                                             v-if="movement.status !== 3"
                                             variant="ghost"
                                             size="sm"
-                                            class="action-button p-1"
+                                            class="action-button-2 p-1"
                                             @click="openModalDelete(movement.id)"
                                             title="Eliminar movimiento"
                                         >

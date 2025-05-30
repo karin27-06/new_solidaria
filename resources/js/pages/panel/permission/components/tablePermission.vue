@@ -35,7 +35,7 @@
                                         <Button
                                             variant="ghost"
                                             size="sm"
-                                            class="action-button"
+                                            class="action-button-2"
                                             @click="openModalDelete(permission.id)"
                                             title="Eliminar permiso"
                                         >

@@ -15,6 +15,10 @@ defineProps<{
     items2: NavItem[];
     items3: NavItem[];
     items4: NavItem[];
+    items5: NavItem[];
+    items6: NavItem[];
+    items7: NavItem[];
+
 }>();
 
 const page = usePage<SharedData>();
@@ -41,15 +45,29 @@ const page = usePage<SharedData>();
         </SidebarMenu>
     </SidebarGroup>
     <SidebarGroupLabel>Gestión de Personas</SidebarGroupLabel>
-         <SidebarMenu>
-            <SidebarMenuItem v-for="item in items2" :key="item.title">
-                <SidebarMenuButton as-child :is-active="item.href === page.url" :tooltip="item.title">
-                    <Link :href="item.href">
-                        <component :is="item.icon" />
-                        <span>{{ item.title }}</span>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
+        <SidebarMenu>
+            <Collapsible v-for="item in items2" :key="item.title" as-child :default-open="isMenuActivo(item) || item.isActive"  class="group/collapsible" >
+                <SidebarMenuItem>
+                    <CollapsibleTrigger as-child>
+                        <SidebarMenuButton :tooltip="item.title">
+                            <component :is="item.icon" v-if="item.icon" />
+                            <span>{{ item.title }}</span>
+                            <ChevronRight class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                        <SidebarMenuSub>
+                            <SidebarMenuSubItem v-for="subItem in item.items" :key="subItem.title" >
+                                <SidebarMenuSubButton as-child :is-active="subItem.href === page.url">
+                                    <Link :href="subItem.href">
+                                        <span>{{ subItem.title }}</span>
+                                    </Link>
+                                </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                        </SidebarMenuSub>
+                    </CollapsibleContent>
+                </SidebarMenuItem>
+            </Collapsible>
         </SidebarMenu>
         <SidebarGroupLabel>Gestión Comercial</SidebarGroupLabel>
         <SidebarMenu>
@@ -76,9 +94,42 @@ const page = usePage<SharedData>();
                 </SidebarMenuItem>
             </Collapsible>
         </SidebarMenu>
-        <SidebarGroupLabel>Adminsitración y Puntos</SidebarGroupLabel>
+                <SidebarGroupLabel>Ingresos Solidaria</SidebarGroupLabel>
+         <SidebarMenu>
+            <SidebarMenuItem v-for="item in items5" :key="item.title">
+                <SidebarMenuButton as-child :is-active="item.href === page.url" :tooltip="item.title">
+                    <Link :href="item.href">
+                        <component :is="item.icon" />
+                        <span>{{ item.title }}</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        </SidebarMenu>
+        <SidebarGroupLabel>Adminsitración</SidebarGroupLabel>
          <SidebarMenu>
             <SidebarMenuItem v-for="item in items4" :key="item.title">
+                <SidebarMenuButton as-child :is-active="item.href === page.url" :tooltip="item.title">
+                    <Link :href="item.href">
+                        <component :is="item.icon" />
+                        <span>{{ item.title }}</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        </SidebarMenu> 
+                <SidebarGroupLabel>Puntos de Acceso</SidebarGroupLabel>
+         <SidebarMenu>
+            <SidebarMenuItem v-for="item in items6" :key="item.title">
+                <SidebarMenuButton as-child :is-active="item.href === page.url" :tooltip="item.title">
+                    <Link :href="item.href">
+                        <component :is="item.icon" />
+                        <span>{{ item.title }}</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        </SidebarMenu>
+                <SidebarGroupLabel>Seguridad</SidebarGroupLabel>
+         <SidebarMenu>
+            <SidebarMenuItem v-for="item in items7" :key="item.title">
                 <SidebarMenuButton as-child :is-active="item.href === page.url" :tooltip="item.title">
                     <Link :href="item.href">
                         <component :is="item.icon" />
