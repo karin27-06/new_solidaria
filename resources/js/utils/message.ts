@@ -6,13 +6,13 @@ import 'vue-sonner/style.css'
 export function showSuccessMessage(title: string, description?: string) {
   toast.success(description || title, {
     description: description ? title : undefined,
-    duration: 300,
+    duration: 3000,
   });
 }
 
 export function showErrorMessage(title: string, description?: string) {
   toast.error(description || title, {
     description: description ? title : undefined,
-    duration: 300,
+    duration: 3000,
   });
 }

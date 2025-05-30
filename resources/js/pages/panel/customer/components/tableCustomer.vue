@@ -69,7 +69,7 @@
 import LoadingTable from '@/components/loadingTable.vue';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useToast } from '@/components/ui/toast';
+import { toast } from 'vue-sonner';
 import { Pagination } from '@/interface/paginacion';
 import { SharedData } from '@/types';
 import { usePage } from '@inertiajs/vue3';
@@ -78,7 +78,6 @@ import { onMounted, ref } from 'vue';
 import PaginationCustomer from '../../../../components/pagination.vue';
 import { CustomerResource } from '../interface/Customer';
 
-const { toast } = useToast();
 const emit = defineEmits<{
     (e: 'page-change', page: number): void;
     (e: 'open-modal', id_customer: number): void;
@@ -90,8 +89,7 @@ const page = usePage<SharedData>();
 const message = ref(page.props.flash?.message || '');
 onMounted(() => {
     if (message.value) {
-        toast({
-            title: 'Notificación',
+        toast('Notificación', {
             description: message.value,
         });
     }

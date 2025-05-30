@@ -4,6 +4,7 @@ import { CustomerRequest, CustomerRequestUpdate, CustomerResource } from '@/page
 import { CustomerServices } from '@/services/customerServices';
 import { showSuccessMessage } from '@/utils/message';
 import { reactive } from 'vue';
+import { toast } from 'vue-sonner';
 
 export const useCustomer = () => {
     const principal = reactive<{
@@ -123,7 +124,7 @@ export const useCustomer = () => {
         try {
             const response = await CustomerServices.update(id, data);
             if (response) {
-                showSuccessMessage('Cliente actualizado', 'El Cliente se actualizó correctamente');
+                showSuccessMessage('El Cliente se actualizó correctamente', 'Cliente actualizado');
                 principal.statusModal.update = false;
                 loadingCustomers(principal.paginacion.current_page, principal.filter);
             }
@@ -135,20 +136,33 @@ export const useCustomer = () => {
     };
 
     // delete customer
-    const deleteCustomer = async (id: number) => {
-        try {
-            const response = await CustomerServices.destroy(id);
-            if (response) {
-                showSuccessMessage('Cliente eliminado', 'El cliente se eliminó correctamente');
-                principal.statusModal.delete = false;
-                loadingCustomers(principal.paginacion.current_page, principal.filter);
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            principal.statusModal.delete = false;
-        }
-    };
+  const deleteCustomer = async (id: number) => {
+    try {
+      const deletePromise = CustomerServices.destroy(id);
+      toast.promise(deletePromise, {
+        loading: 'Eliminando cliente...',
+        success: () => {
+          principal.statusModal.delete = false;
+          loadingCustomers(principal.paginacion.current_page, principal.filter);
+          return {
+            message: 'Cliente eliminado',
+            description: 'El cliente se eliminó correctamente',
+          };
+        },
+        error: () => {
+          principal.statusModal.delete = false;
+          return {
+            message: 'Error al eliminar',
+            description: 'Hubo un problema al eliminar el cliente',
+          };
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      principal.statusModal.delete = false;
+    }
+  };
 
     return {
         principal,
