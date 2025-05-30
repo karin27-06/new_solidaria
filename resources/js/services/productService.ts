@@ -68,8 +68,12 @@ export const ProductServices = {
     async getCategory(): Promise<InputCategoryResponse> {
         return await axios.get('/panel/inputs/category_list');
     },
+    // get Products combobox
     async getProducts(search: string = ''): Promise<ProductResponse> {
-        const response = await axios.get(`/panel/inputs/product_list?${search ? `?search=${encodeURIComponent(search)}` : ''}`);
+        const url = search
+            ? `/panel/inputs/product_list?search=${encodeURIComponent(search)}`
+            : '/panel/inputs/product_list';
+        const response = await axios.get(url);
         return response.data;
     },
     // Add product movement

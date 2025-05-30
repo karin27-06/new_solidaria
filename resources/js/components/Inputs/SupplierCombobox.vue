@@ -88,14 +88,14 @@ const filteredSuppliers = computed(() => {
 
 const initialLoadSuppliers = async () => {
     if (initialLoadDone.value) return;
-    console.log('Cargando proveedores...');
+   // console.log('Cargando proveedores...');
     try {
         isLoading.value = true;
         const response = await SupplierServices.getSuppliers('');
         suppliers.value = response.suppliers || [];
         error.value = false;
         initialLoadDone.value = true;
-        console.log('Proveedores cargados:', response.suppliers);
+      //  console.log('Proveedores cargados:', response.suppliers);
     } catch (e) {
         console.error('Error al cargar proveedores:', e);
         error.value = true;

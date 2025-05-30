@@ -35,7 +35,7 @@ export const SupplierServices = {
     },
     async getSuppliers(search: string = ''): Promise<SupplierResponse> {
         const response = await axios.get(`/panel/inputs/suppliers${search ? `?search=${encodeURIComponent(search)}` : ''}`);
-        console.log('services: ', response.data);
+      //  console.log('services: ', response.data);
         return response.data;
     },
 };

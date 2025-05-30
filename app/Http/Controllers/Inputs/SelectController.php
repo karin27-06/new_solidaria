@@ -50,9 +50,12 @@ class SelectController extends Controller
         return response()->json($users);
     }
     // Obtener lista de productos con detalles
-    public function getProducts()
+    public function getProducts(Request $request)
     {
-        $products = Product::select([
+        $search = $request->query('search', '');
+        $perPage = $request->query('per_page', 20);
+
+        $query = Product::select([
             'id',
             'name',
             'composition',
@@ -60,18 +63,30 @@ class SelectController extends Controller
             'form_farm',
             'barcode',
             'laboratory_id',
-            'laboratory_id',
-            'category_id',
             'category_id',
             'fraction',
             'state_fraction',
             'state_igv',
             'state'
-        ])
-            ->orderBy('name')
-            ->get();
+        ]);
 
-        return response()->json($products);
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('barcode', 'like', '%' . $search . '%')
+                  ->orWhere('composition', 'like', '%' . $search . '%');
+        }
+
+        $products = $query->orderBy('name')->paginate($perPage);
+
+        return response()->json([
+            'products' => $products->items(),
+            'pagination' => [
+                'current_page' => $products->currentPage(),
+                'last_page' => $products->lastPage(),
+                'per_page' => $products->perPage(),
+                'total' => $products->total(),
+            ]
+        ]);
     }
     // Obtener lista de proveedores
     public function getSuppliers()

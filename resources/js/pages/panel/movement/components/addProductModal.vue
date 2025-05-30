@@ -14,7 +14,13 @@
           <FormItem>
             <FormLabel>Producto *</FormLabel>
             <FormControl>
-              <ProductCombobox v-bind="componentField" @select="onProductSelect" :initialId="null" />
+              <ProductCombobox
+                v-bind="componentField"
+                :initialId="null"
+                @select="onProductSelect"
+                @update:modelValue="componentField.handleChange"
+                @blur="componentField.handleBlur"
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
