@@ -18,6 +18,7 @@ class ClientTypeFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
+            'tipo_doc' => $this->faker->randomElement(['01', '06']), // 01: DNI, 06: RUC
             'state' => $this->faker->boolean(),
         ];
     }

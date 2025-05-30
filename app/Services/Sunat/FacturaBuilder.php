@@ -22,90 +22,132 @@ class FacturaBuilder
   {
     $this->see = $see->getSee();
   }
-  public function generateSend(): array
+  private function buildCustomer(array $customerData): Client
   {
-    $client = (new Client())
-      ->setTipoDoc('6')
-      ->setNumDoc('20000000001')
-      ->setRznSocial('EMPRESA X');
+    return (new Client())
+      ->setTipoDoc($customerData['tipo_doc'])
+      ->setNumDoc($customerData['num_doc'])
+      ->setRznSocial($customerData['razon_social']);
+  }
+  private function buildAddress(array $addressData): Address
+  {
 
-    $address = (new Address())
-      ->setUbigueo('150101')
-      ->setDepartamento('LIMA')
-      ->setProvincia('LIMA')
-      ->setDistrito('LIMA')
-      ->setUrbanizacion('-')
-      ->setDireccion('Av. Villa Nueva 221')
-      ->setCodLocal('0000');
-
-    $company = (new Company())
-      ->setRuc('20123456789')
-      ->setRazonSocial('GREEN SAC')
-      ->setNombreComercial('GREEN')
-      ->setAddress($address);
-
+    return (new Address())
+      ->setUbigueo($addressData['ubigueo'])
+      ->setDepartamento($addressData['departamento'])
+      ->setProvincia($addressData['provincia'])
+      ->setDistrito($addressData['distrito'])
+      ->setUrbanizacion($addressData['urbanizacion'])
+      ->setDireccion($addressData['direccion'])
+      ->setCodLocal($addressData['cod_local']);
+  }
+  private function buildCompany(array $companyData): Company
+  {
+    return (new Company())
+      ->setRuc($companyData['ruc'])
+      ->setRazonSocial($companyData['razon_social'])
+      ->setNombreComercial($companyData['nombre_comercial'])
+      ->setAddress($this->buildAddress($companyData['address']));
+  }
+  private function buildFormaPago(): FormaPagoContado
+  {
+    return (new FormaPagoContado());
+  }
+  private function buildDetails(array $items): array
+  {
+    $details = [];
+    foreach ($items as $item) {
+      $details[] = (new SaleDetail())
+        ->setCodProducto($item['cod_producto'])
+        ->setUnidad($item['unidad'])
+        ->setCantidad($item['cantidad'])
+        ->setMtoValorUnitario($item['mto_valor_unitario'])
+        ->setDescripcion($item['descripcion'])
+        ->setMtoBaseIgv($item['mto_base_igv'])
+        ->setPorcentajeIgv($item['porcentaje_igv'])
+        ->setIgv($item['igv'])
+        ->setTipAfeIgv($item['tip_afe_igv'])
+        ->setTotalImpuestos($item['total_impuestos'])
+        ->setMtoValorVenta($item['mto_valor_venta'])
+        ->setMtoPrecioUnitario($item['mto_precio_unitario']);
+    }
+    return $details;
+  }
+  private function buildLeyends(array $legends): array
+  {
+    return [
+      (new Legend())
+        ->setCode($legends['code'])
+        ->setValue($legends['value'])
+    ];
+  }
+  private function setInvoiceAmounts(Invoice $invoice, array $data): void
+  {
+    $invoice
+      ->setMtoOperGravadas($data['mto_oper_gravadas'])
+      ->setMtoIGV($data['mto_igv'])
+      ->setTotalImpuestos($data['total_impuestos'])
+      ->setValorVenta($data['valor_venta'])
+      ->setSubTotal($data['sub_total'])
+      ->setMtoImpVenta($data['mto_imp_venta']);
+  }
+  private function buildInvoice(array $data): Invoice
+  {
     $invoice = (new Invoice())
-      ->setUblVersion('2.1')
-      ->setTipoOperacion('0101') // Venta - Catalog. 51
-      ->setTipoDoc('01') // Factura - Catalog. 01 
-      ->setSerie('F001')
-      ->setCorrelativo('1')
-      ->setFechaEmision(new DateTime('2025-05-27 13:05:00-05:00')) // Zona horaria: Lima
-      ->setFormaPago(new FormaPagoContado) // FormaPago: Contado
-      ->setTipoMoneda('PEN') // Sol - Catalog. 02
-      ->setCompany($company)
-      ->setClient($client)
-      ->setMtoOperGravadas(100.00)
-      ->setMtoIGV(18.00)
-      ->setTotalImpuestos(18.00)
-      ->setValorVenta(100.00)
-      ->setSubTotal(118.00)
-      ->setMtoImpVenta(118.00);
+      ->setUblVersion($data['ubl_version'])
+      ->setTipoOperacion($data['tipo_operacion'])
+      ->setTipoDoc($data['tipo_doc'])
+      ->setSerie($data['serie'])
+      ->setCorrelativo($data['correlativo'])
+      ->setFechaEmision($data['fecha_emision'])
+      ->setFormaPago($this->buildFormaPago())
+      ->setTipoMoneda($data['tipo_moneda'])
+      ->setCompany($this->buildCompany($data['company']))
+      ->setClient($this->buildCustomer($data['client']))
+      ->setDetails($this->buildDetails($data['items']))
+      ->setLegends($this->buildLeyends($data['legends']));
 
-    $item = (new SaleDetail())
-      ->setCodProducto('P001')
-      ->setUnidad('NIU') // Unidad - Catalog. 03
-      ->setCantidad(2)
-      ->setMtoValorUnitario(50.00)
-      ->setDescripcion('PRODUCTO 1')
-      ->setMtoBaseIgv(100)
-      ->setPorcentajeIgv(18.00) // 18%
-      ->setIgv(18.00)
-      ->setTipAfeIgv('10') // Gravado Op. Onerosa - Catalog. 07
-      ->setTotalImpuestos(18.00) // Suma de impuestos en el detalle
-      ->setMtoValorVenta(100.00)
-      ->setMtoPrecioUnitario(59.00);
-    $legend = (new Legend())
-      ->setCode('1000') // Monto en letras - Catalog. 52
-      ->setValue('SON DOSCIENTOS TREINTA Y SEIS CON 00/100 SOLES');
-    $invoice->setDetails([$item])
-      ->setLegends([$legend]);
-    // enviar sunat
+    $this->setInvoiceAmounts($invoice, $data);
+
+    return $invoice;
+  }
+
+  public function createInvoice(array $data): array
+  {
+    $invoice = $this->buildInvoice($data);
+    Log::info('data', $data);
     Log::info('enviado', [
       'serie' => $invoice->getSerie(),
       'correlativo' => $invoice->getCorrelativo(),
       'fechaEmision' => Carbon::parse($invoice->getFechaEmision())->format('Y-m-d H:i:s'),
     ]);
+
     $resulta = $this->see->send($invoice);
 
     if (!$resulta->isSuccess()) {
+      Log::error('Error al enviar la factura', [
+        'serie' => $invoice->getSerie(),
+        'correlativo' => $invoice->getCorrelativo(),
+        'fechaEmision' => Carbon::parse($invoice->getFechaEmision())->format('Y-m-d H:i:s'),
+        'error' => $resulta->getError(),
+      ]);
       return [
         'success' => false,
         'errors' => $resulta->getError(),
         'invoice' => $invoice,
       ];
     }
-    // guardar el xml firmado 
+
     FacadesStorage::disk('local')->put(
-      'facturas2/' . $invoice->getName() . '.xml',
+      'facturas/' . $invoice->getName() . '.xml',
       $this->see->getFactory()->getLastXml()
     );
 
-    // cdr
     FacadesStorage::disk('local')->put(
       'cdr/' . 'R-' . $invoice->getName() . '.zip',
       $resulta->getCdrZip()
     );
+
     return [
       'success' => true,
       'errors' => null,

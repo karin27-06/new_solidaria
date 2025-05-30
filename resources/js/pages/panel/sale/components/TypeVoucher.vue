@@ -34,8 +34,8 @@ const props = defineProps<{
 const handleSelection = (value: string) => {
     const paymentMap: Record<string, TypeVoucher> = {
         '1': { id: 1, name: 'Factura' },
-        '2': { id: 2, name: 'Boleta' },
-        '3': { id: 3, name: 'Tikcket' },
+        '2': { id: 2, name: 'Tikcket' },
+        '3': { id: 3, name: 'Boleta' },
     };
 
     if (value in paymentMap) {

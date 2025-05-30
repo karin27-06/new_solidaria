@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('client_types', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->unique();
+            $table->string('tipo_doc', 2)->comment('Tipo de documento: 1: DNI y 6: RUC')->default('01');
             $table->boolean('state')->default(true)->comment('true: activo, false: inactivo');
             $table->timestamps();
         });
