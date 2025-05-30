@@ -32,7 +32,7 @@ class ProductFactory extends Factory
             'fraction'    => $fraction,
             'state_fraction'    => $state_fraction,
             'state_igv'    => $this->faker->boolean(),
-            'state'    => $this->faker->boolean(),
+            'state'    => true,
         ];
     }
 }

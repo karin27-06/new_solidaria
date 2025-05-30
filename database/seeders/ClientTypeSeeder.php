@@ -15,12 +15,12 @@ class ClientTypeSeeder extends Seeder
     {
         ClientType::create([
             'name' => 'DNI',
-            'tipo_doc' => '01', // DNI
+            'tipo_doc' => '1', // DNI
             'state' => true,
         ]);
         ClientType::create([
             'name' => 'FACTURA',
-            'tipo_doc' => '06', // RUC
+            'tipo_doc' => '6', // RUC
             'state' => true,
         ]);
     }
