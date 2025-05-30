@@ -1,3 +1,5 @@
+import { Pagination } from '@/interface/paginacion';
+
 export interface ProductSaleRequest {
     product_local_id: number;
     quantity_box: number;
@@ -25,4 +27,29 @@ export interface StoreSaleRequest {
 export interface SaleResponseStore {
     status: boolean;
     message: string;
+}
+
+export interface SaleResource {
+    id: number;
+    usuario: string;
+    cliente: string;
+    local: string;
+    doctor: string;
+    tipo_comprobante: string;
+    tipo_pago: string;
+    codigo: string;
+    codigo_tarjeta: string;
+    op_gravada: number;
+    op_exonerada: number;
+    op_inafecta: number;
+    igv: number;
+    total: number;
+    estado_venta: boolean;
+    estado_sunat: boolean;
+    created_at: string;
+}
+
+export interface SaleListResponse {
+    sales: SaleResource[];
+    pagination: Pagination;
 }

@@ -3,6 +3,7 @@
 namespace App\Services\Sunat;
 
 use App\Contracts\SunatInterface;
+use App\Models\Sale;
 use Carbon\Carbon;
 use DateTime;
 use Greenter\Model\Client\Client;
@@ -112,7 +113,7 @@ class FacturaBuilder
     return $invoice;
   }
 
-  public function createInvoice(array $data): array
+  public function createInvoice(array $data, int $id_sale): array
   {
     $invoice = $this->buildInvoice($data);
     Log::info('data', $data);
@@ -147,6 +148,15 @@ class FacturaBuilder
       'cdr/' . 'R-' . $invoice->getName() . '.zip',
       $resulta->getCdrZip()
     );
+
+    // uodate status sunat
+    $sale = Sale::find($id_sale);
+    if ($sale) {
+      $sale->state_sunat = true;
+      $sale->save();
+    } else {
+      Log::error('Sale not found', ['id_sale' => $id_sale]);
+    }
 
     return [
       'success' => true,

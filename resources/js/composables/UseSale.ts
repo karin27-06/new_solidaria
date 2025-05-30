@@ -1,7 +1,7 @@
 import { ComboBoxCustomer, comboBoxDoctor, TypePaymens, TypeVoucher } from '@/interface/ComboBox';
 import { Pagination } from '@/interface/paginacion';
 import { ProductLocalPrice } from '@/interface/ProductLocalPrice';
-import { StoreSaleRequest } from '@/pages/panel/sale/interface/Sale';
+import { SaleResource, StoreSaleRequest } from '@/pages/panel/sale/interface/Sale';
 import { saleServices } from '@/services/saleServices';
 import { showErrorMessage, showSuccessMessage } from '@/utils/message';
 import { ref } from 'vue';
@@ -17,7 +17,16 @@ export const useSale = () => {
         to: 0,
     });
     const loading = ref(false);
-
+    const loadingSale = ref(false);
+    const salesList = ref<SaleResource[]>([]);
+    const paginationSale = ref<Pagination>({
+        total: 0,
+        current_page: 0,
+        per_page: 0,
+        last_page: 0,
+        from: 0,
+        to: 0,
+    });
     // DATA PARA EL BACKEND
     const cardProducts = ref<ProductLocalPrice[]>([]);
     const customerData = ref<ComboBoxCustomer>({
@@ -149,6 +158,20 @@ export const useSale = () => {
         }
     };
 
+    const saleList = async (page: number = 1, search: string = '') => {
+        loadingSale.value = true;
+        try {
+            const response = await saleServices.saleList(page, search);
+            salesList.value = response.sales;
+            paginationSale.value = response.pagination;
+        } catch (error) {
+            handleApiError(error, 'Error al cargar la lista de ventas');
+            console.error('Error al cargar la lista de ventas:', error);
+        } finally {
+            loadingSale.value = false;
+        }
+    };
+
     return {
         loadingResultProducts,
         deleteResultProduct,
@@ -168,5 +191,9 @@ export const useSale = () => {
         setTypeVoucherData,
         storeSale,
         reset,
+        loadingSale,
+        salesList,
+        paginationSale,
+        saleList,
     };
 };

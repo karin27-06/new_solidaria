@@ -5,6 +5,7 @@ namespace App\Pipelines\Sales;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Services\Sunat\FacturaBuilder;
+use Carbon\Carbon;
 use Closure;
 use DateTime;
 use Illuminate\Support\Facades\Log;
@@ -26,8 +27,9 @@ class SendSunat
         $saleData['customer_id'],
         $saleData['products'],
         $saleData['serie'],
-        $saleData['correlative']
-      )
+        $saleData['correlative'],
+      ),
+      $saleData['sale_id']
     );
     Log::info('Respuesta de sunat: ' . json_encode($respuesta));
     return $next($saleData);
@@ -135,7 +137,7 @@ class SendSunat
       'tipo_doc' => '01', // Factura - Catalog. 01
       'serie' => $serie,
       'correlativo' => $correlativo,
-      'fecha_emision' => (new DateTime('2025-05-29 13:05:00-05:00')),
+      'fecha_emision' => Carbon::now(),
       'tipo_moneda' => 'PEN', // Sol - Catalog. 02
       'company' => $this->getCompany(),
       'client' => $this->getCustomer($customer_id),

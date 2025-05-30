@@ -1,5 +1,5 @@
 import { ProductLocalPriceResponse } from '@/interface/ProductLocalPrice';
-import { SaleResponseStore, StoreSaleRequest } from '@/pages/panel/sale/interface/Sale';
+import { SaleListResponse, SaleResponseStore, StoreSaleRequest } from '@/pages/panel/sale/interface/Sale';
 import axios, { AxiosError } from 'axios';
 type ValidationError = {
     errors: Record<string, string[]>;
@@ -51,5 +51,10 @@ export const saleServices = {
         } catch (error) {
             return handleApiError(error);
         }
+    },
+
+    async saleList(page: number, search: string = ''): Promise<SaleListResponse> {
+        const response = await axios.get(`/panel/sales-list?page=${page}&name=${encodeURIComponent(search)}`);
+        return response.data;
     },
 };

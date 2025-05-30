@@ -137,7 +137,7 @@ html {
 
 /* Table header sticky on vertical scroll (if needed) */
 .table-header-row {
-    @apply sticky top-0 bg-gray-50 dark:bg-gray-800/60;
+    @apply sticky top-0 bg-green-50 dark:bg-gray-800/60;
 }
 
 /* Table head cells */
@@ -251,23 +251,19 @@ html {
 }
 
 .action-button {
-  @apply h-8 w-8 p-0 text-gray-600 hover:bg-gray-100 hover:text-gray-900
-         dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100
-         outline outline-1 outline-green-500;
+    @apply h-8 w-8 p-0 text-gray-600 outline outline-1 outline-green-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100;
 }
 
 .action-button:hover {
-  @apply outline-green-500 text-green-600 bg-green-100;
+    @apply bg-green-100 text-green-600 outline-green-500;
 }
 
 .action-button-2 {
-  @apply h-8 w-8 p-0 text-gray-600 hover:bg-gray-100 hover:text-gray-900
-         dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100
-         outline outline-1 outline-red-500;
+    @apply h-8 w-8 p-0 text-gray-600 outline outline-1 outline-red-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100;
 }
 
 .action-button-2:hover {
-  @apply outline-red-500 text-red-600 bg-red-100;
+    @apply bg-red-100 text-red-600 outline-red-500;
 }
 
 .action-icon {

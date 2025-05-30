@@ -76,7 +76,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         # module Customer
         Route::resource('customers', CustomerController::class);
         # list Customers
-        Route::get('listar-customers', [CustomerController::class, 'listarCustomers'])->name('customers.listar');  
+        Route::get('listar-customers', [CustomerController::class, 'listarCustomers'])->name('customers.listar');
         # module Products
         Route::resource('product_prices', ProductPriceController::class);
         # list Products
@@ -114,11 +114,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         #Print ProductoMovement
         Route::get('/movements/{movement}/print', [MovementController::class, 'print'])->name('movements.print');
         # Route group for inputs, selects and autocomplete
-      
+
         # module sale
         Route::resource('sales', SaleController::class);
-      
-      
+        Route::get('sales-list', [SaleController::class, 'getSalesList'])->name('sales.listar');
+        Route::get('sales-view', [SaleController::class, 'viewSaleList'])->name('sales.view');
         Route::prefix('inputs')->name('inputs.')->group(function () {
             # get product list
             Route::get('product_list', [SelectController::class, 'getProducts'])->name('product_list');
