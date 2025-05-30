@@ -10,8 +10,8 @@ use App\Models\Permission;
 use App\Models\Role;
 use App\Pipelines\FilterByName;
 use Illuminate\Http\Request;
-use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Pipeline;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role as ModelsRole;
 

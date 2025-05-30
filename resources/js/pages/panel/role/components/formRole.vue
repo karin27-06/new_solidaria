@@ -42,6 +42,7 @@ import * as z from 'zod';
 
 // composable
 import { useRole } from '@/composables/useRole';
+import { onMounted, ref } from 'vue';
 const { createRole } = useRole();
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -68,7 +69,7 @@ const { handleSubmit } = useForm({
     validationSchema: formSchema,
 });
 
-const selectedPermissions = ref<number[]>([]);  // Aquí está la definición de ref
+const selectedPermissions = ref<number[]>([]); // Aquí está la definición de ref
 
 // Manejo de formulario
 const onSubmit = handleSubmit(async (values) => {
