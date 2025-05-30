@@ -4,6 +4,7 @@ import { ProductpriceRequest, ProductpriceRequestUpdate, ProductpriceResource } 
 import { ProductpriceServices } from '@/services/productpriceService';
 import { showSuccessMessage } from '@/utils/message';
 import { reactive } from 'vue';
+import { toast } from 'vue-sonner';
 
 export const useProductprice = () => {
     const principal = reactive<{
@@ -115,7 +116,7 @@ export const useProductprice = () => {
         try {
             const response = await ProductpriceServices.update(id, data);
             if (response) {
-                showSuccessMessage('Producto actualizado', 'El producto se actualizó correctamente');
+                showSuccessMessage('El precio de producto se actualizó correctamente','Precio de producto actualizado');
                 principal.statusModal.update = false;
                 loadingProductsprice(principal.paginacion.current_page, principal.filter);
             }
@@ -126,21 +127,36 @@ export const useProductprice = () => {
         }
     };
 
-    // delete product_price
-    const deleteProduct = async (id: number) => {
-        try {
-            const response = await ProductpriceServices.destroy(id);
-            if (response) {
-                showSuccessMessage('Producto eliminado', 'El producto se eliminó correctamente');
-                principal.statusModal.delete = false;
-                loadingProductsprice(principal.paginacion.current_page, principal.filter);
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            principal.statusModal.delete = false;
-        }
-    };
+    // delete product price con toast.promise
+const deleteProduct = async (id: number) => {
+  try {
+    const deletePromise = ProductpriceServices.destroy(id);
+
+    toast.promise(deletePromise, {
+      loading: 'Eliminando precio del producto...',
+      success: () => {
+        principal.statusModal.delete = false;
+        loadingProductsprice(principal.paginacion.current_page, principal.filter);
+        return {
+          message: 'Precio del producto eliminado',
+          description: 'El precio del producto se eliminó correctamente.',
+        };
+      },
+      error: () => {
+        principal.statusModal.delete = false;
+        return {
+          message: 'Error al eliminar',
+          description: 'No se pudo eliminar el precio del producto.',
+        };
+      },
+    });
+
+  } catch (error) {
+    console.error(error);
+  } finally {
+    principal.statusModal.delete = false;
+  }
+};
 
     return {
         principal,

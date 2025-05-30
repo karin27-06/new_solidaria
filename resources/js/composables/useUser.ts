@@ -2,6 +2,8 @@ import { Pagination } from '@/interface/paginacion';
 import { UserRequest, UserResource, UserUpdateRequest } from '@/pages/panel/user/interface/User';
 import { userServices } from '@/services/userServices';
 import { reactive, ref } from 'vue';
+import { toast } from 'vue-sonner';
+import { showSuccessMessage } from '@/utils/message';
 
 export const useUser = () => {
     const principal = reactive<{
@@ -72,7 +74,7 @@ export const useUser = () => {
         try {
             const response = await userServices.update(id, user);
             if (response.status) {
-                message.value = response.message;
+                showSuccessMessage('El usuario se actualizó correctamente','Usuario actualizado');
                 loadingUser(principal.paginacion.current_page);
             }
         } catch (error) {
@@ -82,20 +84,40 @@ export const useUser = () => {
             principal.statusModalUpdate = false;
         }
     };
+
     const deleteUser = async (id: number) => {
         try {
-            const response = await userServices.destroy(id);
-            if (response.status) {
-                message.value = response.message;
-                loadingUser(principal.paginacion.current_page);
-            }
-        } catch (error) {
-            console.error('Error deleting user:', error);
-            message.value = 'Error deleting user';
-        } finally {
+        const deletePromise = userServices.destroy(id);
+
+        toast.promise(deletePromise, {
+        loading: 'Eliminando usuario...',
+        success: () => {
+            loadingUser(principal.paginacion.current_page);
             principal.statusModalDelete = false;
-        }
-    };
+            return {
+            message: 'Usuario eliminado',
+            description: 'El usuario se eliminó correctamente.',
+            };
+        },
+        error: () => {
+            principal.statusModalDelete = false;
+            return {
+            message: 'Error al eliminar',
+            description: 'No se pudo eliminar el usuario.',
+            };
+        },
+        });
+
+    } catch (error) {
+    console.error('Error deleting user:', error);
+        toast.error('Error al eliminar usuario', {
+        description: 'Ocurrió un error inesperado al eliminar el usuario.',
+        duration: 3000,
+        });
+    } finally {
+        principal.statusModalDelete = false;
+    }
+};
     return {
         principal,
         message,

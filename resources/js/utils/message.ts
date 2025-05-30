@@ -1,11 +1,18 @@
-import { useToast } from '@/components/ui/toast/use-toast';
+// resources/js/utils/message.ts
 
-export const { toast } = useToast();
+import { toast } from 'vue-sonner';
+import 'vue-sonner/style.css'
 
 export function showSuccessMessage(title: string, description?: string) {
-    toast({ title, description, variant: 'default', duration: 3000 });
+  toast.success(description || title, {
+    description: description ? title : undefined,
+    duration: 300,
+  });
 }
 
 export function showErrorMessage(title: string, description?: string) {
-    toast({ title, description, variant: 'destructive', duration: 3000 });
+  toast.error(description || title, {
+    description: description ? title : undefined,
+    duration: 300,
+  });
 }

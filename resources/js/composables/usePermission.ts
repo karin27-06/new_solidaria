@@ -3,6 +3,7 @@ import { getPermissionList, PermissionResource, PermissionUpdateRequest } from '
 import { PermissionServices } from '@/services/permissionServices';
 import { showSuccessMessage } from '@/utils/message';
 import { reactive, ref } from 'vue';
+import { toast } from 'vue-sonner'; // ✅ Importado
 
 export const usePermission = () => {
     const principal = reactive<{
@@ -94,7 +95,7 @@ export const usePermission = () => {
         try {
             const response = await PermissionServices.update(id, data);
             if (response.status) {
-                showSuccessMessage('Permiso actualizado', 'El permiso se actualizó correctamente');
+                showSuccessMessage('El permiso se actualizó correctamente', 'Permiso actualizado');
                 principal.statusModal.update = false;
                 loadingPermissions(principal.paginacion.current_page, principal.filter);
             }
@@ -105,14 +106,30 @@ export const usePermission = () => {
 
     const deletePermission = async (id: number) => {
         try {
-            const response = await PermissionServices.destroy(id);
-            if (response.status) {
-                showSuccessMessage('Permiso eliminado', 'El permiso se eliminó correctamente');
-                principal.statusModal.delete = false;
-                loadingPermissions(principal.paginacion.current_page, principal.filter);
-            }
+            const deletePromise = PermissionServices.destroy(id);
+            toast.promise(deletePromise, {
+                loading: 'Eliminando permiso...',
+                success: () => {
+                    principal.statusModal.delete = false;
+                    loadingPermissions(principal.paginacion.current_page, principal.filter);
+                    return {
+                        message: 'Permiso eliminado',
+                        description: 'El permiso se eliminó correctamente',
+                    };
+                },
+                error: () => {
+                    principal.statusModal.delete = false;
+                    return {
+                        message: 'Error al eliminar',
+                        description: 'Hubo un problema al eliminar el permiso',
+                    };
+                },
+            });
         } catch (error) {
             console.error(error);
+            toast.error('Error inesperado', {
+                description: 'No se pudo eliminar el permiso.',
+            });
         } finally {
             principal.statusModal.delete = false;
         }

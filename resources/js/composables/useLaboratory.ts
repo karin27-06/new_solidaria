@@ -1,13 +1,12 @@
-import { useToast } from '@/components/ui/toast'; // ✅ Agregado
+import { toast } from 'vue-sonner';
 import { Pagination } from '@/interface/paginacion';
 import { LaboratoryRequest, LaboratoryResource, LaboratoryUpdateRequest } from '@/pages/panel/laboratory/interface/Laboratory';
-import { showErrorMessage, showSuccessMessage } from '@/utils/message';
+import { showSuccessMessage } from '@/utils/message';
 import axios from 'axios';
 import { reactive } from 'vue';
 import { LaboratoryServices } from '../services/laboratoryServices';
 
 export const useLaboratory = () => {
-    const { toast } = useToast(); // ✅ Inicializamos toast
 
     const principal = reactive<{
         laboratoryList: LaboratoryResource[];
@@ -97,10 +96,7 @@ export const useLaboratory = () => {
         try {
             const response = await LaboratoryServices.update(id, data);
             if (response.state) {
-                toast({
-                    title: 'Laboratorio actualizado',
-                    description: 'El laboratorio se actualizó correctamente',
-                });
+                showSuccessMessage('El laboratorio se actualizó correctamente','Laboratorio actualizado');
                 principal.stateModal.update = false;
                 loadingLaboratories(principal.paginacion.current_page, principal.filter);
             }
@@ -110,20 +106,33 @@ export const useLaboratory = () => {
     };
 
     const deleteLaboratory = async (id: number) => {
-        try {
-            const response = await LaboratoryServices.destroy(id);
-            if (response.state) {
-                showSuccessMessage('Laboratorio eliminado', 'El laboratorio se eliminó correctamente');
-                principal.stateModal.delete = false;
-                loadingLaboratories(principal.paginacion.current_page, principal.filter);
-            }
-        } catch (error) {
-            showErrorMessage('Laboratorio no eliminado', 'El laboratorio no se eliminó correctamente');
-            console.error(error);
-        } finally {
-            principal.stateModal.delete = false;
-        }
-    };
+    try {
+    const deletePromise = LaboratoryServices.destroy(id);
+
+    toast.promise(deletePromise, {
+      loading: 'Eliminando laboratorio...',
+      success: () => {
+        principal.stateModal.delete = false;
+        loadingLaboratories(principal.paginacion.current_page, principal.filter);
+        return {
+          message: 'Laboratorio eliminado',
+          description: 'El laboratorio se eliminó correctamente.',
+        };
+      },
+      error: () => {
+        principal.stateModal.delete = false;
+        return {
+          message: 'Error al eliminar',
+          description: 'No se pudo eliminar el laboratorio.',
+        };
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    principal.stateModal.delete = false;
+  }
+};
     const validateLaboratoryName = async (name: string): Promise<boolean> => {
         try {
             const response = await axios.get(`/panel/laboratories/validate-name?name=${encodeURIComponent(name)}`);

@@ -43,7 +43,7 @@
                                         <span class="sr-only">Editar proveedor</span>
                                     </Button>
                                     <Button
-                                        variant="ghost"
+                                        variant="outline"
                                         size="sm"
                                         class="action-button-2"
                                         @click="openModalDelete(doctor.id)"
@@ -76,7 +76,7 @@ import Button from '@/components/ui/button/Button.vue';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pagination } from '@/interface/paginacion';
 import { SharedData } from '@/types';
-import { toast } from '@/utils/message';
+import { toast } from 'vue-sonner';
 import { usePage } from '@inertiajs/vue3';
 import { Trash, UserPen } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
@@ -93,8 +93,7 @@ const message = ref(page.props.flash?.message || '');
 
 onMounted(() => {
     if (message.value) {
-        toast({
-            title: 'Notificación',
+        toast('Notificación', {
             description: message.value,
         });
     }

@@ -44,7 +44,7 @@
                                         </Button-->
 
                                         <Button
-                                            variant="ghost"
+                                            variant="outline"
                                             size="sm"
                                             class="action-button-2"
                                             @click="openModalDelete(role.id)"
@@ -80,7 +80,7 @@ import { useToast } from '@/components/ui/toast';
 import { Pagination } from '@/interface/paginacion';
 import { SharedData } from '@/types';
 import { usePage } from '@inertiajs/vue3';
-import { Trash, UserPen, KeyRound } from 'lucide-vue-next';
+import { Trash, UserPen } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 import { RoleResource } from '../interface/Role';
 
@@ -111,9 +111,9 @@ const { roleList, rolePaginate } = defineProps<{
     loading: boolean;
 }>();
 
-const openModal = (id: number) => {
+/*const openModal = (id: number) => {
     emit('open-modal', id);
-};
+};*/
 
 const openModalDelete = (id: number) => {
     emit('open-modal-delete', id);

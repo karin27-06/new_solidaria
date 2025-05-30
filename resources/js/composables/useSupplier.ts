@@ -3,6 +3,7 @@ import { SupplierResource, SupplierRequest, SupplierUpdateRequest } from '@/page
 import { SupplierServices } from '@/services/supplierServices';
 import { showSuccessMessage } from '@/utils/message';
 import { reactive } from 'vue';
+import { toast } from 'vue-sonner';
 
 export const useSupplier = () => {
     const principal = reactive<{
@@ -108,7 +109,7 @@ export const useSupplier = () => {
         try {
             const response = await SupplierServices.update(id, data);
             if (response.state) {
-                showSuccessMessage('Proveedor actualizado', 'El proveedor se actualizo correctamente');
+                showSuccessMessage('El proveedor se actualizo correctamente', 'Proveedor actualizado');
                 principal.stateModal.update = false;
                 loadingSuppliers(principal.paginacion.current_page, principal.filter);
             }
@@ -118,20 +119,29 @@ export const useSupplier = () => {
     };
     // delete supplier
     const deleteSupplier = async (id: number) => {
-        try {
-            const response = await SupplierServices.destroy(id);
-            console.log(response.state);
-            if (response.state) {
-                showSuccessMessage('Proveedor eliminado', 'El Proveedor se elimino correctamente');
-                principal.stateModal.delete = false;
-                loadingSuppliers(principal.paginacion.current_page, principal.filter);
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            principal.stateModal.delete = false;
-        }
-    };
+
+    toast.promise(SupplierServices.destroy(id), {
+    loading: 'Eliminando proveedor...',
+    success: () => {
+        principal.stateModal.delete = false;
+        loadingSuppliers(principal.paginacion.current_page, principal.filter);
+
+        return {
+        // Esto es el título principal:
+        message: 'Proveedor eliminado',
+        description: 'El proveedor se eliminó correctamente.',
+        };
+    },
+    error: () => {
+        console.error();
+        principal.stateModal.delete = false;
+        return {
+        description: 'No se pudo eliminar el proveedor.',
+        message: 'Error al eliminar',
+        };
+    },
+    });
+};
 
     return {
         principal,

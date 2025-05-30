@@ -1,8 +1,9 @@
 import { Pagination } from '@/interface/paginacion';
 import { getRoleList, RoleResource, RoleUpdateRequest } from '@/pages/panel/role/interface/Role';
 import { RoleServices } from '@/services/roleServices';
-import { showErrorMessage, showSuccessMessage } from '@/utils/message';
+import { showErrorMessage,showSuccessMessage } from '@/utils/message';
 import { reactive, ref } from 'vue';
+import { toast } from 'vue-sonner';
 
 export const useRole = () => {
     const principal = reactive<{
@@ -106,28 +107,46 @@ export const useRole = () => {
     const updateRole = async (id: number, data: RoleUpdateRequest) => {
         try {
             await RoleServices.update(id, data);
+            showSuccessMessage('El laboratorio se actualizó correctamente','Laboratorio actualizado');
+            //loadingRoles(principal.paginacion.current_page, principal.filter);
         } catch (error) {
             console.error(error);
             showErrorMessage('Error al actualizar el rol', 'Hubo un problema al actualizar el rol.');
         }
     };
-    // delete role
-    const deleteRole = async (id: number) => {
-        try {
-            const response = await RoleServices.destroy(id);
-            console.log(response.status);
-            if (response.status) {
-                showSuccessMessage('Rol eliminado', 'El rol se eliminó correctamente');
-                principal.statusModal.delete = false;
-                loadingRoles(principal.paginacion.current_page, principal.filter);
-            }
-        } catch (error) {
-            console.error(error);
-            showErrorMessage('Error al eliminar el rol', 'Hubo un problema al eliminar el rol.');
-        } finally {
-            principal.statusModal.delete = false;
-        }
-    };
+    // delete role con toast.promise
+const deleteRole = async (id: number) => {
+  try {
+    const deletePromise = RoleServices.destroy(id);
+
+    toast.promise(deletePromise, {
+      loading: 'Eliminando rol...',
+      success: () => {
+        principal.statusModal.delete = false;
+        loadingRoles(principal.paginacion.current_page, principal.filter);
+        return {
+          message: 'Rol eliminado',
+          description: 'El rol se eliminó correctamente.',
+        };
+      },
+      error: () => {
+        principal.statusModal.delete = false;
+        return {
+          message: 'Error al eliminar el rol',
+          description: 'Hubo un problema al eliminar el rol.',
+        };
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    toast.error('Error al eliminar el rol', {
+      description: 'Hubo un problema inesperado al eliminar el rol.',
+      duration: 3000,
+    });
+  } finally {
+    principal.statusModal.delete = false;
+  }
+};
     // GET ROLES
     const getRoles = async () => {
         try {

@@ -5,6 +5,7 @@ import { ProductRequest, ProductRequestUpdate, ProductResource } from '@/pages/p
 import { ProductServices } from '@/services/productService';
 import { showSuccessMessage } from '@/utils/message';
 import { reactive } from 'vue';
+import { toast } from 'vue-sonner';
 
 export const useProduct = () => {
     const principal = reactive<{
@@ -146,7 +147,7 @@ export const useProduct = () => {
         try {
             const response = await ProductServices.update(id, data);
             if (response.status) {
-                showSuccessMessage('Producto actualizado', 'El producto se actualizó correctamente');
+                showSuccessMessage('El producto se actualizó correctamente','Producto actualizado');
                 principal.statusModal.update = false;
                 loadingProducts(principal.paginacion.current_page, principal.filter);
             }
@@ -158,21 +159,35 @@ export const useProduct = () => {
         }
     };
 
-    // delete product
-    const deleteProduct = async (id: number) => {
-        try {
-            const response = await ProductServices.destroy(id);
-            if (response.status) {
-                showSuccessMessage('Producto eliminado', 'El producto se eliminó correctamente');
-                principal.statusModal.delete = false;
-                loadingProducts(principal.paginacion.current_page, principal.filter);
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            principal.statusModal.delete = false;
-        }
-    };
+    // delete product con toast.promise
+const deleteProduct = async (id: number) => {
+  try {
+    const deletePromise = ProductServices.destroy(id);
+
+    toast.promise(deletePromise, {
+      loading: 'Eliminando producto...',
+      success: () => {
+        principal.statusModal.delete = false;
+        loadingProducts(principal.paginacion.current_page, principal.filter);
+        return {
+          message: 'Producto eliminado',
+          description: 'El producto se eliminó correctamente.',
+        };
+      },
+      error: () => {
+        principal.statusModal.delete = false;
+        return {
+          message: 'Error al eliminar',
+          description: 'No se pudo eliminar el producto.',
+        };
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    principal.statusModal.delete = false;
+  }
+};
 
     return {
         principal,

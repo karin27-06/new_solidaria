@@ -1,7 +1,8 @@
 import { ClientTypeRequest, ClientTypeResource, ClientTypeUpdateRequest } from '@/pages/panel/clientType/interface/ClientType';
 import { ClientTypeServices } from '@/services/clientTypeService';
-import { showSuccessMessage } from '@/utils/message';
+//import { showSuccessMessage } from '@/utils/message';
 import { reactive } from 'vue';
+import { toast } from 'vue-sonner';
 
 export function useClientType() {
     const principal = reactive({
@@ -59,26 +60,46 @@ export function useClientType() {
 
     // Update client type
     const updateClientType = async (id: number, data: ClientTypeUpdateRequest) => {
-        try {
-            const response = await ClientTypeServices.update(id, data);
-            showSuccessMessage(response.message);
-            loadingClientTypes();
-        } catch (error) {
-            console.error('Error updating client type:', error);
-        }
-    };
+    try {
+        const response = await ClientTypeServices.update(id, data);
+        toast.success('Tipo de cliente actualizado', {
+            description: response.message,
+            duration: 3000,
+        });
+        loadingClientTypes();
+    } catch (error) {
+        console.error('Error updating client type:', error);
+    }
+};
 
     // Delete client type
     const deleteClientType = async (id: number) => {
-        try {
-            const response = await ClientTypeServices.destroy(id);
-            loadingClientTypes();
-            showSuccessMessage(response.message);
-            principal.statusModal.delete = false;
-        } catch (error) {
-            console.error('Error deleting client type:', error);
-        }
-    };
+    try {
+        const deletePromise = ClientTypeServices.destroy(id);
+
+        toast.promise(deletePromise, {
+            loading: 'Eliminando tipo de cliente...',
+            success: () => {
+                loadingClientTypes();
+                principal.statusModal.delete = false;
+                return {
+                    message: 'Tipo de cliente eliminado',
+                    description: 'El tipo de cliente se eliminó correctamente.',
+                };
+            },
+            error: () => {
+                principal.statusModal.delete = false;
+                return {
+                    message: 'Error al eliminar',
+                    description: 'No se pudo eliminar el tipo de cliente.',
+                };
+            },
+        });
+
+    } catch (error) {
+        console.error('Error deleting client type:', error);
+    }
+};
 
     return {
         principal,

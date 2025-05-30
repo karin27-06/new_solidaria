@@ -3,6 +3,7 @@ import { ZoneRequest, ZoneResource, ZoneUpdateRequest } from '@/pages/panel/zone
 import { ZoneServices } from '@/services/zoneServices';
 import { showSuccessMessage } from '@/utils/message';
 import { reactive } from 'vue';
+import { toast } from 'vue-sonner';
 
 export const useZone = () => {
     const principal = reactive<{
@@ -105,7 +106,7 @@ export const useZone = () => {
         try {
             const response = await ZoneServices.update(id, data);
             if (response.status) {
-                showSuccessMessage('Zona actualizada', 'La zona se actualizó correctamente');
+                showSuccessMessage('La zona se actualizó correctamente', 'Zona actualizada');
                 principal.statusModal.update = false;
                 loadingZones(principal.paginacion.current_page, principal.filter);
             }
@@ -113,22 +114,35 @@ export const useZone = () => {
             console.error(error);
         }
     };
-    // delete zone
+    //delete zone
     const deleteZone = async (id: number) => {
-        try {
-            const response = await ZoneServices.destroy(id);
-            console.log(response.status);
-            if (response.status) {
-                showSuccessMessage('Zona eliminada', 'La zona se eliminó correctamente');
-                principal.statusModal.delete = false;
-                loadingZones(principal.paginacion.current_page, principal.filter);
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            principal.statusModal.delete = false;
-        }
-    };
+    try {
+      const deletePromise = ZoneServices.destroy(id);
+
+      toast.promise(deletePromise, {
+        loading: 'Eliminando zona...',
+        success: () => {
+          principal.statusModal.delete = false;
+          loadingZones(principal.paginacion.current_page, principal.filter);
+          return {
+            message: 'Zona eliminada',
+            description: 'La zona se eliminó correctamente',
+          };
+        },
+        error: () => {
+          principal.statusModal.delete = false;
+          return {
+            message: 'Error al eliminar',
+            description: 'Hubo un problema al eliminar la zona',
+          };
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      principal.statusModal.delete = false;
+    }
+  };
     return {
         principal,
         loadingZones,

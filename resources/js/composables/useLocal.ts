@@ -3,6 +3,7 @@ import { GetLocalResponse, LocalRequest, LocalResource, LocalUpdateRequest } fro
 import { localServices } from '@/services/localServices';
 import { showSuccessMessage } from '@/utils/message';
 import { reactive, ref } from 'vue';
+import { toast } from 'vue-sonner';
 
 export const useLocal = () => {
     const principal = reactive<{
@@ -122,7 +123,7 @@ export const useLocal = () => {
         try {
             const response = await localServices.update(id, data);
             if (response.status) {
-                showSuccessMessage('Local actualizada', 'El local se actualizó correctamente');
+                showSuccessMessage('El local se actualizó correctamente', 'Local actualizada');
                 principal.statusModal.update = false;
                 loadingLocals(principal.paginacion.current_page, principal.filter);
             }
@@ -132,20 +133,33 @@ export const useLocal = () => {
     };
     // delete local
     const deleteLocal = async (id: number) => {
-        try {
-            const response = await localServices.destroy(id);
-            console.log(response.status);
-            if (response.status) {
-                showSuccessMessage('Local eliminado', 'El local se eliminó correctamente');
-                principal.statusModal.delete = false;
-                loadingLocals(principal.paginacion.current_page, principal.filter);
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            principal.statusModal.delete = false;
-        }
-    };
+    try {
+      const deletePromise = localServices.destroy(id);
+
+      toast.promise(deletePromise, {
+        loading: 'Eliminando local...',
+        success: () => {
+          principal.statusModal.delete = false;
+          loadingLocals(principal.paginacion.current_page, principal.filter);
+          return {
+            message: 'Local eliminado',
+            description: 'El local se eliminó correctamente',
+          };
+        },
+        error: () => {
+          principal.statusModal.delete = false;
+          return {
+            message: 'Error al eliminar',
+            description: 'Hubo un problema al eliminar el local',
+          };
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      principal.statusModal.delete = false;
+    }
+  };
 
     const getLocalList = async () => {
         try {

@@ -3,6 +3,7 @@ import { CategoryRequest, CategoryResource, CategoryUpdateRequest } from '@/page
 import { CategoryServices } from '@/services/categoryServices';
 import { showSuccessMessage } from '@/utils/message';
 import { reactive } from 'vue';
+import { toast } from 'vue-sonner';
 
 export const useCategory = () => {
     const principal = reactive<{
@@ -105,7 +106,7 @@ export const useCategory = () => {
         try {
             const response = await CategoryServices.update(id, data);
             if (response.status) {
-                showSuccessMessage('Categoría actualizada', 'La categoría se actualizó correctamente');
+                showSuccessMessage('La categoría se actualizó correctamente','Categoría actualizada');
                 principal.statusModal.update = false;
                 loadingCategories(principal.paginacion.current_page, principal.filter);
             }
@@ -113,22 +114,35 @@ export const useCategory = () => {
             console.error(error);
         }
     };
-    // delete category
-    const deleteCategory = async (id: number) => {
-        try {
-            const response = await CategoryServices.destroy(id);
-            console.log(response.status);
-            if (response.status) {
-                showSuccessMessage('Categoría eliminada', 'La categoría se eliminó correctamente');
-                principal.statusModal.delete = false;
-                loadingCategories(principal.paginacion.current_page, principal.filter);
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            principal.statusModal.delete = false;
-        }
-    };
+    // delete category con toast.promise
+const deleteCategory = async (id: number) => {
+  try {
+    const deletePromise = CategoryServices.destroy(id);
+
+    toast.promise(deletePromise, {
+      loading: 'Eliminando categoría...',
+      success: () => {
+        principal.statusModal.delete = false;
+        loadingCategories(principal.paginacion.current_page, principal.filter);
+        return {
+          message: 'Categoría eliminada',
+          description: 'La categoría se eliminó correctamente.',
+        };
+      },
+      error: () => {
+        principal.statusModal.delete = false;
+        return {
+          message: 'Error al eliminar',
+          description: 'No se pudo eliminar la categoría.',
+        };
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    principal.statusModal.delete = false;
+  }
+};
     return {
         principal,
         loadingCategories,

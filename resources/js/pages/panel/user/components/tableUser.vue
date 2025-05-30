@@ -43,7 +43,7 @@
                                         <span class="sr-only">Editar proveedor</span>
                                     </Button>
                                     <Button
-                                        variant="ghost"
+                                        variant="outline"
                                         size="sm"
                                         class="action-button-2"
                                         @click="openModalDelete(user.id)"
@@ -76,7 +76,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pagination } from '@/interface/paginacion';
 import { SharedData } from '@/types';
-import { showSuccessMessage } from '@/utils/message';
+import { toast } from 'vue-sonner';
 import { usePage } from '@inertiajs/vue3';
 import { Trash, UserPen } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
@@ -100,7 +100,9 @@ const { userList, userPaginate, loading } = defineProps<{
 
 onMounted(() => {
     if (message.value) {
-        showSuccessMessage('Notificación', message.value);
+        toast('Notificación', {
+            description: message.value,
+        });
     }
 });
 

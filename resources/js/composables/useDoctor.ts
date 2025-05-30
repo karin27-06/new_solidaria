@@ -3,7 +3,8 @@ import { DoctorResource, storeDoctorRequest, updateDoctorRequest } from '@/pages
 import { DoctorServices } from '@/services/doctorServices';
 import { showSuccessMessage } from '@/utils/message';
 import { reactive } from 'vue';
-
+import { toast } from 'vue-sonner';
+ 
 export const useDoctors = () => {
     const principal = reactive<{
         doctorList: DoctorResource[];
@@ -97,7 +98,7 @@ export const useDoctors = () => {
         try {
             const response = await DoctorServices.update(id, data);
             if (response.status === true) {
-                showSuccessMessage(response.message);
+                showSuccessMessage('El doctor se actualizo correctamente', 'Doctor actualizado');
                 loadingDoctors(principal.paginacion.current_page, principal.filter);
             }
         } catch (error) {
@@ -106,20 +107,36 @@ export const useDoctors = () => {
             principal.statusModal.update = false;
         }
     };
-    // deleting doctor
-    const deleteDoctor = async (id: number) => {
-        try {
-            const response = await DoctorServices.destroy(id);
-            if (response.status === true) {
-                showSuccessMessage(response.message);
-                loadingDoctors(principal.paginacion.current_page, principal.filter);
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            principal.statusModal.delete = false;
-        }
-    };
+    // Deleting doctor con toast.promise (sin cambiar estructura)
+const deleteDoctor = async (id: number) => {
+  try {
+    const deletePromise = DoctorServices.destroy(id);
+
+    toast.promise(deletePromise, {
+      loading: 'Eliminando doctor...',
+      success: () => {
+        principal.statusModal.delete = false;
+        loadingDoctors(principal.paginacion.current_page, principal.filter);
+        return {
+          message: 'Doctor eliminado',
+          description: 'El doctor se eliminó correctamente.',
+        };
+      },
+      error: () => {
+        principal.statusModal.delete = false;
+        return {
+          message: 'Error al eliminar',
+          description: 'No se pudo eliminar el doctor.',
+        };
+      },
+    });
+
+  } catch (error) {
+    console.error(error);
+  } finally {
+    principal.statusModal.delete = false;
+  }
+};
 
     return {
         principal,
