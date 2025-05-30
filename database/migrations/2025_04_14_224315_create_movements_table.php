@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('type_movement_id')->references('id')->on('type_movements')->onDelete('cascade');
             
-            $table->unsignedTinyInteger('status')->default(1)->comment('0 eliminado, 1 activo, 2 anulado');
+            $table->unsignedTinyInteger('status')->default(1)->comment('0 eliminado, 1 activo, 2 anulado , 3 finalizado');
             $table->unsignedTinyInteger('igv_status')->default(1)->comment('1 incluye, 2 no incluye');
             $table->enum('payment_type', ['contado','credito'])->default('cash');
             $table->timestamps();

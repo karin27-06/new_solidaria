@@ -1,13 +1,13 @@
 <template>
     <!-- Estado de carga inicial -->
-    <div v-if="isLoading" class="flex items-center space-x-2 py-2">
+    <!-- <div v-if="isLoading" class="flex items-center space-x-2 py-2">
         <div class="h-4 w-4 animate-spin rounded-full border-b-2 border-t-2 border-primary"></div>
         <span class="text-sm text-muted-foreground">Cargando proveedores...</span>
-    </div>
-    
+    </div> -->
+
     <!-- Mensaje de error -->
-    <div v-else-if="error" class="py-2 text-sm text-red-500">Error al cargar proveedores. Intente nuevamente.</div>
-    
+    <div v-if="error" class="py-2 text-sm text-red-500">Error al cargar proveedores. Intente nuevamente.</div>
+
     <!-- Combobox con altura controlada -->
     <Combobox v-else by="id" v-model="selectedSupplier">
         <ComboboxAnchor>
@@ -28,15 +28,15 @@
                 </span>
             </div>
         </ComboboxAnchor>
-        
+
         <!-- Contenedor con scroll -->
         <ComboboxList class="max-h-60 overflow-y-auto">
             <ComboboxEmpty>No se encontró ningún proveedor.</ComboboxEmpty>
             <ComboboxGroup>
-                <ComboboxItem 
-                    v-for="supplier in filteredSuppliers" 
-                    :key="supplier.id" 
-                    :value="supplier" 
+                <ComboboxItem
+                    v-for="supplier in filteredSuppliers"
+                    :key="supplier.id"
+                    :value="supplier"
                     @select="onSelect(supplier)"
                     class="px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
@@ -61,11 +61,11 @@ import {
     ComboboxItemIndicator,
     ComboboxList,
 } from '@/components/ui/combobox';
-import { Check, Search } from 'lucide-vue-next';
-import { onMounted, ref, computed } from 'vue';
-import debounce from 'debounce';
-import { SupplierServices } from '@/services/supplierServices';
 import { SupplierResource } from '@/pages/panel/supplier/interface/Supplier';
+import { SupplierServices } from '@/services/supplierServices';
+import debounce from 'debounce';
+import { Check, Search } from 'lucide-vue-next';
+import { computed, onMounted, ref } from 'vue';
 
 const emit = defineEmits<{
     (e: 'select', supplier_id: number): void;
@@ -80,25 +80,22 @@ const isSearching = ref<boolean>(false);
 const selectedSupplier = ref<SupplierResource | null>(null);
 const initialLoadDone = ref<boolean>(false);
 
-
 const filteredSuppliers = computed(() => {
     if (!searchText.value) return suppliers.value;
-    
-    return suppliers.value.filter(supplier => 
-        supplier.name.toLowerCase().includes(searchText.value.toLowerCase())
-    );
-});
 
+    return suppliers.value.filter((supplier) => supplier.name.toLowerCase().includes(searchText.value.toLowerCase()));
+});
 
 const initialLoadSuppliers = async () => {
     if (initialLoadDone.value) return;
-    
+   // console.log('Cargando proveedores...');
     try {
         isLoading.value = true;
         const response = await SupplierServices.getSuppliers('');
-        suppliers.value = response || [];
+        suppliers.value = response.suppliers || [];
         error.value = false;
         initialLoadDone.value = true;
+      //  console.log('Proveedores cargados:', response.suppliers);
     } catch (e) {
         console.error('Error al cargar proveedores:', e);
         error.value = true;
@@ -107,14 +104,13 @@ const initialLoadSuppliers = async () => {
     }
 };
 
-
 const searchSuppliers = async (query: string) => {
     if (!initialLoadDone.value) return;
-    
+
     try {
         isSearching.value = true;
         const response = await SupplierServices.getSuppliers(query);
-        suppliers.value = response || [];
+        suppliers.value = response.suppliers || [];
         error.value = false;
     } catch (e) {
         console.error('Error al buscar proveedores:', e);
@@ -123,15 +119,13 @@ const searchSuppliers = async (query: string) => {
     }
 };
 
-
 const handleSearchInput = (value: string) => {
     searchText.value = value;
-    
+
     if (initialLoadDone.value) {
         debouncedSearch(value);
     }
 };
-
 
 const debouncedSearch = debounce((value: string) => {
     if (value.length >= 3 || value === '') {
@@ -139,12 +133,10 @@ const debouncedSearch = debounce((value: string) => {
     }
 }, 400);
 
-
 const onSelect = (supplier: SupplierResource) => {
     selectedSupplier.value = supplier;
     emit('select', supplier.id);
 };
-
 
 onMounted(() => {
     initialLoadSuppliers();

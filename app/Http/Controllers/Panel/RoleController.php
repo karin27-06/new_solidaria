@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\RoleResource;
+use App\Models\Permission;
 use App\Models\Role;
 use App\Pipelines\FilterByName;
 use Illuminate\Http\Request;
-use Illuminate\Pipeline\Pipeline;
-use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Pipeline;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role as ModelsRole;
 
 class RoleController extends Controller
 {
@@ -34,14 +34,14 @@ class RoleController extends Controller
 
         try {
             $name = $request->get('name');
-            $roles = app(Pipeline::class)
+            $roles = Pipeline::send($name)
                 ->send(Role::query())
                 ->through([
                     new FilterByName($name),
                 ])
-                ->thenReturn()->orderBy('id','asc')->paginate(12);
+                ->thenReturn()->orderBy('id', 'asc')->paginate(12);
             return response()->json([
-                'roles'=> RoleResource::collection($roles),
+                'roles' => RoleResource::collection($roles),
                 'pagination' => [
                     'total' => $roles->total(),
                     'current_page' => $roles->currentPage(),
@@ -64,10 +64,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permissions = Permission::all();
-        return Inertia::render('panel/role/components/formRole', [
-            'permisos' => $permissions,  // Pasando los permisos a la vista
-        ]);
+        return Inertia::render('panel/role/components/formRole');
     }
 
     /**
@@ -81,13 +78,9 @@ class RoleController extends Controller
         if (!isset($validated['guard_name'])) {
             $validated['guard_name'] = 'web'; // Asigna un valor predeterminado si no se pasa
         }
-            // Crear el rol
+        // Crear el rol
         $role = Role::create($validated);
-
-        // Sincronizar permisos seleccionados con el rol
-        $role->permisos()->sync($request->permisos);  // Aquí estamos sincronizando los permisos seleccionados
-
-        return redirect()->route('panel.roles.index')->with('message', 'Rol creado correctamente');   
+        return redirect()->route('panel.roles.index')->with('message', 'Rol creado correctamente');
     }
 
     /**
@@ -103,19 +96,37 @@ class RoleController extends Controller
         ], 200);
     }
 
+    public function edit(Role $role)
+    {
+        // Obtener todos los permisos
+        $permissions = Permission::all();
+
+        // Obtener los permisos del rol
+        $rolePermissions = $role->permisos;
+
+        // Pasar los permisos al formulario de edición
+        return Inertia::render('panel/role/components/formEditRole', [
+            'roleData' => $role,
+            'permisos' => $permissions,
+            'selectedPermissions' => $rolePermissions->pluck('id')->toArray(),  // Pasar los permisos seleccionados
+        ]);
+    }
+
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(UpdateRoleRequest $request, ModelsRole $role)
     {
-        Gate::authorize('update', $role);
-        $validated = $request->validated();
-        $role->update($validated);
-        //$role->permisos()->sync($request->permisos);
+        // Gate::authorize('update', $role);
+        $validatedData = $request->validated();
+        $role->update($validatedData);
+        if ($request->has('permisos')) {
+            $role->syncPermissions($request->permisos);
+        }
         return response()->json([
             'status' => true,
             'message' => 'Rol actualizado correctamente',
-            'role' => new RoleResource($role->refresh()),
         ]);
     }
 
@@ -131,5 +142,4 @@ class RoleController extends Controller
             'message' => 'Rol eliminado correctamente',
         ]);
     }
-
 }

@@ -29,7 +29,7 @@ import {
 
 const props = withDefaults(defineProps<{
   modal: boolean;
-  itemId: number | string;
+  itemId: number | string | null;
   title?: string;
   description?: string;
   confirmButtonText?: string;

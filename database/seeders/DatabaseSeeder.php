@@ -16,17 +16,21 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionSeeder::class,
             RoleSeeder::class,
+            ZoneSeeder::class,
+            TypeVoucherSeeder::class,
             LocalSeeder::class,
             UserSeeder::class,
-            //SupplierSeeder::class,
-            //CategorySeeder::class,
-            //LaboratorySeeder::class,
-            //DoctorSeeder::class,
-            ZoneSeeder::class,
+            SupplierSeeder::class,
+            CategorySeeder::class,
+            LaboratorySeeder::class,
+            DoctorSeeder::class,
             ClientTypeSeeder::class,
-            //ProductSeeder::class,
+            ProductSeeder::class,
             TypeMovementSeeder::class,
-            //GuideSeeder::class,
+            GuideSeeder::class,
+            CustomerSeeder::class,
+            TypePaymentSeeder::class,
+            SaleSeeder::class,
         ]);
     }
 }

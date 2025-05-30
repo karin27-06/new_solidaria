@@ -1,3 +1,4 @@
+<!-- pages/panel/movement/indexMovement.vue -->
 <template>
     <Head title="Movimientos"></Head>
     <AppLayout :breadcrumbs="breadcrumbs">
@@ -10,9 +11,18 @@
                     @page-change="handlePageChange"
                     @open-modal="getIdMovement"
                     @open-modal-delete="openDeleteModal"
+                    @open-modal-products-details="openModalProductsDetails"
                     :loading="principal.loading"
                 />
+                <ProductsDetailsModal
+                    v-if="principal.statusModal.addProducts"
+                    :modal="principal.statusModal.addProducts"
+                    :movement-data="principal.movementData"
+                    @emit-close="closeProductsDetailsModal"
+                    @refresh-movements="refreshMovements"
+                />
                 <EditMovement
+                    v-if="principal.statusModal.update"
                     :movement-data="principal.movementData"
                     :modal="principal.statusModal.update"
                     @emit-close="closeModal"
@@ -42,6 +52,11 @@ import { onMounted } from 'vue';
 import EditMovement from './components/editMovement.vue';
 import TableMovement from './components/tableMovement.vue';
 import { MovementUpdateRequest } from './interface/Movement';
+import ProductsDetailsModal from './components/productsDetailsModal.vue';
+import { useToast } from '@/components/ui/toast';
+import { MovementResource } from './interface/Movement';
+
+const { toast } = useToast();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -62,13 +77,31 @@ const { principal, loadingMovements, getMovementById, updateMovement, deleteMove
 
 // get pagination
 const handlePageChange = (page: number) => {
-    console.log(page);
+    //console.log(page);
     loadingMovements(page);
 };
 
 // get movement by id for edit
-const getIdMovement = (id: number) => {
-    getMovementById(id);
+const getIdMovement = async (id: number) => {
+    //console.log('Opening EditMovement for ID:', id);
+    await getMovementById(id);
+    principal.statusModal.update = true;
+    principal.statusModal.addProducts = false;
+    principal.statusModal.delete = false;
+};
+
+// Open products details modal
+const openModalProductsDetails = async (id: number) => {
+    //console.log('Opening ProductsDetailsModal for ID:', id);
+    await getMovementById(id);
+    principal.statusModal.addProducts = true;
+    principal.statusModal.update = false;
+    principal.statusModal.delete = false;
+};
+
+const closeProductsDetailsModal = () => {
+    principal.statusModal.addProducts = false;
+    principal.movementData = {} as MovementResource;
 };
 
 // close modal
@@ -90,7 +123,7 @@ const emitUpdateMovement = (movement: MovementUpdateRequest, id_movement: number
 const openDeleteModal = (movementId: number) => {
     principal.statusModal.delete = true;
     principal.idMovement = movementId;
-    console.log('Eliminar movimiento con ID:', movementId);
+   // console.log('Eliminar movimiento con ID:', movementId);
 };
 
 // delete movement
@@ -101,6 +134,15 @@ const emitDeleteMovement = (movementId: number | string) => {
 // search movement
 const searchMovement = (text: string) => {
     loadingMovements(1, text);
+};
+
+// refresh movements
+const refreshMovements = () => {
+    loadingMovements(principal.paginacion.current_page);
+    toast({
+        title: 'Movimientos actualizados',
+        description: 'La lista de movimientos ha sido refrescada.',
+    });
 };
 </script>
 
