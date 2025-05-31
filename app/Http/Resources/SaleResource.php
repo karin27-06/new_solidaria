@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -31,7 +32,7 @@ class SaleResource extends JsonResource
             'total' => $this->total,
             'estado_venta' => $this->status_sale,
             'estado_sunat' => $this->state_sunat,
-            'created_at' => $this->created_at,
+            'created_at' => Carbon::parse($this->created_at)->format('d/m/Y H:i:s'),
         ];
     }
 }

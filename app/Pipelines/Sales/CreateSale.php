@@ -28,6 +28,7 @@ class CreateSale
       'state_sunat' => $saleData['state_sunat'],
     ]);
     $saleData['sale_model'] = $sale;
+    $saleData['sale_id'] = $sale->id;
     Log::info('Registrando venta');
     return $next($saleData);
   }

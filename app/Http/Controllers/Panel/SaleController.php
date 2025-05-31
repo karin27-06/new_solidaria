@@ -120,4 +120,31 @@ class SaleController extends Controller
             'sale' => $sale,
         ])->setStatusCode(201);
     }
+
+
+    public function viewSaleList()
+    {
+        return Inertia::render('panel/saleList/saleListIndex');
+    }
+
+
+    public function getSalesList()
+    {
+        $sales = Sale::with('user', 'customer', 'local', 'doctor', 'typeVoucher', 'typePayment')
+            ->orderBy('id', 'asc')
+            ->paginate(12);
+        return response()->json([
+            'sales' => SaleResource::collection($sales),
+            'pagination' => [
+                'total' => $sales->total(),
+                'current_page' => $sales->currentPage(),
+                'per_page' => $sales->perPage(),
+                'last_page' => $sales->lastPage(),
+                'from' => $sales->firstItem(),
+                'to' => $sales->lastItem(),
+            ],
+        ])->setStatusCode(200, 'Sales retrieved successfully', [
+            'Content-Type' => 'application/json',
+        ]);
+    }
 }
