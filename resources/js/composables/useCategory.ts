@@ -1,7 +1,7 @@
 import { Pagination } from '@/interface/paginacion';
 import { CategoryRequest, CategoryResource, CategoryUpdateRequest } from '@/pages/panel/category/interface/Category';
 import { CategoryServices } from '@/services/categoryServices';
-import { showSuccessMessage } from '@/utils/message';
+import { showErrorMessage, showSuccessMessage } from '@/utils/message';
 import { reactive } from 'vue';
 
 export const useCategory = () => {
@@ -16,6 +16,7 @@ export const useCategory = () => {
             delete: boolean;
         };
         categoryData: CategoryResource;
+        message?: string;
     }>({
         categoryList: [],
         paginacion: {
@@ -41,16 +42,23 @@ export const useCategory = () => {
             updated_at: '',
         },
     });
-        //reset category data
-        const resetcategoryData = () => {
-            principal.categoryData = {
-                id: 0,
-                name: '',
-                status: true,
-                created_at: '',
-                updated_at: '',
-            };
+    //reset category data
+    const resetcategoryData = () => {
+        principal.categoryData = {
+            id: 0,
+            name: '',
+            status: true,
+            created_at: '',
+            updated_at: '',
         };
+    };
+
+    const handleApiError = (error: unknown, defaultMessage = 'Error desconocido') => {
+        console.error('API Error:', error);
+        const errorMessage = error instanceof Error ? error.message : defaultMessage;
+        principal.message = errorMessage;
+        showErrorMessage('Error', errorMessage);
+    };
 
     // loading categories
     const loadingCategories = async (page: number = 1, name: string = '', status: boolean = true) => {
@@ -68,27 +76,28 @@ export const useCategory = () => {
             }
         }
     };
-            // creating categories
-            const createCategory = async (data: CategoryRequest) => {
-                try {
-                    await CategoryServices.store(data);
-                } catch (error) {
-                    console.error(error);
-                }
-            };
-        // get Category by id
-        const getCategoryById = async (id: number) => {
-            try {
-                if (id === 0) {
-                    principal.categoryData = {
-                        id: 0,
-                        name: '',
-                        status: true,
-                        created_at: '',
-                        updated_at: '',
-                    };
-                    return;
-                }
+    // creating categories
+    const createCategory = async (data: CategoryRequest) => {
+        try {
+            await CategoryServices.store(data);
+        } catch (error) {
+            console.error('hola');
+            handleApiError(error, 'Error al crear la categoria');
+        }
+    };
+    // get Category by id
+    const getCategoryById = async (id: number) => {
+        try {
+            if (id === 0) {
+                principal.categoryData = {
+                    id: 0,
+                    name: '',
+                    status: true,
+                    created_at: '',
+                    updated_at: '',
+                };
+                return;
+            }
             const response = await CategoryServices.show(id);
             if (response.status) {
                 principal.categoryData = response.category;

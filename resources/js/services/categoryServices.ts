@@ -6,7 +6,39 @@ import {
     showCategoryResponse,
 } from '@/pages/panel/category/interface/Category';
 import { router } from '@inertiajs/vue3';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+
+type ValidationError = {
+    errors: Record<string, string[]>;
+    message: string;
+};
+
+type ApiError = {
+    message: string;
+    status?: number;
+};
+const handleApiError = (error: unknown): never => {
+    if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+
+        // Error de validación (422)
+        if (axiosError.response?.status === 422) {
+            const validationError = axiosError.response.data as ValidationError;
+            const errorMessages = Object.entries(validationError.errors)
+                .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
+                .join('\n');
+
+            throw new Error(errorMessages);
+        }
+
+        // Otros errores HTTP
+        const apiError = axiosError.response?.data as ApiError;
+        throw new Error(apiError?.message || axiosError.message);
+    }
+
+    // Errores no relacionados a Axios
+    throw error instanceof Error ? error : new Error('Error desconocido');
+};
 
 export const CategoryServices = {
     //list categories
@@ -16,7 +48,11 @@ export const CategoryServices = {
     },
     //inertia
     async store(data: CategoryRequest) {
-        router.post(route('panel.categories.store'), data);
+        try {
+            router.post(route('panel.categories.store'), data);
+        } catch (error) {
+            handleApiError(error);
+        }
     },
     // show categories
     async show(id: number): Promise<showCategoryResponse> {
