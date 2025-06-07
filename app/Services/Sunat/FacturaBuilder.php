@@ -5,9 +5,7 @@ namespace App\Services\Sunat;
 use App\Contracts\SunatInterface;
 use App\Models\Sale;
 use Carbon\Carbon;
-use DateTime;
 use Greenter\Model\Client\Client;
-use Greenter\Model\Company\Address;
 use Greenter\Model\Company\Company;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\Invoice;
@@ -19,13 +17,11 @@ use Illuminate\Support\Facades\Storage as FacadesStorage;
 class FacturaBuilder
 {
   protected $see;
-  protected array $companyData;
-  protected array $addressData;
+  protected Company $companyData;
   public function __construct(SunatInterface $see)
   {
     $this->see = $see->getSee();
     $this->companyData = $see->getCompanyData();
-    $this->addressData = $see->getAddressData();
   }
   private function buildCustomer(array $customerData): Client
   {
@@ -33,25 +29,6 @@ class FacturaBuilder
       ->setTipoDoc($customerData['tipo_doc'])
       ->setNumDoc($customerData['num_doc'])
       ->setRznSocial($customerData['razon_social']);
-  }
-
-  private function buildAddress(): Address
-  {
-    return (new Address())
-      ->setUbigueo($this->addressData['ubigueo'])
-      ->setDepartamento($this->addressData['departamento'])
-      ->setProvincia($this->addressData['provincia'])
-      ->setDistrito($this->addressData['distrito'])
-      ->setUrbanizacion($this->addressData['urbanizacion'])
-      ->setDireccion($this->addressData['direccion']);
-  }
-  private function buildCompany(): Company
-  {
-    return (new Company())
-      ->setRuc($this->companyData['ruc'])
-      ->setRazonSocial($this->companyData['razon_social'])
-      ->setNombreComercial($this->companyData['nombre_comercial'])
-      ->setAddress($this->buildAddress());
   }
   private function buildFormaPago(): FormaPagoContado
   {
@@ -97,6 +74,8 @@ class FacturaBuilder
   }
   private function buildInvoice(array $data): Invoice
   {
+
+
     $invoice = (new Invoice())
       ->setUblVersion($data['ubl_version'])
       ->setTipoOperacion($data['tipo_operacion'])
@@ -106,7 +85,7 @@ class FacturaBuilder
       ->setFechaEmision($data['fecha_emision'])
       ->setFormaPago($this->buildFormaPago())
       ->setTipoMoneda($data['tipo_moneda'])
-      ->setCompany($this->buildCompany())
+      ->setCompany($this->companyData)
       ->setClient($this->buildCustomer($data['client']))
       ->setDetails($this->buildDetails($data['items']))
       ->setLegends($this->buildLeyends($data['legends']));
@@ -137,7 +116,7 @@ class FacturaBuilder
       ]);
       return [
         'success' => false,
-        'errors' => $resulta->getError(),
+        'errors' => $resulta->getError()->getMessage(),
         'invoice' => $invoice,
       ];
     }

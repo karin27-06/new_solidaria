@@ -2,6 +2,7 @@
 
 namespace App\Pipelines\Sales;
 
+use App\Contracts\NumeroALetrasController;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Services\Sunat\FacturaBuilder;
@@ -80,15 +81,21 @@ class SendSunat
     }
     return $products;
   }
-  private function getLegends(): array
+  private function getLegends(float $number): array
   {
+    $textoNumber = new  NumeroALetrasController();
     return [
       'code' => '1000',
-      'value' => 'SON DOSCIENTOS TREINTA Y SEIS CON 00/100 SOLES',
+      'value' => $textoNumber->toInvoice($number, 2, 'SOLES'),
     ];
   }
   public function getInvoiceData(int $customer_id, array $productos, string $serie, string $correlativo): array
   {
+
+    // get type comprobante
+    $customer = $this->getCustomer($customer_id);
+    $status = $customer['tipo_doc'] === '6' ? '01' : '03'; // 6 = RUC, 1 = DNI
+
     $items = $this->getItems($productos);
 
     // Calculate totals from items
@@ -113,15 +120,15 @@ class SendSunat
     return [
       'ubl_version' => '2.1',
       'tipo_operacion' => '0101', // Venta - Catalog. 51
-      'tipo_doc' => '01', // Factura - Catalog. 01 Boleta - Catalog. 03
+      'tipo_doc' => $status, // Factura - Catalog. 01 Boleta - Catalog. 03
       'serie' => $serie,
       'correlativo' => $correlativo,
       'fecha_emision' => Carbon::now(),
       'tipo_moneda' => 'PEN', // Sol - Catalog. 02
       // 'company' => $this->getCompany(),
-      'client' => $this->getCustomer($customer_id),
+      'client' => $customer,
       'items' => $items,
-      'legends' => $this->getLegends(),
+      'legends' => $this->getLegends($sub_total),
       'mto_oper_gravadas' => $mto_oper_gravadas,
       'mto_igv' => $mto_igv,
       'total_impuestos' => $total_impuestos,

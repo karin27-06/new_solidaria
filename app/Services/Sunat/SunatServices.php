@@ -3,6 +3,8 @@
 namespace App\Services\Sunat;
 
 use App\Contracts\SunatInterface;
+use Greenter\Model\Company\Address;
+use Greenter\Model\Company\Company;
 use Greenter\See;
 
 class SunatServices implements SunatInterface
@@ -34,32 +36,40 @@ class SunatServices implements SunatInterface
   /**
    * Get the company data.
    *
-   * @return array
+   * @return Company
    */
-  public function getCompanyData(): array
+  public function getCompanyData(): Company
   {
-    return [
-      'ruc' => config('greenter.company.ruc'),
-      'razon_social' => config('greenter.company.razon_social'),
-      'nombre_comercial' => config('greenter.company.nombre_comercial'),
-      'address' => $this->getAddressData(),
-    ];
+    return (new Company())
+      ->setRuc(config('greenter.company.ruc'))
+      ->setRazonSocial(config('greenter.company.razon_social'))
+      ->setNombreComercial(config('greenter.company.nombre_comercial'))
+      ->setAddress(
+        (new Address())
+          ->setUbigueo(config('greenter.company.address.ubigueo'))
+          ->setDepartamento(config('greenter.company.address.departamento'))
+          ->setProvincia(config('greenter.company.address.provincia'))
+          ->setDistrito(config('greenter.company.address.distrito'))
+          ->setUrbanizacion(config('greenter.company.address.urbanizacion'))
+          ->setDireccion(config('greenter.company.address.direccion'))
+          ->setCodLocal(config('greenter.company.address.cod_local'))
+      );
   }
+
   /**
    * Get the address data.
    *
-   * @return array
+   * @return Address
    */
-  public function getAddressData(): array
+  public function getAddressData(): Address
   {
-    return [
-      'ubigueo' => config('greenter.address.ubigueo'),
-      'departamento' => config('greenter.address.departamento'),
-      'provincia' => config('greenter.address.provincia'),
-      'distrito' => config('greenter.address.distrito'),
-      'urbanizacion' => config('greenter.address.urbanizacion'),
-      'direccion' => config('greenter.address.direccion'),
-      'cod_local' => config('greenter.address.cod_local'),
-    ];
+    return (new Address())
+      ->setUbigueo(config('greenter.company.address.ubigueo'))
+      ->setDepartamento(config('greenter.company.address.departamento'))
+      ->setProvincia(config('greenter.company.address.provincia'))
+      ->setDistrito(config('greenter.company.address.distrito'))
+      ->setUrbanizacion(config('greenter.company.address.urbanizacion'))
+      ->setDireccion(config('greenter.company.address.direccion'))
+      ->setCodLocal(config('greenter.company.address.cod_local'));
   }
 }
