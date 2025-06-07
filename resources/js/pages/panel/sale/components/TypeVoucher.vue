@@ -5,12 +5,12 @@
             <Label for="option-one">Factura</Label>
         </div>
         <div class="flex items-center space-x-2">
-            <RadioGroupItem id="option-two" value="2" />
-            <Label for="option-two">Boleta</Label>
+            <RadioGroupItem id="option-tree" value="2" />
+            <Label for="option-tree">Tikcket</Label>
         </div>
         <div class="flex items-center space-x-2">
-            <RadioGroupItem id="option-tree" value="3" />
-            <Label for="option-tree">Tikcket</Label>
+            <RadioGroupItem id="option-two" value="3" />
+            <Label for="option-two">Boleta</Label>
         </div>
     </RadioGroup>
 </template>

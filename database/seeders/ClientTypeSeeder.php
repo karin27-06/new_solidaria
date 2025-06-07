@@ -19,7 +19,7 @@ class ClientTypeSeeder extends Seeder
             'state' => true,
         ]);
         ClientType::create([
-            'name' => 'FACTURA',
+            'name' => 'RUC',
             'tipo_doc' => '6', // RUC
             'state' => true,
         ]);

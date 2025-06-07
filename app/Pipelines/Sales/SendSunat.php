@@ -7,7 +7,6 @@ use App\Models\Product;
 use App\Services\Sunat\FacturaBuilder;
 use Carbon\Carbon;
 use Closure;
-use DateTime;
 use Illuminate\Support\Facades\Log;
 
 class SendSunat
@@ -45,28 +44,8 @@ class SendSunat
     return [
       'tipo_doc' => $customer->clientType->tipo_doc,
       'num_doc' => $customer->code,
+      // la razon social se forma con el nombre y apellido del cliente y en caso de ser empres se tomar el nombre comercial 
       'razon_social' => $customer->firstname . ' ' . $customer->lastname,
-    ];
-  }
-  private function getAddress(): array
-  {
-    return [
-      'ubigueo' => '150101',
-      'departamento' => 'PIURA',
-      'provincia' => 'PIURA',
-      'distrito' => 'PIURA',
-      'urbanizacion' => '-',
-      'direccion' => 'Av. Ejemplo 123',
-      'cod_local' => '0000',
-    ];
-  }
-  private function getCompany(): array
-  {
-    return [
-      'ruc' => '20000000001',
-      'razon_social' => 'SOLIDARIA SAC',
-      'nombre_comercial' => 'BOTICA SOLIDARIA',
-      'address' => $this->getAddress(),
     ];
   }
   private function getItems(array $productos): array
@@ -134,12 +113,12 @@ class SendSunat
     return [
       'ubl_version' => '2.1',
       'tipo_operacion' => '0101', // Venta - Catalog. 51
-      'tipo_doc' => '01', // Factura - Catalog. 01
+      'tipo_doc' => '01', // Factura - Catalog. 01 Boleta - Catalog. 03
       'serie' => $serie,
       'correlativo' => $correlativo,
       'fecha_emision' => Carbon::now(),
       'tipo_moneda' => 'PEN', // Sol - Catalog. 02
-      'company' => $this->getCompany(),
+      // 'company' => $this->getCompany(),
       'client' => $this->getCustomer($customer_id),
       'items' => $items,
       'legends' => $this->getLegends(),

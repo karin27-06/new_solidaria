@@ -56,7 +56,7 @@ class ProductObserver
                 'purchase_price' => 0,
                 'percentage' => 0,
                 'unit_price' => rand(0, 100),
-                'fraction_price' => rand(0, 100),
+                'fraction_price' => rand(0, 50),
             ]);
         }
 
@@ -65,7 +65,7 @@ class ProductObserver
             Product_Local::create([
                 'product_id' => $product->id,
                 'local_id' => $i,
-                'StockFraction' => rand(0, $product->fraction),
+                'StockFraction' => $product->state_fraction ? rand(0, $product->fraction) : 0,
                 'StockBox' => rand(0, 100),
                 'stock_min' => 3,
                 'stock_max' => 5,

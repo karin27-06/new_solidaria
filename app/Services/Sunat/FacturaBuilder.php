@@ -19,9 +19,13 @@ use Illuminate\Support\Facades\Storage as FacadesStorage;
 class FacturaBuilder
 {
   protected $see;
+  protected array $companyData;
+  protected array $addressData;
   public function __construct(SunatInterface $see)
   {
     $this->see = $see->getSee();
+    $this->companyData = $see->getCompanyData();
+    $this->addressData = $see->getAddressData();
   }
   private function buildCustomer(array $customerData): Client
   {
@@ -30,25 +34,24 @@ class FacturaBuilder
       ->setNumDoc($customerData['num_doc'])
       ->setRznSocial($customerData['razon_social']);
   }
-  private function buildAddress(array $addressData): Address
-  {
 
+  private function buildAddress(): Address
+  {
     return (new Address())
-      ->setUbigueo($addressData['ubigueo'])
-      ->setDepartamento($addressData['departamento'])
-      ->setProvincia($addressData['provincia'])
-      ->setDistrito($addressData['distrito'])
-      ->setUrbanizacion($addressData['urbanizacion'])
-      ->setDireccion($addressData['direccion'])
-      ->setCodLocal($addressData['cod_local']);
+      ->setUbigueo($this->addressData['ubigueo'])
+      ->setDepartamento($this->addressData['departamento'])
+      ->setProvincia($this->addressData['provincia'])
+      ->setDistrito($this->addressData['distrito'])
+      ->setUrbanizacion($this->addressData['urbanizacion'])
+      ->setDireccion($this->addressData['direccion']);
   }
-  private function buildCompany(array $companyData): Company
+  private function buildCompany(): Company
   {
     return (new Company())
-      ->setRuc($companyData['ruc'])
-      ->setRazonSocial($companyData['razon_social'])
-      ->setNombreComercial($companyData['nombre_comercial'])
-      ->setAddress($this->buildAddress($companyData['address']));
+      ->setRuc($this->companyData['ruc'])
+      ->setRazonSocial($this->companyData['razon_social'])
+      ->setNombreComercial($this->companyData['nombre_comercial'])
+      ->setAddress($this->buildAddress());
   }
   private function buildFormaPago(): FormaPagoContado
   {
@@ -103,7 +106,7 @@ class FacturaBuilder
       ->setFechaEmision($data['fecha_emision'])
       ->setFormaPago($this->buildFormaPago())
       ->setTipoMoneda($data['tipo_moneda'])
-      ->setCompany($this->buildCompany($data['company']))
+      ->setCompany($this->buildCompany())
       ->setClient($this->buildCustomer($data['client']))
       ->setDetails($this->buildDetails($data['items']))
       ->setLegends($this->buildLeyends($data['legends']));
@@ -130,7 +133,7 @@ class FacturaBuilder
         'serie' => $invoice->getSerie(),
         'correlativo' => $invoice->getCorrelativo(),
         'fechaEmision' => Carbon::parse($invoice->getFechaEmision())->format('Y-m-d H:i:s'),
-        'error' => $resulta->getError(),
+        'error' => $resulta->getError()->getMessage(),
       ]);
       return [
         'success' => false,

@@ -97,10 +97,20 @@
                         <div class="venta-detalle-section mt-6">
                             <Button
                                 @click="processSale"
-                                :disabled="!canProcessSale || isProcessing"
-                                class="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                                :disabled="!canProcessSale || props.isProcessing2"
+                                class="w-full rounded-md px-4 py-2 font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                                :class="{
+                                    'bg-blue-600 hover:bg-blue-700': canProcessSale && !props.isProcessing2,
+                                    'cursor-not-allowed bg-gray-400': !canProcessSale || props.isProcessing2,
+                                }"
                             >
-                                {{ isProcessing ? 'Procesando...' : 'Procesar Venta' }}
+                                <template v-if="props.isProcessing2">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <div class="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                                        Procesando...
+                                    </div>
+                                </template>
+                                <template v-else> Procesar Venta </template>
                             </Button>
                         </div>
                     </div>
@@ -115,7 +125,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { ComboBoxCustomer, comboBoxDoctor, TypePaymens, TypeVoucher } from '@/interface/ComboBox';
 import { ProductLocalPrice } from '@/interface/ProductLocalPrice';
 import { Eye } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { StoreSaleRequest } from '../interface/Sale';
 
 const props = defineProps<{
@@ -124,10 +134,18 @@ const props = defineProps<{
     doctorData: comboBoxDoctor;
     typePaymentData: TypePaymens;
     typeVoucherData: TypeVoucher;
+    isProcessing2?: boolean;
 }>();
 
 const emit = defineEmits<{
-    (event: 'saleProcessed', saleData: StoreSaleRequest): void;
+    (
+        event: 'saleProcessed',
+        saleData: StoreSaleRequest,
+        callback?: {
+            onSuccess: () => void;
+            onError?: () => void;
+        },
+    ): void;
     (event: 'saleError', errorMessage: string): void;
 }>();
 
@@ -135,12 +153,14 @@ const emit = defineEmits<{
 const operacionesGrabadas = computed(() => {
     const total = props.cardProducts.reduce((total, item) => {
         if (item.state_igv) {
-            // Solo productos gravados
-            return (total + item.unit_price * item.quantify_box + item.fraction_price * item.quantify_fraction) / 1.18;
+            const productoValor = (item.unit_price * item.quantify_box + item.fraction_price * item.quantify_fraction) / 1.18;
+            console.log('Producto:', item.product_name, 'Valor:', productoValor);
+            console.log('Total acumulado:', total + productoValor);
+            return total + productoValor;
         }
         return total;
     }, 0);
-    return parseFloat(total.toFixed(2)); // Aseguramos 2 decimales
+    return parseFloat(total.toFixed(2));
 });
 
 // Operaciones inafectas (sin IGV)
@@ -186,22 +206,18 @@ const formatCurrency = (value: number) => {
         .replace('PEN', 'S/.');
 };
 
-const isProcessing = ref<boolean>(false);
-
 const canProcessSale = computed(() => {
-    return !isProcessing.value && props.customerData?.id && props.typePaymentData?.id && props.typeVoucherData?.id && props.cardProducts?.length > 0;
+    return !props.isProcessing2 && props.customerData?.id && props.typePaymentData?.id && props.typeVoucherData?.id && props.cardProducts?.length > 0;
 });
 
 // Función para procesar la venta
 const processSale = async () => {
-    if (!canProcessSale.value) {
+    if (!canProcessSale.value || props.isProcessing2) {
         emit('saleError', 'Faltan datos requeridos para procesar la venta');
         return;
     }
-
-    isProcessing.value = true;
-
     try {
+        // await nextTick();
         // Preparar los datos en el formato requerido
         const saleData = {
             customer_id: props.customerData.id,
@@ -223,16 +239,22 @@ const processSale = async () => {
                 price_fraction: item.fraction_price,
             })),
         };
-
         // Emitir el evento con los datos preparados
-        emit('saleProcessed', saleData);
+        emit('saleProcessed', saleData, {
+            onSuccess: () => {
+                console.log('Venta procesada exitosamente');
+            },
+            onError: () => {
+                console.error('Error al procesar la venta');
+            },
+        });
 
         console.log('Datos de venta preparados:', saleData);
     } catch (error) {
         emit('saleError', 'Error al procesar la venta');
         console.error('Error al procesar la venta:', error);
     } finally {
-        isProcessing.value = false;
+        console.log('Proceso de venta finalizado');
     }
 };
 </script>

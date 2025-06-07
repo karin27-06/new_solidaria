@@ -78,6 +78,7 @@
                                         :doctor-data="doctorData"
                                         :type-payment-data="typePaymentData"
                                         :type-voucher-data="typeVoucherData"
+                                        :is-processing2="loading"
                                         @sale-processed="storeVenta"
                                     />
                                 </div>
@@ -185,9 +186,16 @@ const getTypeVoucher = (typeVoucher: import('@/interface/ComboBox').TypeVoucher 
     }
 };
 
-const storeVenta = (data: StoreSaleRequest) => {
+const storeVenta = (
+    data: StoreSaleRequest,
+    callback?: {
+        onSuccess: () => void;
+        onError?: (error: any) => void;
+    },
+) => {
     console.log('storeVenta', data);
     storeSale(data);
+    callback?.onSuccess?.();
 };
 </script>
 
