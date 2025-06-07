@@ -97,49 +97,77 @@ class FacturaBuilder
 
   public function createInvoice(array $data, int $id_sale): array
   {
+    // contruyo el comprobante
     $invoice = $this->buildInvoice($data);
-    Log::info('data', $data);
-    Log::info('enviado', [
+    // envio a SUNAT
+    $resulta = $this->see->send($invoice);
+    // si hubo error
+    if (!$resulta->isSuccess()) {
+      $this->logInvoiceError($invoice, $resulta);
+      return $this->buildErrorResponse($resulta, $invoice);
+    }
+    // guarda los archivos
+    $this->storeInvoiceFiles($invoice, $resulta);
+    // actualiza el estado de la venta
+    $this->updateSaleStatus($id_sale, true);
+    return $this->buildSuccessResponse($invoice);
+  }
+
+
+  /**
+   * Registra el error de la factura en los logs
+   */
+  protected function logInvoiceError($invoice, $result): void
+  {
+    Log::error('Error al enviar la factura', [
       'serie' => $invoice->getSerie(),
       'correlativo' => $invoice->getCorrelativo(),
       'fechaEmision' => Carbon::parse($invoice->getFechaEmision())->format('Y-m-d H:i:s'),
+      'error' => $result->getError()->getMessage(),
     ]);
+  }
 
-    $resulta = $this->see->send($invoice);
-
-    if (!$resulta->isSuccess()) {
-      Log::error('Error al enviar la factura', [
-        'serie' => $invoice->getSerie(),
-        'correlativo' => $invoice->getCorrelativo(),
-        'fechaEmision' => Carbon::parse($invoice->getFechaEmision())->format('Y-m-d H:i:s'),
-        'error' => $resulta->getError()->getMessage(),
-      ]);
-      return [
-        'success' => false,
-        'errors' => $resulta->getError()->getMessage(),
-        'invoice' => $invoice,
-      ];
-    }
-
+  /**
+   * Almacena el xml y cdr para boletas y facturas
+   */
+  protected function storeInvoiceFiles($invoice, $result): void
+  {
+    $folder = $invoice->getTipoDoc() === '03' ? 'boletas' : 'facturas';
     FacadesStorage::disk('local')->put(
-      'facturas/' . $invoice->getName() . '.xml',
+      $folder . '/' . $invoice->getName() . '.xml',
       $this->see->getFactory()->getLastXml()
     );
-
     FacadesStorage::disk('local')->put(
-      'cdr/' . 'R-' . $invoice->getName() . '.zip',
-      $resulta->getCdrZip()
+      'cdr/' . $folder . '/R-' . $invoice->getName() . '.zip',
+      $result->getCdrZip()
     );
+  }
 
-    // uodate status sunat
-    $sale = Sale::find($id_sale);
-    if ($sale) {
-      $sale->state_sunat = true;
-      $sale->save();
-    } else {
-      Log::error('Sale not found', ['id_sale' => $id_sale]);
-    }
+  /**
+   * Actualiza el estado de la venta en SUNAT
+   */
+  protected function updateSaleStatus(int $id_sale, bool $status): void
+  {
+    Sale::where('id', $id_sale)->update(['state_sunat' => $status]);
+  }
 
+  /**
+   * Construye la respuesta de error
+   */
+  protected function buildErrorResponse($result, $invoice): array
+  {
+    return [
+      'success' => false,
+      'errors' => $result->getError()->getMessage(),
+      'invoice' => $invoice,
+    ];
+  }
+
+  /**
+   * Construye la respuesta exitosa
+   */
+  protected function buildSuccessResponse($invoice): array
+  {
     return [
       'success' => true,
       'errors' => null,
