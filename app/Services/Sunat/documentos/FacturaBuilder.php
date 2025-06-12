@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Sunat;
+namespace App\Services\Sunat\documentos;
 
 use App\Contracts\SunatInterface;
 use App\Models\Sale;
@@ -55,13 +55,17 @@ class FacturaBuilder
   {
     // contruyo el comprobante
     $invoice = $this->buildInvoice($data);
-    // envio a SUNAT
+    // envio a SUNAT  para crear el xml es 'getXmlSigned'
     $resulta = $this->see->send($invoice);
     // si hubo error
     if (!$resulta->isSuccess()) {
       $this->logInvoiceError($invoice, $resulta);
       return $this->buildErrorResponse($resulta, $invoice);
     }
+
+    // utilizo el metodo greenter 'getStatus' para obtener el estado de la factura
+    // $status = $this->see->getStatus($invoice->getCompany()->getRuc(), $invoice->getTipoDoc(), $invoice->getSerie(), $invoice->getCorrelativo());
+
     // guarda los archivos
     $this->storeInvoiceFiles($invoice, $resulta);
     // actualiza el estado de la venta

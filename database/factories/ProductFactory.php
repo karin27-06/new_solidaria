@@ -31,7 +31,7 @@ class ProductFactory extends Factory
             'category_id' => $this->faker->numberBetween(1, 100),
             'fraction'    => $fraction,
             'state_fraction'    => $state_fraction,
-            'state_igv'    => $this->faker->boolean(),
+            'state_igv'    => $this->faker->boolean(90),
             'state'    => true,
         ];
     }
