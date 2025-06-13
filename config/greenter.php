@@ -14,7 +14,7 @@ return [
     : SunatEndpoints::FE_BETA,
   // el certificado es el de prueba, si el certificado pasa a produccion pasar al storage
   // y cambiar la ruta a storage_path
-  'certificate_path' => storage_path(env('SUNAT_CERT_NAME', 'certificate.pem')),
+  'certificate_path' => storage_path('app/public/Certificados/' . env('SUNAT_CERT_NAME', 'certificate.pem')),
 
   'company' => [
     'ruc' => env('SUNAT_RUC', '20000000001'),
