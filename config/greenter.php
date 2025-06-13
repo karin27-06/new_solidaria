@@ -12,8 +12,9 @@ return [
   'endpoint' => env('SUNAT_ENV', 'beta') === 'production'
     ? SunatEndpoints::FE_PRODUCCION
     : SunatEndpoints::FE_BETA,
-
-  'certificate_path' => storage_path('app/public/Certificados/' . env('SUNAT_CERT_NAME', 'certificate.pem')),
+  // el certificado es el de prueba, si el certificado pasa a produccion pasar al storage
+  // y cambiar la ruta a storage_path
+  'certificate_path' => public_path(env('SUNAT_CERT_NAME', 'certificate.pem')),
 
   'company' => [
     'ruc' => env('SUNAT_RUC', '20000000001'),
