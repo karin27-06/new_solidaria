@@ -2,12 +2,12 @@
 
 namespace App\Pipelines\Sales;
 
+use App\Contracts\NumeroALetrasController;
 use App\Models\Customer;
 use App\Models\Product;
-use App\Services\Sunat\FacturaBuilder;
+use App\Services\Sunat\documentos\FacturaBuilder;
 use Carbon\Carbon;
 use Closure;
-use DateTime;
 use Illuminate\Support\Facades\Log;
 
 class SendSunat
@@ -45,28 +45,8 @@ class SendSunat
     return [
       'tipo_doc' => $customer->clientType->tipo_doc,
       'num_doc' => $customer->code,
+      // la razon social se forma con el nombre y apellido del cliente y en caso de ser empres se tomar el nombre comercial 
       'razon_social' => $customer->firstname . ' ' . $customer->lastname,
-    ];
-  }
-  private function getAddress(): array
-  {
-    return [
-      'ubigueo' => '150101',
-      'departamento' => 'PIURA',
-      'provincia' => 'PIURA',
-      'distrito' => 'PIURA',
-      'urbanizacion' => '-',
-      'direccion' => 'Av. Ejemplo 123',
-      'cod_local' => '0000',
-    ];
-  }
-  private function getCompany(): array
-  {
-    return [
-      'ruc' => '20000000001',
-      'razon_social' => 'SOLIDARIA SAC',
-      'nombre_comercial' => 'BOTICA SOLIDARIA',
-      'address' => $this->getAddress(),
     ];
   }
   private function getItems(array $productos): array
@@ -80,15 +60,18 @@ class SendSunat
       }
       $cantidad =  $producto['quantity_fraction'] > 0 ? ($producto['quantity_box'] * $product->fraction) + $producto['quantity_fraction'] : $producto['quantity_box'];
       $precio_unitario = $producto['quantity_fraction'] > 0 ? $producto['price_fraction'] : $producto['price_box'];
-      $totalBase = round($cantidad * $precio_unitario, 2);
+      // total base con IGV
+      $totalBase = round((($cantidad * $precio_unitario) / 1.18), 2);
+      // IGV calculado
       $igv = round($totalBase * 0.18, 2);
+      // Precio unitario final
       $precio_unitario_final = round(($totalBase + $igv) / $cantidad, 2);
 
       $products[] = [
         'cod_producto' => 'P' . $product->id, // Código del producto
         'unidad' => 'NIU', // Unidad de medida - Catalog. 03
         'cantidad' => $cantidad,
-        'mto_valor_unitario' => round($precio_unitario, 2),
+        'mto_valor_unitario' => round(($precio_unitario / 1.18), 2),
         'descripcion' => $product->name,
         'mto_base_igv' => $totalBase,
         'porcentaje_igv' => 18.00, // Porcentaje IGV - Catalog. 07
@@ -101,15 +84,21 @@ class SendSunat
     }
     return $products;
   }
-  private function getLegends(): array
+  private function getLegends(float $number): array
   {
+    $textoNumber = new  NumeroALetrasController();
     return [
       'code' => '1000',
-      'value' => 'SON DOSCIENTOS TREINTA Y SEIS CON 00/100 SOLES',
+      'value' => $textoNumber->toInvoice($number, 2, 'SOLES'),
     ];
   }
   public function getInvoiceData(int $customer_id, array $productos, string $serie, string $correlativo): array
   {
+
+    // get type comprobante
+    $customer = $this->getCustomer($customer_id);
+    $status = $customer['tipo_doc'] === '6' ? '01' : '03'; // 6 = RUC, 1 = DNI
+
     $items = $this->getItems($productos);
 
     // Calculate totals from items
@@ -131,18 +120,24 @@ class SendSunat
     $total_impuestos = round($total_impuestos, 2);
     $valor_venta = round($valor_venta, 2);
     $sub_total = round($mto_oper_gravadas + $mto_igv, 2);
+    Log::info('Datos de la factura: ', [
+      'mto_oper_gravadas' => $mto_oper_gravadas,
+      'mto_igv' => $mto_igv,
+      'total_impuestos' => $total_impuestos,
+      'valor_venta' => $valor_venta,
+      'sub_total' => $sub_total,
+    ]);
     return [
       'ubl_version' => '2.1',
       'tipo_operacion' => '0101', // Venta - Catalog. 51
-      'tipo_doc' => '01', // Factura - Catalog. 01
+      'tipo_doc' => $status, // Factura - Catalog. 01 Boleta - Catalog. 03
       'serie' => $serie,
       'correlativo' => $correlativo,
       'fecha_emision' => Carbon::now(),
       'tipo_moneda' => 'PEN', // Sol - Catalog. 02
-      'company' => $this->getCompany(),
-      'client' => $this->getCustomer($customer_id),
+      'client' => $customer,
       'items' => $items,
-      'legends' => $this->getLegends(),
+      'legends' => $this->getLegends($sub_total),
       'mto_oper_gravadas' => $mto_oper_gravadas,
       'mto_igv' => $mto_igv,
       'total_impuestos' => $total_impuestos,

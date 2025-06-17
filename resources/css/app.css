@@ -233,6 +233,13 @@ html {
     @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200;
 }
 
+.status-gravada {
+    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200;
+}
+.status-inafecta {
+    @apply bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-200;
+}
+
 .status-indicator {
     @apply mr-1 h-1.5 w-1.5 rounded-full;
 }
@@ -243,6 +250,14 @@ html {
 
 .status-indicator-inactive {
     @apply bg-red-500 dark:bg-red-400;
+}
+
+.status-indicator-gravada {
+    @apply bg-yellow-500 dark:bg-yellow-400;
+}
+
+.status-indicator-inafecta {
+    @apply bg-gray-500 dark:bg-gray-400;
 }
 
 /* Estilos de acciones */

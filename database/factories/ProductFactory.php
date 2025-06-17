@@ -27,11 +27,11 @@ class ProductFactory extends Factory
             'presentation'  => substr($this->faker->text, 0, 10),
             'form_farm'  => substr($this->faker->text, 0, 10),
             'barcode'  => $this->faker->numerify('8#######'),
-            'laboratory_id' => $this->faker->numberBetween(1, 100),
-            'category_id' => $this->faker->numberBetween(1, 300),
+            'laboratory_id' => $this->faker->numberBetween(1, 30),
+            'category_id' => $this->faker->numberBetween(1, 100),
             'fraction'    => $fraction,
             'state_fraction'    => $state_fraction,
-            'state_igv'    => $this->faker->boolean(),
+            'state_igv'    => $this->faker->boolean(90),
             'state'    => true,
         ];
     }

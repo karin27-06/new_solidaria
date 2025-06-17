@@ -11,6 +11,7 @@
                     <TableHead class="table-head">Fracciones</TableHead>
                     <TableHead class="table-head">P.caja</TableHead>
                     <TableHead class="table-head">P.fraccion</TableHead>
+                    <TableHead class="table-head">status igv</TableHead>
                     <TableHead class="table-head">C.cajas</TableHead>
                     <TableHead class="table-head">C.fracciones</TableHead>
                     <TableHead class="table-head-actions">Agregar</TableHead>
@@ -35,6 +36,16 @@
                     <td class="cell-data">{{ product.stockFraction }}</td>
                     <td class="cell-data">S/{{ product.unit_price }}</td>
                     <td class="cell-data">S/{{ product.fraction_price }}</td>
+                    <td class="cell-status">
+                        <span v-if="product.state_igv === true" class="status-badge status-gravada">
+                            <span class="status-indicator status-indicator-gravada"></span>
+                            Gravada
+                        </span>
+                        <span v-else class="status-badge status-inafecta">
+                            <span class="status-indicator status-indicator-inafecta"></span>
+                            Inafecta
+                        </span>
+                    </td>
                     <td class="cell-data">
                         <Input
                             type="number"
